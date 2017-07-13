@@ -148,20 +148,6 @@ menu:
       pre: "search"
       url: "#"
       weight: 5
-  cool:
-    - name: "Home"
-      url: "/"
-      weight: 1
-    - name: "Project Home"
-      url: "/cool/"
-      weight: 2
-    - name: "Sample Page"
-      url: "/cool/sample/"
-      weight: 3
-    - name: "Github repo"
-      pre: "github"
-      url: "https://github.com/yihui/blogdown-yihui-template"
-      weight: 4
 
 outputs:
   home: ["html", "json", "rss"]
@@ -173,7 +159,7 @@ params:
   dateFormat: "2005/01/01"
   customCSS: ["css/custom.css", "css/localsearch.css", "lib/lightGallery/css/lightgallery.css"]
   customJS: ["js/center-img.js", "js/right-quote.js", "js/no-highlight.js", "js/fix-footnote.js", "js/local-search.js"]
-  githubContentURL: "https://github.com/haopen/blogdown/edit/master/content/"
+  githubContentURL: "https://github.com/haopen/Blogdown/edit/master/content/"
 
   # options for highlight.js (version, additional languages, and theme)
   highlightjsVersion: "9.11.0"
