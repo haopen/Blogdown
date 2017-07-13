@@ -1,0 +1,798 @@
+---
+title: Pandoc 中的 Markdown 语法 z
+date: 2016-10-26
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Markdown", "4-Pandoc"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: markdown-in-pandoc
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#skills"><span class="toc-section-number">1</span> 小技巧汇总</a></li>
+<li><a href="#summary"><span class="toc-section-number">2</span> 概述</a></li>
+<li><a href="#para"><span class="toc-section-number">3</span> 段落</a><ul>
+<li><a href="#para-newline"><span class="toc-section-number">3.1</span> 段落和换行符</a></li>
+<li><a href="#extension-escaped_line_breaks"><span class="toc-section-number">3.2</span> Extension: escaped_line_breaks</a></li>
+</ul></li>
+<li><a href="#title"><span class="toc-section-number">4</span> 标题</a><ul>
+<li><a href="#setext-"><span class="toc-section-number">4.1</span> Setext 风格语法</a></li>
+<li><a href="#atx-"><span class="toc-section-number">4.2</span> ATX 风格语法</a><ul>
+<li><a href="#extension-blank_before_header"><span class="toc-section-number">4.2.1</span> Extension: blank_before_header</a></li>
+<li><a href="#-extension-header_attributes"><span class="toc-section-number">4.2.2</span> 标题标识符 Extension: header_attributes</a></li>
+<li><a href="#extension-auto_identifiers"><span class="toc-section-number">4.2.3</span> Extension: auto_identifiers</a></li>
+<li><a href="#extension-implicit_header_references"><span class="toc-section-number">4.2.4</span> Extension: implicit_header_references</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#blockquote"><span class="toc-section-number">5</span> 块引用</a><ul>
+<li><a href="#extension-blank_before_blockquote"><span class="toc-section-number">5.1</span> Extension: blank_before_blockquote</a></li>
+</ul></li>
+<li><a href="#codechunck"><span class="toc-section-number">6</span> 代码块{codeChunck}</a><ul>
+<li><a href="#tab-codechunck"><span class="toc-section-number">6.1</span> 缩进式代码块{tab-codeChunck}</a></li>
+<li><a href="#fenced-code-blocks"><span class="toc-section-number">6.2</span> 围栏式代码块</a><ul>
+<li><a href="#extension-fenced_code_blocks"><span class="toc-section-number">6.2.1</span> Extension: fenced_code_blocks</a></li>
+<li><a href="#extension-backtick_code_blocks"><span class="toc-section-number">6.2.2</span> Extension: backtick_code_blocks</a></li>
+<li><a href="#extension-fenced_code_attributes"><span class="toc-section-number">6.2.3</span> Extension: fenced_code_attributes</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#line-blocks"><span class="toc-section-number">7</span> 行文本块</a><ul>
+<li><a href="#extension-line_blocks"><span class="toc-section-number">7.1</span> Extension: line_blocks</a></li>
+</ul></li>
+<li><a href="#lists"><span class="toc-section-number">8</span> 列表</a><ul>
+<li><a href="#unordered-lists"><span class="toc-section-number">8.1</span> 无序列表</a><ul>
+<li><a href="#4-spaces-rule"><span class="toc-section-number">8.1.1</span> 四空格原则{4-spaces-rule}</a></li>
+</ul></li>
+<li><a href="#ordered-lists"><span class="toc-section-number">8.2</span> 有序列表{ordered-lists}</a><ul>
+<li><a href="#extension-fancy_lists"><span class="toc-section-number">8.2.1</span> Extension: fancy_lists</a></li>
+<li><a href="#extension-startnum"><span class="toc-section-number">8.2.2</span> Extension: startnum</a></li>
+</ul></li>
+<li><a href="#dl-dt-dd-"><span class="toc-section-number">8.3</span> 定义列表（dl, dt, dd 等）</a><ul>
+<li><a href="#extension-definition_lists"><span class="toc-section-number">8.3.1</span> Extension: definition_lists</a></li>
+</ul></li>
+<li><a href="#numbered-lists"><span class="toc-section-number">8.4</span> 编号列表{numbered-lists}</a><ul>
+<li><a href="#extension-example_lists"><span class="toc-section-number">8.4.1</span> Extension: example_lists</a></li>
+</ul></li>
+<li><a href="#para-lists"><span class="toc-section-number">8.5</span> 紧凑和宽松列表</a></li>
+<li><a href="#cuttedLists"><span class="toc-section-number">8.6</span> 截断列表</a></li>
+</ul></li>
+<li><a href="#hline"><span class="toc-section-number">9</span> 水平线</a></li>
+<li><a href="#table"><span class="toc-section-number">10</span> 表格</a><ul>
+<li><a href="#extension-table_captions"><span class="toc-section-number">10.1</span> Extension: table_captions</a></li>
+<li><a href="#extension-simple_tables"><span class="toc-section-number">10.2</span> Extension: simple_tables（不推荐）</a></li>
+<li><a href="#extension-multiline_tables"><span class="toc-section-number">10.3</span> Extension: multiline_tables（支持对齐、原始内容换行）</a></li>
+<li><a href="#extension-grid_tables"><span class="toc-section-number">10.4</span> Extension: grid_tables（支持块元素）</a></li>
+<li><a href="#extension-pipe_tables"><span class="toc-section-number">10.5</span> Extension: pipe_tables（支持对齐）</a></li>
+</ul></li>
+<li><a href="#blackslash"><span class="toc-section-number">11</span> 反斜线转义符</a><ul>
+<li><a href="#escape"><span class="toc-section-number">11.1</span> 转义符</a><ul>
+<li><a href="#extension-all_symbols_escapable"><span class="toc-section-number">11.1.1</span> Extension: all_symbols_escapable</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#inline"><span class="toc-section-number">12</span> 行内格式</a><ul>
+<li><a href="#strong"><span class="toc-section-number">12.1</span> 强调</a><ul>
+<li><a href="#extension-intraword_underscores"><span class="toc-section-number">12.1.1</span> Extension: intraword_underscores</a></li>
+</ul></li>
+<li><a href="#strikeout"><span class="toc-section-number">12.2</span> 删除线</a><ul>
+<li><a href="#extension-strikeout"><span class="toc-section-number">12.2.1</span> Extension: strikeout</a></li>
+</ul></li>
+<li><a href="#sup-sub"><span class="toc-section-number">12.3</span> 上标和下标</a><ul>
+<li><a href="#extension-superscript-subscript"><span class="toc-section-number">12.3.1</span> Extension: superscript, subscript</a></li>
+</ul></li>
+<li><a href="#inline-code"><span class="toc-section-number">12.4</span> 行内代码块</a><ul>
+<li><a href="#extension-inline_code_attributes"><span class="toc-section-number">12.4.1</span> Extension: inline_code_attributes</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#html-"><span class="toc-section-number">13</span> HTML 代码</a><ul>
+<li><a href="#extension-raw_html"><span class="toc-section-number">13.1</span> Extension: raw_html</a></li>
+<li><a href="#extension-markdown_in_html_blocks"><span class="toc-section-number">13.2</span> Extension: markdown_in_html_blocks</a></li>
+</ul></li>
+<li><a href="#links"><span class="toc-section-number">14</span> 链接</a><ul>
+<li><a href="#inline-links"><span class="toc-section-number">14.1</span> 行内链接</a></li>
+<li><a href="#cite-links"><span class="toc-section-number">14.2</span> 引用链接</a><ul>
+<li><a href="#extension-shortcut_reference_links"><span class="toc-section-number">14.2.1</span> Extension: shortcut_reference_links</a></li>
+</ul></li>
+<li><a href="#identifier"><span class="toc-section-number">14.3</span> 内部链接</a></li>
+<li><a href="#images"><span class="toc-section-number">14.4</span> 图片</a><ul>
+<li><a href="#extension-implicit_figures"><span class="toc-section-number">14.4.1</span> Extension: implicit_figures</a></li>
+<li><a href="#extension-link_attributes"><span class="toc-section-number">14.4.2</span> Extension: link_attributes</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#footnotes"><span class="toc-section-number">15</span> 脚注</a><ul>
+<li><a href="#extension-footnotes"><span class="toc-section-number">15.1</span> Extension: footnotes</a></li>
+</ul></li>
+<li><a href="#metadata"><span class="toc-section-number">16</span> 元数据块</a><ul>
+<li><a href="#-extension-pandoc_title_block"><span class="toc-section-number">16.1</span> 标题块 Extension: pandoc_title_block</a></li>
+<li><a href="#yaml--extension-yaml_metadata_block"><span class="toc-section-number">16.2</span> YAML 元数据 Extension: yaml_metadata_block</a></li>
+<li><a href="#-extansion-citation"><span class="toc-section-number">16.3</span> 引用 Extansion: citation</a></li>
+</ul></li>
+<li><a href="#yaml-"><span class="toc-section-number">17</span> YAML 语法简单介绍</a></li>
+</ul>
+</div>
+
+<p><strong>原文地址</strong>：</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://www.cnblogs.com/baiyangcao/p/pandoc_markdown.html" class="uri">http://www.cnblogs.com/baiyangcao/p/pandoc_markdown.html</a></li>
+<li><a href="http://www.bagualu.net/wordpress/archives/5284" class="uri">http://www.bagualu.net/wordpress/archives/5284</a></li>
+</ol>
+<div id="skills" class="section level1">
+<h1><span class="header-section-number">1</span> 小技巧汇总</h1>
+<ol style="list-style-type: decimal">
+<li>博客中提供的 <code>&lt;pre class=&quot;white&quot;&gt;...&lt;/pre&gt;</code> 和 <code>&lt;pre class=&quot;center&quot;&gt;...&lt;/pre&gt;</code> 只能通过 html 实现；</li>
+<li>普通的 <code>&lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;</code> 通过缩进 4 个空格实现；</li>
+<li>块级的代码高亮通过 <code>```…```</code> 方法实现，其中的 <code>`</code> 可以被替换成<code>~</code>，并且可以添加 <code>class, id, 代码的语言名称</code> 等内容；</li>
+<li>行内代码通过 <code>`</code> 来包括，也可以通过 <code>&lt;code&gt;...&lt;/code&gt;</code> 来实现，生成标题 <code>class, id, 代码的语言名称</code> 的方法与块级代码类似；</li>
+<li><code>&lt;hn&gt;</code> 也可以添加 <code>class, id</code> 等；</li>
+<li>在行内代码块中显示 <code>`</code> 需要用 <code>` ` `</code>，在行间高亮代码中显示 <code>```</code>，只需要将 <code>`</code> 替换成 <code>~</code> 就可以，不需要用 RMarkdown 中的做法；</li>
+<li>现在通过 Pandoc 解释 Hexo 下的 Markdown，基本上可以保证解释的结果能够与 Mathjax 良好兼容，但要注意 Pandoc 对 LaTeX 语法的支持中，行内公式和行间公式分别用 <code>`$...$`</code> 和 <code>`$$ $$`</code> 完成，不支持使用 <code>“\(...\)”</code> 和 <code>“\[...\]”</code> 语法，当然 <code>“\begin{equation}...\end{equation}”</code> 还是可以正常使用的；</li>
+<li>脚注的语法是 <code>^[]</code>，另外一种脚注内容单独放置的语法暂时不使用；</li>
+<li>删除线用一对 <code>~~</code> 实现，上标用一对 <code>^</code> 实现，下标用一对 <code>~</code> 实现；</li>
+<li>使用 <code>&gt;</code> 生成块级内容时，空行最好也添加上 <code>&gt;</code>，这样在原始的 Markdown 规范和 Pandoc 的扩展规范中都能正常工作；</li>
+</ol>
+<!-- more -->
+</div>
+<div id="summary" class="section level1">
+<h1><span class="header-section-number">2</span> 概述</h1>
+<p>Pandoc 中支持扩展修订版本的 Markdown 语法</p>
+<ul>
+<li>使用 Pandoc 中支持的 Markdown 语法用 <code>-f markdown</code>；</li>
+<li>使用标准 Markdown 语法用 <code>-f markdown_strict</code>；</li>
+</ul>
+<p>Pandoc 所支持的语法各种对标准 Markdown 语法的扩展可以通过在格式后以 <code>+EXTENSION</code> 添加或 <code>-EXTENSION</code> 去除，如：</p>
+<ul>
+<li><code>-f markdown-footnotes</code> 表示识别除了 <code>footnotes</code> 扩展之外的所有 Pandoc Markdown 语法；</li>
+<li><code>-f markdown_strict+footnotes+pipe_tables</code> 表示识别标准 Markdown 语法加上 <code>footnotes</code> 和 <code>pipe_tables</code> 扩展语法。</li>
+</ul>
+</div>
+<div id="para" class="section level1">
+<h1><span class="header-section-number">3</span> 段落</h1>
+<p>段落是指一个或多个空行之后的多行文本，文本中的换行都被视作空格，如若要输出换行，则应在行末添加两个或多个空格</p>
+<blockquote>
+<p><strong>注</strong>： 段落之后也应加一个<code>空行</code>，以区分段落和其他部分，如：列表。</p>
+</blockquote>
+<p>如下Markdown语法</p>
+<pre><code>这是一个段落
+ - 列表项1
+ - 列表项2</code></pre>
+<p>翻译成HTML如下：</p>
+<pre><code>这是一个段落  - 列表项1  - 列表项2</code></pre>
+<p>若要正确的显示列表应在段落后添加一个空行，如下：</p>
+<pre><code>这是一个段落
+
+ - 列表项1
+ - 列表项2</code></pre>
+<div id="para-newline" class="section level2">
+<h2><span class="header-section-number">3.1</span> 段落和换行符</h2>
+<p>段落之间有一个空行。如果没有空行，那么它们会被认为是一个段落。同一个段落中不同的行之间的换行符会被一个<code>空格</code>代替。这个对于中文而言，造成的后果是，段落中会莫名其妙的多出几个空格，看着奇怪。Pandoc 中有一个扩展能自动处理这种换行符，这个扩展叫<code>east_asian_line_breaks</code>，这个扩展在 Pandoc 中没有被缺省的打开，所以需要手动打开，即使用<code>-from markdown+east_asian_line_breaks</code>，这个扩展是在 Pandoc 的 1.16 版本中实现，此前的版本中是没有这个扩展的。因此，如果你使用这个扩展是发现这个扩展不认识，那你需要升级你的 Pandoc 的版本。</p>
+<p>一行结束时，如果要强制换行，可以在行尾输入两个及以上空格。不然，Pandoc 会以上面的方式进行段内换行的处理。一种可能的例外是写多行诗时，一个小块可能以<code>&lt;br /&gt;</code>的形式放在一起，之后又用一个<code>&lt;p&gt;</code>开始一个新的小块，也许后面的<strong>行文本块</strong>方法是一种可行的做法，或者在一行结尾处用<code>\</code>来达到目的。</p>
+<pre><code>| 咏梅
+| 啊！梅花
+|   红
+| 
+|       霜
+
+一行一行一行\
+二行二行二行
+
+三行三行三行</code></pre>
+</div>
+<div id="extension-escaped_line_breaks" class="section level2">
+<h2><span class="header-section-number">3.2</span> Extension: escaped_line_breaks</h2>
+<p>也可以通过在行末添加一个反斜线<code>\</code>来换行<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>，如：</p>
+<pre><code>这是第一行\
+这是第二行</code></pre>
+</div>
+</div>
+<div id="title" class="section level1">
+<h1><span class="header-section-number">4</span> 标题</h1>
+<p>Pandoc中支持两种标题语法：<strong>Setext</strong> 和 <strong>ATX</strong>。</p>
+<div id="setext-" class="section level2">
+<h2><span class="header-section-number">4.1</span> Setext 风格语法</h2>
+<p>setext 风格标题是一行文本下跟一行<code>=</code>符号（表示一级标题）和<code>-</code>符号（表示二级标题），文本中可以包含如<strong>斜体</strong>、<strong>加粗</strong>等行内格式<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<pre><code>一级标题
+=======
+
+二级标题
+-------</code></pre>
+</div>
+<div id="atx-" class="section level2">
+<h2><span class="header-section-number">4.2</span> ATX 风格语法</h2>
+<p>ATX 风格标题就是我们通常所用的 Markdown 标题语法，在行首添加一到六个<code>#</code>符号表示不同级别的标题，编译成对应的 html 标签<code>&lt;hn&gt;</code>，如一个<code>#</code>表示一级标题，会编译成 HTML 标签<code>&lt;h1&gt;</code>，与 setext 风格相同，文本中可以包含如<strong>斜体</strong>、<strong>加粗</strong>等行内格式。</p>
+<div id="extension-blank_before_header" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Extension: blank_before_header</h3>
+<p>标准 Markdown 语法并不要求在标题前添加一个空行，但是 Pandoc 语法却要求标题前添加一个空行（除了文档开头）</p>
+</div>
+<div id="-extension-header_attributes" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> 标题标识符 Extension: header_attributes</h3>
+<p>通常在 html 和 LaTeX 中使用，可以通过在标题行末添加如下形式的标识符来为标题添加属性：</p>
+<pre><code>{#identifier .class .class key=value key=value}</code></pre>
+<p>其中的<code>id</code>是最有用的，通常用于文内的交叉引用。使用<code>id</code>做文内引用的方法是<code>[标题名](#id)</code>，这样在生成的 html 和 pdf 文档中就会有到这个标题的超链了。其中的标题名不必要和该标题的名字一样，只要保证<code>#id</code>一样就可以了。</p>
+<p><code>identifier</code>会被编译成 html 文档中的<code>id</code>属性，<code>class</code>会被合并成 html 文档中的<code>class</code>属性</p>
+</div>
+<div id="extension-auto_identifiers" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Extension: auto_identifiers</h3>
+<p>没有显示指定<code>identifier</code>的标题会根据标题内容自动分配一个唯一标识，标题文本生成<code>identifier</code>的顺序如下：</p>
+<ol style="list-style-type: decimal">
+<li>移除格式、连接等；</li>
+<li>移除脚注(footnotes)；</li>
+<li>移除除了下划线<code>_</code>和连接符<code>-</code>之外的标点符号；</li>
+<li>用连接符<code>-</code>替换所有<code>空格</code>和<code>换行符</code>；</li>
+<li>将所有字母转换成小写；</li>
+<li><code>identifier</code>不能以数字和标点符号开头；</li>
+<li>如果文本此时为空，则取<code>section</code>做标识符；</li>
+<li>如果自动生成的标识符相同则根据顺序在标识符后添加<code>-1</code>、<code>-2</code>等。</li>
+</ol>
+</div>
+<div id="extension-implicit_header_references" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Extension: implicit_header_references</h3>
+<p>Pandoc 默认每个标题都定义了引用链接，故对于标题<code># 标题1</code>，可以使用<code>[标题1]</code>或者<code>[标题1][]</code>引用，注意，引用链接是<strong>区分大小写</strong>的。</p>
+</div>
+</div>
+</div>
+<div id="blockquote" class="section level1">
+<h1><span class="header-section-number">5</span> 块引用</h1>
+<p>块引用是指一个或多个段落或其他块元素（如列表或标题），每一行以一个<code>&gt;</code>符号和一个<code>可选</code>的<code>空格</code>开头（<strong>注意</strong>：<code>&gt;</code>符号并不需要在行首，但是不可缩进超过<code>三个空格</code>）</p>
+<pre><code>&gt; 块引用
+&gt; 段落
+&gt; 
+&gt; 1. 列表1
+&gt; 2. 列表2</code></pre>
+<p>块引用并不是每一行都需要以<code>&gt;</code>符号开头，只需在每一个区域的首行添加<code>&gt;</code>即可，如下文本和上述的文本有<del>相同</del>的效果。</p>
+<p><strong>警告</strong>：实际上在本博客的设置下后一种情形出现了两个 block，即两种情形下的显示结果并不相同，这显然与 Pandoc 的<code>blank_before_blockquote</code>扩展有关。因此保险起见，还是推荐使用第一种方式的块引用。另一种可以考虑的解决方法是使用标准的 Markdown，但是根据需要加上少量 Pandoc 的特有扩展，这样可以保证两种情形的效果相同。</p>
+<pre><code>&gt; 块引用
+段落
+
+&gt; 1. 列表1
+2. 列表2 </code></pre>
+<blockquote>
+<p><strong>注</strong>： 1. 块引用可以嵌套使用； 2. <code>&gt;</code>后的空格作为块引用标识的一部分，若是在块引用中添加代码， 则需在<code>&gt;</code>后添加<code>五个空格</code>。</p>
+</blockquote>
+<div id="extension-blank_before_blockquote" class="section level2">
+<h2><span class="header-section-number">5.1</span> Extension: blank_before_blockquote</h2>
+<p>标准 Markdown 语法并不要求在块引用前添加一个<del><code>空行</code></del>，但是 Pandoc 语法却要求在块引用前添加一个<code>空行</code>（除了文档开头外）。</p>
+</div>
+</div>
+<div id="codechunck" class="section level1">
+<h1><span class="header-section-number">6</span> 代码块{codeChunck}</h1>
+<div id="tab-codechunck" class="section level2">
+<h2><span class="header-section-number">6.1</span> 缩进式代码块{tab-codeChunck}</h2>
+<p>由<code>四个空格</code>或<code>一个tab</code>缩进的文本取做代码块，区块中的特殊字符、空格和换行都会被保留，而缩进的空格和tab会在输出中移除，但在代码块中的空行不必缩进</p>
+<pre class="cs"><code>    using System;
+
+    public class Program
+    {
+        public static void Main() 
+        {
+            Console.Write(&#39;Hello World!&#39;);
+        }
+    }</code></pre>
+</div>
+<div id="fenced-code-blocks" class="section level2">
+<h2><span class="header-section-number">6.2</span> 围栏式代码块</h2>
+<div id="extension-fenced_code_blocks" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Extension: fenced_code_blocks</h3>
+<p>除了标准的缩进式代码块之外，Pandoc 还支持围栏式代码块， 代码块以<code>三个或三个以上</code>的<code>~</code>符号行开始，以等于或多于开始行<code>~</code>个数符号行结束， 若是代码块中含有<code>~</code>，只需使开始行和结束行中的<code>~</code>符号个数多于代码块中的即可</p>
+<pre><code>~~~~~
+~~~~
+code here
+~~~~
+~~~~~~</code></pre>
+</div>
+<div id="extension-backtick_code_blocks" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Extension: backtick_code_blocks</h3>
+<p>与<code>fenced_code_blocks</code>相同，只不过使用反引号<code>`</code>替换波浪线<code>~</code>而已</p>
+</div>
+<div id="extension-fenced_code_attributes" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Extension: fenced_code_attributes</h3>
+<p>与标题标识符相同，在波浪线或反引号代码块的首行添加属性即可，如下：</p>
+<pre class="cs"><code>~~~ { #id .cs .numberLines }
+using System;
+
+public class Program
+{
+    public static void Main() 
+    {
+        Console.Write(&#39;Hello World!&#39;);
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</code></pre>
+<p>如上代码中添加的 cs 类可以用于代码 HTML 和 LaTex 输出的代码高亮，Pandoc 所支持高亮的语言可以通过在命令行中输入<code>pandoc --version</code>查看， 除了上述方式设置代码块的高亮语言，也可通过如下方式设置</p>
+<pre class="cs"><code>```cs
+using System;
+
+public class Program
+{
+    public static void Main() 
+    {
+        Console.Write(&#39;Hello World!&#39;);
+    }
+}
+```</code></pre>
+</div>
+</div>
+</div>
+<div id="line-blocks" class="section level1">
+<h1><span class="header-section-number">7</span> 行文本块</h1>
+<div id="extension-line_blocks" class="section level2">
+<h2><span class="header-section-number">7.1</span> Extension: line_blocks</h2>
+<p>行文本块是指一系列由<code>|</code>和一个<code>空格</code>开头的行，在输出中可以保留空格和换行， 不会像段落那样将换行符转换成空格，可用于诗文和地址的排版</p>
+<pre><code>| 咏梅
+| 啊！梅花
+|   红
+| 
+|       霜</code></pre>
+</div>
+</div>
+<div id="lists" class="section level1">
+<h1><span class="header-section-number">8</span> 列表</h1>
+<div id="unordered-lists" class="section level2">
+<h2><span class="header-section-number">8.1</span> 无序列表</h2>
+<p>列表项以星号<code>*</code>、加号<code>+</code>或减号<code>-</code>开头，如下：</p>
+<pre><code> * 列表项1
+ * 列表项2
+ * 列表项3</code></pre>
+<p>这样输出的列表是<strong>紧凑</strong>型的列表，若是要输出<strong>宽松</strong>型列表， 可在列表项之间添加空行即可</p>
+<pre><code> * 列表项1
+
+ * 列表项2
+
+ * 列表项3</code></pre>
+<div id="4-spaces-rule" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> 四空格原则{4-spaces-rule}</h3>
+<p>一个列表项里可以包含多个段落或其他块级别内容， 但是其次的段落都应该以一个空行和四个空格缩进开始</p>
+<pre><code>  * 列表项1 第一段落
+
+    列表项1 第二段落
+
+  * 列表项2 第一段落
+
+        { code }</code></pre>
+<p>列表中可以<strong>嵌套列表</strong>，每一层嵌套列表都需要添加<code>四个空格</code>或一个<code>tab</code>缩进， 并且每一层应该使用不同的起始符。</p>
+<pre><code> * 1.1
+     + 1.1.1
+        - 1.1.1.1
+        - 1.1.1.2
+     + 1.1.2
+ * 1.2</code></pre>
+</div>
+</div>
+<div id="ordered-lists" class="section level2">
+<h2><span class="header-section-number">8.2</span> 有序列表{ordered-lists}</h2>
+<p>有序列表项以<code>数字</code>、一个点<code>.</code>和一个<code>空格</code>开头， 并且取第一个列表项数字为基准，依次向下排，故下面两个列表是一样的</p>
+<pre><code>**列表1**
+
+ 1. 一
+ 2. 二
+ 3. 三
+
+---
+
+**列表2**
+
+ 1. 一
+ 5. 二
+ 9. 三</code></pre>
+<div id="extension-fancy_lists" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Extension: fancy_lists</h3>
+<p>不像标准 Markdown 语法只能使用阿拉伯数字作为有序列表标识， Pandoc中还支持<code>大小写字母</code>、<code>罗马数字</code>，或用<code>括号</code>、<code>右括号</code>标识列表项， 但其后的文本需与列表标识隔开至少一个空格， 若是一个<code>大写字母</code>和一个<code>点</code>做标识，则需在其后跟<code>两个空格</code>。</p>
+<p><code>fancy_lists</code>扩展还支持使用<code>#</code>来代替数字</p>
+<pre><code> #. 列表项1
+ #. 列表项2</code></pre>
+</div>
+<div id="extension-startnum" class="section level3">
+<h3><span class="header-section-number">8.2.2</span> Extension: startnum</h3>
+<p>Pandoc 支持自定义的列表起始数字，而且会在每次使用不同的列表标识便重新开始一个新列表， 如下会创建三个列表</p>
+<pre><code> (3) 列表1项1
+ (7) 列表1项2
+  1. 列表2项1
+  *  列表2项1 </code></pre>
+</div>
+</div>
+<div id="dl-dt-dd-" class="section level2">
+<h2><span class="header-section-number">8.3</span> 定义列表（dl, dt, dd 等）</h2>
+<div id="extension-definition_lists" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Extension: definition_lists</h3>
+<pre><code>词语1
+
+ :    词语1的定义
+
+    词语1的第二段定义
+第二段定义是多行的
+
+词语2
+
+ :    词语2的定义</code></pre>
+<p>定义列表形式如上，<strong>术语</strong>独占一行，其后可以跟一个空行，然后是一个或多个<strong>定义</strong>，每一个定义以<code>:</code>和<code>~</code>开头，可以缩进<code>一到两个空格</code>。</p>
+<p>一个术语可以包含多个定义，一个定义可以包含多个<strong>区块</strong>（段落、代码块、列表等），而每一个区块都应以<code>四个空格</code>或<code>一个tab</code>缩进。</p>
+</div>
+</div>
+<div id="numbered-lists" class="section level2">
+<h2><span class="header-section-number">8.4</span> 编号列表{numbered-lists}</h2>
+<div id="extension-example_lists" class="section level3">
+<h3><span class="header-section-number">8.4.1</span> Extension: example_lists</h3>
+<p>特殊的列表标识符<code>@</code>用于连续编号列表，整个文档中的<code>@</code>符号从<code>1</code>开始编号， 依次类推，如下的前三个<code>@</code>会分别替换为<code>1, 2, 3</code></p>
+<pre><code>(@)  My first example will be numbered (1).
+(@)  My second example will be numbered (2).
+
+Explanation of examples.
+
+(@)  My third example will be numbered (3).
+
+
+(@good)  This is a good example.
+
+As (@good) illustrates, ...</code></pre>
+<p><code>@</code> 后可以加上一个字符串来表示一个标签，用于在其他地方引用这个序号，如上例中的 <code>@good</code> 会被 <code>4</code> 来替换。</p>
+</div>
+</div>
+<div id="para-lists" class="section level2">
+<h2><span class="header-section-number">8.5</span> 紧凑和宽松列表</h2>
+<p>若列表项前插入一个空行，则会将当前列表项作为段落处理（用<code>&lt;p&gt;</code>标签包裹），从而输出“宽松”的列表，反之则会输出“紧凑”的列表。</p>
+</div>
+<div id="cuttedLists" class="section level2">
+<h2><span class="header-section-number">8.6</span> 截断列表</h2>
+<pre><code> 1. 列表1项1
+ 2. 列表1项2
+
+ 1. 列表2项1
+ 2. 列表2项2</code></pre>
+<p>如上想要输出两个列表，却会输出一个有四项的列表，要想“截断”列表1，则可在两个列表之间插入一行没有缩进的行，如 HTML 注释</p>
+<pre><code> 1. 列表1项1
+ 2. 列表1项2
+
+&lt;!-- --&gt;
+
+ 1. 列表2项1
+ 2. 列表2项2</code></pre>
+</div>
+</div>
+<div id="hline" class="section level1">
+<h1><span class="header-section-number">9</span> 水平线</h1>
+<p>一行由三个或三个以上<code>*</code>、<code>-</code>或<code>_</code>组成的会输出一个水平线。</p>
+</div>
+<div id="table" class="section level1">
+<h1><span class="header-section-number">10</span> 表格</h1>
+<p>Pandoc 中支持 simple_tables, multiline_tables, grid_tables 和 pipe_tables 四种表格。要注意单元格中内容的换行与块元素是不同的概念，原始内容可以换行与显示结果中的换行是不同的概念。</p>
+<div id="extension-table_captions" class="section level2">
+<h2><span class="header-section-number">10.1</span> Extension: table_captions</h2>
+<p>四种表格都可以通过在表格前或后添加一个以<code>Table:</code>（或<code>:</code>）开头的段落表示表格的表头。</p>
+</div>
+<div id="extension-simple_tables" class="section level2">
+<h2><span class="header-section-number">10.2</span> Extension: simple_tables（不推荐）</h2>
+<p>简单的表格形如下</p>
+<pre><code>  Right     Left     Center     Default
+-------     ------ ----------   -------
+     12     12        12            12
+    123     123       123          123
+      1     1          1             1
+
+Table:  简单表格实例</code></pre>
+<p>列首行和表格中的每一行都应独占一行，列<code>对齐方式</code>由列头和其下虚线行的相对位置决定：</p>
+<ul>
+<li>右对齐： 虚线行与列头右对齐，而左端超过列头</li>
+<li>左对齐： 虚线行与列头左对齐，而右端超过列头</li>
+<li>居中： 虚线行超出列头两端</li>
+<li>默认： 虚线行与列头两端对齐（一般情况下默认是左对齐）</li>
+</ul>
+<p>表格必须以一个空行或一行虚线行加一个空行结束，而且有时可以忽略列头行。</p>
+<p><strong>注</strong>：中文环境不推荐使用这种方式选择对齐方式，反正小生是玩不好。</p>
+</div>
+<div id="extension-multiline_tables" class="section level2">
+<h2><span class="header-section-number">10.3</span> Extension: multiline_tables（支持对齐、原始内容换行）</h2>
+<p>跨行表格允许列首行和表格中的行可以分多行撰写，但是不支持单元格的<del>跨行和跨列</del>，跨行表格必须以一行虚线行开始，以一行虚线行和一个空行结束，行与行之间应有一个空行</p>
+<pre><code>-------------------------------------------------------------
+ Centered   Default           Right Left
+  Header    Aligned         Aligned Aligned
+----------- ------- --------------- -------------------------
+   First    row                12.0 一个行跨
+                                    多行的例子
+
+  Second    row                 5.0 这是另一行
+                                    注意表格行与行
+                                    之间的空行哦~~
+-------------------------------------------------------------
+
+Table: 这个是标题
+也能跨行的啦~~</code></pre>
+<p>跨行表格的列首行也可以被忽略，也可以只包含一行，但是这一行后必须跟着一个空行</p>
+</div>
+<div id="extension-grid_tables" class="section level2">
+<h2><span class="header-section-number">10.4</span> Extension: grid_tables（支持块元素）</h2>
+<p>网格表格中列首行与其他行需要使用一行<code>=</code>隔开，但是在没有列首行的表格中可以忽略，网格表格中的单元格可以包含任意区块（<code>段落</code>、<code>代码块</code>、<code>列表</code>等），但<del>对齐方式</del>和单元格的<del>跨行跨列</del>都是不支持滴~</p>
+<pre><code>: 网格表格样例
+
++---------------+---------------+--------------------+
+| Fruit         | Price         | Advantages         |
++===============+===============+====================+
+| Bananas       | $1.34         | - built-in wrapper |
+|               |               | - bright color     |
++---------------+---------------+--------------------+
+| Oranges       | $2.10         | - cures scurvy     |
+|               |               | - tasty            |
++---------------+---------------+--------------------+</code></pre>
+</div>
+<div id="extension-pipe_tables" class="section level2">
+<h2><span class="header-section-number">10.5</span> Extension: pipe_tables（支持对齐）</h2>
+<pre><code>| Right | Left | Default | Center |
+|------:|:-----|---------|:------:|
+|   12  |  12  |    12   |    12  |
+|  123  |  123 |   123   |   123  |
+|    1  |    1 |     1   |     1  |
+
+  : `pipe_tables`表格样例</code></pre>
+<p>pipe_tables 每一列之间用竖线<code>|</code>隔开，列首行和其余行之间用虚线行隔开，虚线行中用冒号<code>:</code>来决定列的对其方式，表格中两端的<code>|</code>竖线列可以忽略，而且<code>|</code>只是用来隔开列，而不必对齐，但是 pipe_tables 的列首行不能忽略，要是想要生成没有列首的表格，只要在列首行的单元格置空便可</p>
+<pre><code> | 
+-----|-----:
+苹果 | 2.05
+梨   | 1.37
+橘子 | 3.09</code></pre>
+<p><strong>注</strong>： pipe_tables 中的单元格不可包含如<del><strong>段落</strong></del>、<del><strong>列表</strong></del>等区块元素</p>
+</div>
+</div>
+<div id="blackslash" class="section level1">
+<h1><span class="header-section-number">11</span> 反斜线转义符</h1>
+<div id="escape" class="section level2">
+<h2><span class="header-section-number">11.1</span> 转义符</h2>
+<div id="extension-all_symbols_escapable" class="section level3">
+<h3><span class="header-section-number">11.1.1</span> Extension: all_symbols_escapable</h3>
+<p>除了在代码块和行内代码中，反斜线后的任何字符和空格都会按照字面输出，Markdown 语法中能被转义的字符如下</p>
+<pre><code>\`*_{}[]()&gt;#+-.!</code></pre>
+</div>
+</div>
+</div>
+<div id="inline" class="section level1">
+<h1><span class="header-section-number">12</span> 行内格式</h1>
+<div id="strong" class="section level2">
+<h2><span class="header-section-number">12.1</span> 强调</h2>
+<p>用一个 <code>*</code> 或 <code>_</code> 包裹起来的文本会被输出为<i>斜体</i>，而用一对 <code>**</code> 或 <code>__</code> 包裹起来的文本会被输出为 <strong>加粗</strong>。</p>
+<blockquote>
+<p>强调文本：这里是<i>*斜体*</i>，这里是<strong>**加粗**</strong></p>
+</blockquote>
+<p>若是 <code>*</code> 或 <code>_</code> 符号前后有 <code>空格</code>，或用 <code>\</code> 转义，则不会输出为斜体或加粗。</p>
+<blockquote>
+<p>这里 <code>* 不会被翻译成斜体 *</code>, 而且 <code>\*这里也不会\*</code>。</p>
+</blockquote>
+<div id="extension-intraword_underscores" class="section level3">
+<h3><span class="header-section-number">12.1.1</span> Extension: intraword_underscores</h3>
+<p>文本中的成对<code>_</code>不会被翻译成斜体， 这个扩展的意思是 Pandoc 不会把文字中间的<code>_</code>解释为加粗的语法，因为 Pandoc 认为在文字中使用<code>_</code>是一个普遍的现象。如果解释为加粗反而会带来不便，因此如果要在文字中间使用强调（加粗）语法，请使用<code>*</code>。</p>
+</div>
+</div>
+<div id="strikeout" class="section level2">
+<h2><span class="header-section-number">12.2</span> 删除线</h2>
+<div id="extension-strikeout" class="section level3">
+<h3><span class="header-section-number">12.2.1</span> Extension: strikeout</h3>
+<p>一对<code>~~</code>所包裹的文本会添加一条删除线</p>
+<pre><code>~~这个文本被删除了~~</code></pre>
+</div>
+</div>
+<div id="sup-sub" class="section level2">
+<h2><span class="header-section-number">12.3</span> 上标和下标</h2>
+<div id="extension-superscript-subscript" class="section level3">
+<h3><span class="header-section-number">12.3.1</span> Extension: superscript, subscript</h3>
+<p>上标可以通过一对<code>^</code>标识，而下标可以通过一对<code>~</code>标识， 若上下标中包含空格，可以通过<code>\</code>转义空格</p>
+<pre><code>H~2~O
+2^10^ = 1024
+P~a\ cat~</code></pre>
+</div>
+</div>
+<div id="inline-code" class="section level2">
+<h2><span class="header-section-number">12.4</span> 行内代码块</h2>
+<p>小段的行内代码块可以使用一对<code>`</code>包裹， 而行内代码块中含有反引号<code>`</code>，可以用双反引号包裹代码块， 但是行内代码块中的转义符<code>\</code>没有转义的作用。</p>
+<pre><code>这是一个`行内代码块`
+这是一个行内代码块的反引号`` ` ``
+这是一个行内代码块的反引号` ` `，效果与上一行在本博客中类似
+这是一个行内代码块的反斜线`\`</code></pre>
+<div id="extension-inline_code_attributes" class="section level3">
+<h3><span class="header-section-number">12.4.1</span> Extension: inline_code_attributes</h3>
+<p>与代码块一样，行内代码块后写可以添加属性，形式如下：</p>
+<pre><code>`行内代码块`{ #identifier .class key=value }</code></pre>
+</div>
+</div>
+</div>
+<div id="html-" class="section level1">
+<h1><span class="header-section-number">13</span> HTML 代码</h1>
+<div id="extension-raw_html" class="section level2">
+<h2><span class="header-section-number">13.1</span> Extension: raw_html</h2>
+<p>可以直接在文档中插入 HTML 代码（除了代码块等<code>&lt;</code>, <code>&gt;</code>和<code>&amp;</code>符不会被翻译的地方之外）</p>
+</div>
+<div id="extension-markdown_in_html_blocks" class="section level2">
+<h2><span class="header-section-number">13.2</span> Extension: markdown_in_html_blocks</h2>
+<p>使用 markdown_strict 格式的时候，HTML 代码中的 Markdown 语法不会被翻译， 但是使用 Pandoc 的 Markdown 格式时，HTML 代码中的 Markdown 语法也会被翻译， 但是有一个例外，HTML 代码<code>&lt;script&gt;</code>和<code>&lt;style&gt;</code>标签中的 Markdown 语法也不会被翻译。</p>
+</div>
+</div>
+<div id="links" class="section level1">
+<h1><span class="header-section-number">14</span> 链接</h1>
+<p>如果用<code>尖括号</code>包裹一个 URL 或 email 地址，就会输出一个链接：</p>
+<pre><code>&lt;http://google.com&gt;
+&lt;sam@green.eggs.ham&gt;</code></pre>
+<div id="inline-links" class="section level2">
+<h2><span class="header-section-number">14.1</span> 行内链接</h2>
+<p>行内链接文本由方括号<code>[]</code>包裹，其后跟 URL 链接用圆括号<code>()</code>包裹， 圆括号内的 URL 后可以用双引号<code>&quot;</code>包裹一串字符串作为链接标题，</p>
+<pre><code>这是 [行内链接](链接地址), 并且这是 [一个
+带有标题的行内链接](http://fsf.org &quot;链接标题，鼠标悬停时显示&quot;)</code></pre>
+<p>Email 的链接地址应该跟在<code>mailto</code>后面</p>
+<pre><code>[给我邮件哦~~](mailto:sam@green.eggs.ham)</code></pre>
+</div>
+<div id="cite-links" class="section level2">
+<h2><span class="header-section-number">14.2</span> 引用链接</h2>
+<p><strong>显示引用链接</strong>包含<strong>链接</strong>和<strong>链接定义</strong>两部分， 链接定义可以出现在文档其他部分，链接之前或之后皆可；链接由方括号<code>[]</code>包裹的<code>链接文本</code>和由方括号<code>[]</code>包裹的<code>链接标签</code>组成</p>
+<pre><code>[链接文本1][Label1]
+[链接文本2][Label2]</code></pre>
+<p>链接定义由方括号<code>[]</code>包裹的链接标签、冒号、空格和 链接地址（可以用尖括号<code>&lt;&gt;</code>包裹）组成， 其后还可以跟空格+链接标题，由单引号<code>'</code>, <code>&quot;</code>或圆括号<code>()</code>包裹</p>
+<pre><code>[Label1]: http://www.baidu.com &quot;百度一下&quot;
+[Label2]: http://www.google.com
+    &quot;谷歌一下&quot; </code></pre>
+<p><strong>注</strong>： 链接标签不区分大小写。</p>
+<p><strong>隐式引用链接</strong>中的链接标签部分为空， 而链接定义中的链接标签由链接文本替换。</p>
+<pre><code>详情见[官方网站][]
+
+[官方网站]: http://guanfangwangzhan.com</code></pre>
+<div id="extension-shortcut_reference_links" class="section level3">
+<h3><span class="header-section-number">14.2.1</span> Extension: shortcut_reference_links</h3>
+<p>隐式引用链接中的空方括号<code>[]</code>可以忽略。</p>
+</div>
+</div>
+<div id="identifier" class="section level2">
+<h2><span class="header-section-number">14.3</span> 内部链接</h2>
+<p>可以使用<code>identifier</code>来链接到文档中的其他章节， 链接地址形如<code>#identifier</code></p>
+<pre><code>见[标题](#标题)
+
+见[标题]
+[标题]: #标题</code></pre>
+</div>
+<div id="images" class="section level2">
+<h2><span class="header-section-number">14.4</span> 图片</h2>
+<p>如果链接前添加<code>!</code>，链接则会被作为图片处理， 而链接文本则会被作为图片的<code>alt</code>属性处理。</p>
+<pre><code>![月亮](月亮.jpg &quot;十五的月亮&quot;)</code></pre>
+<div id="extension-implicit_figures" class="section level3">
+<h3><span class="header-section-number">14.4.1</span> Extension: implicit_figures</h3>
+<p>若是图片作为一个<code>独自的段落</code>存在，则图片的连接文本会被当做标题处理</p>
+<pre><code>![这是标题](图片地址.png)</code></pre>
+<p>但若是想要将图片作为一般的<code>行内图片</code>处理，只需确保图片不是当前行的唯一内容即可， 比如在行末添加一个<code>反斜线</code>：</p>
+<pre><code>![这个就不是标题了~~](图片地址.png)\</code></pre>
+</div>
+<div id="extension-link_attributes" class="section level3">
+<h3><span class="header-section-number">14.4.2</span> Extension: link_attributes</h3>
+<p>链接或图片后可以像其他元素一样添加属性 <code>{ #identifier .class key=value }</code></p>
+<pre><code>行内图片 ![图片](地址.png){ #id .class width=20 }
+和一个带属性的[引用链接]
+
+[引用链接]: http://www.baidu.com &quot;百度一下&quot; { #id2 .class key=value }</code></pre>
+</div>
+</div>
+</div>
+<div id="footnotes" class="section level1">
+<h1><span class="header-section-number">15</span> 脚注</h1>
+<div id="extension-footnotes" class="section level2">
+<h2><span class="header-section-number">15.1</span> Extension: footnotes</h2>
+<pre><code>Here is a footnote reference,[^1] and another.[^longnote]
+
+[^1]: Here is the footnote.
+
+[^longnote]: Here&#39;s one with multiple blocks.
+
+    Subsequent paragraphs are indented to show that they
+belong to the previous footnote.
+
+        { some.code }
+
+    The whole paragraph can be indented, or just the first
+    line.  In this way, multi-paragraph footnotes work like
+    multi-paragraph list items.
+
+This paragraph won&#39;t be part of the note, because it
+isn&#39;t indented.</code></pre>
+<p>脚注的<code>identifier</code>不可包含<del><code>空格</code></del>，<del><code>tab</code></del>或<del><code>换行</code></del>， 在输出中脚注会按照顺序编号，如上例中的<code>[^longnote]</code>会被编号<code>2</code>， 脚注虽不必一定放在文档的末尾，但也不可以出现在其他的区块中（如列表、块引用、表格等）<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>。</p>
+</div>
+</div>
+<div id="metadata" class="section level1">
+<h1><span class="header-section-number">16</span> 元数据块</h1>
+<p>这一小部分内容可以在后面学习过 Pandoc 模板以后在来看。</p>
+<p>在 Markdown 中可以嵌入元数据块，这些块用来给定文档的一些属性，这些块分为两种，一种是使用在文章最前面的<strong>标题块</strong>，还有一种是使用在文中任意地方的，叫<strong>YAML 块</strong>，分别介绍如下：</p>
+<div id="-extension-pandoc_title_block" class="section level2">
+<h2><span class="header-section-number">16.1</span> 标题块 Extension: pandoc_title_block</h2>
+<p>这个块放在文件的最前面，格式如下</p>
+<pre><code>% 标题
+% 作者，多个作者使用分号分开
+% 日期</code></pre>
+<p>这样的内容将会被解析，解析的结果可能会出现在最后的文档中（比如在 pdf 或者 html 的标题以及作者部分，之所以说“可能”，是因为自定义模板中可能没有这些输出）。这三个元素也可以只有其中一个或者两个，在这种情况下，在相应的地方要留出空行，比如</p>
+<pre><code>% 我的标题
+%
+% 2016年4月6日</code></pre>
+<p>标题以及作者可以是多行的，第二行以后的文字需要缩进。多个作者可使用分号分开，也可使用多行格式，例如：</p>
+<pre><code>% 我的标题
+  多行的标题
+% 作者1
+  作者2
+% 2016年4月6日</code></pre>
+<p>日期必须在一行，不能分行。</p>
+<p>关于这些元素在最后输出文件中的位置，可以参考后面的 Pandoc 模板部分。</p>
+</div>
+<div id="yaml--extension-yaml_metadata_block" class="section level2">
+<h2><span class="header-section-number">16.2</span> YAML 元数据 Extension: yaml_metadata_block</h2>
+<p>yaml 块是用<code>---</code>开头，以<code>---</code>或者<code>...</code>结束的一个块，这中块可以出现在文中的任何地方，每个块开始的地方，必须在前面留出一个空行。yaml 块也可以放在一个独立的文件中，在使用 Pandoc 的时候，把这个 yaml 文件作为输入就可以了。Pandoc 在处理多个输入文件的时候，总是把这些文件合成一个文件，然后再进行处理，因此一个单独的 yaml 文件是不会有问题的。但是请注意一定要以<code>---</code>把 yaml 块包起来。</p>
+<p>下面是一个处理独立 yaml 文件的命令行</p>
+<pre><code>pandoc aa.md metadata.yaml -s -o aa.html</code></pre>
+<p>yaml 块中定义的变量会加入到文件的 metadata 中。如果一个变量被多个块定义，那么它的值为第一个被定义的地方，后面的定义无效。另外如果一个变量以下划线结束，它将不会被 pandoc 处理。</p>
+<p>下面是一个元数据块的例子，第一行中包含<code>:</code>，因此需要一个引号包起来，在 abstract 定义中，使用<code>|</code>来开始一个缩进的块。</p>
+<pre class="yml"><code>---
+title:  &#39;This is the title: it contains a colon&#39;
+author:
+- name: Author One
+  affiliation: University of Somewhere
+- name: Author Two
+  affiliation: University of Nowhere
+tags: [nothing, nothingness]
+abstract: |
+  This is the abstract.
+
+  It consists of two paragraphs.
+...</code></pre>
+<p>在上面的这个块中，作者部分有自定义的域，因此需要一个自定义的模板来显示它们，下面是一个模板的例子：</p>
+<pre><code>$for(author)$
+$if(author.name)$
+$author.name$$if(author.affiliation)$ ($author.affiliation$)$endif$
+$else$
+$author$
+$endif$
+$endfor$</code></pre>
+</div>
+<div id="-extansion-citation" class="section level2">
+<h2><span class="header-section-number">16.3</span> 引用 Extansion: citation</h2>
+<p>这是关于如何添加参考文献的内容。</p>
+</div>
+</div>
+<div id="yaml-" class="section level1">
+<h1><span class="header-section-number">17</span> YAML 语法简单介绍</h1>
+<p>前面提到了 Markdown 中的元数据块可以通过 YAML 语法来指定。</p>
+<p>YAML 全称为（Yet Another Markup Language），也是一种标签语言。是以数据为表达目标的语言。通过空格和分行来分隔数据单元。下面是一个实例：</p>
+<pre class="yml"><code>house:
+  family:
+    name: Doe
+    parents:
+      - John
+      - Jane
+    children:
+      - Paul
+      - Mark
+      - Simone
+  address:
+    number: 34
+    street: Main Street
+    city: Nowheretown
+    zipcode: 12345</code></pre>
+<p>其中连续的项目通过<code>-</code>来表示，map 结构的<code>key/value</code>结构使用<code>:</code>来分隔。要求同一级别的数据前面缩进的空格数要相同。在上面的例子中，<code>Simone</code>可使用<code>hourse.family.children[3]</code>来引用。</p>
+<p>其他的相关内容：</p>
+<ul>
+<li>要添加注释，使用<code>#</code>符号。</li>
+<li>布尔值使用<code>true</code>和<code>false</code></li>
+<li>空值使用<code>null</code>或者<code>~</code></li>
+<li>数值支持
+<ul>
+<li>整数，如<code>12</code></li>
+<li>八进制数，如<code>012</code></li>
+<li>16进制数，如<code>0xC</code></li>
+<li>浮点数，如<code>1.24</code></li>
+<li>指数，如<code>1.2e3</code></li>
+<li>无穷: <code>.inf</code></li>
+</ul></li>
+</ul>
+<p>结束前，我们看这样一个例子：</p>
+<pre class="yml"><code>title:
+ - type: main
+   text: My Book
+ - type: subtitle
+   text: An investigation of metadata</code></pre>
+<p>在这个例子中，要访问<code>My Book</code>,应该使用<code>title[1].text</code>。这里的两个<code>-</code>表示<code>title</code>下是一个数组结构。</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>这是在表格单元格中添加换行的唯一形式。<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>在本博客中，斜体的<code>display</code>被设置成了<code>block</code>并且居中对齐，主要用于图、表的标题。<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>未理解。<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>

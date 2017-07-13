@@ -1,0 +1,78 @@
+---
+title: Hexo 的 NexT 主题中的 pre 环境、Mathjax 公式
+date: 2017-03-28
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Mathjax", "4-LaTeX", "4-Markdown", "4-Hexo"]
+slug: mathjax
+---
+
+
+
+<p>Mathjax 指令参考：<a href="http://docs.mathjax.org/en/latest/tex.html" class="uri">http://docs.mathjax.org/en/latest/tex.html</a></p>
+<blockquote>
+<p><strong>提醒</strong>：现在通过 Pandoc 解释 Hexo 下的 Markdown，基本上可以保证解释的结果能够与 Mathjax 良好兼容，但要注意 Pandoc 对 LaTeX 语法的支持中，行内公式和行间公式分别用 <code>`$...$`</code> 和 <code>`$$ $$`</code> 完成，不支持使用 <code>“\(...\)”</code> 和 <code>“\[...\]”</code> 语法，当然 <code>“\begin{equation}...\end{equation}”</code> 还是可以正常使用的。</p>
+</blockquote>
+<!-- more -->
+<div class="section level1">
+<h1>公式</h1>
+<div class="section level2">
+<h2>支持带编号的公式</h2>
+<p>在原有的<code>themes\next\layout\_third-party.mathjax.swig</code>中添加如下内容：</p>
+<pre class="javascript"><code>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+MathJax.Hub.Config({
+    TeX: {equationNumbers: {autoNumber: [&quot;AMS&quot;], useLabelIds: true}},
+    &quot;HTML-CSS&quot;: {linebreaks: {automatic: true}},
+    SVG: {linebreaks: {automatic: true}}
+});
+&lt;/script&gt;</code></pre>
+<p>之后可以像 LaTeX 一样添加<code>\label{}</code>以及<code>\eqref{}, \ref{}</code>。</p>
+</div>
+<div id="mathop" class="section level2">
+<h2><code>mathop</code></h2>
+<pre class="tex"><code>\mathop{\arg\,\min}</code></pre>
+</div>
+</div>
+<div id="pre-" class="section level1">
+<h1>pre 环境</h1>
+<p>本模板提供了一个<code>&lt;pre class=&quot;white&quot;&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;</code>的环境用于生成背景为白色的代码环境，注意<code>&lt;pre&gt;</code>与<code>&lt;code&gt;</code>之间可以换行，但<code>&lt;code&gt;</code>与文本之间要紧密相联；还提供了<code>&lt;pre class=&quot;center&quot;&gt;&lt;/pre&gt;</code>用于生成文字居中效果，不需要在行与行之间换行！</p>
+<p>由于<code>&gt;</code>和<code>```</code>生成的代码与 html 中的<code>&lt;pre&gt;</code>没有关系，因此无法通过 Pandoc 提供的代码额外属性添加功能添加<code>center</code>或者<code>white</code>，只能用手工方法自己添加 html 来生成上面两种特殊的<code>&lt;pre&gt;</code>环境，普通的<code>&lt;pre&gt;&lt;code&gt;</code>通过缩进 4 个空格的方式完成。</p>
+<p>下面是<code>emoji</code>和<code>脚注</code>的示例（注意用<code>```…```</code>生成的代码有行号，而用 4 个空格生成的没有。）：</p>
+<pre class="markdown"><code>:smile: :smirk: :relieved:
+
+Here is an inline note.^[Inlines notes are easier to write, since
+you don&#39;t have to pick an identifier and move down to type the
+note.]
+
+Here is a footnote reference,[^1] and another.[^longnote]
+ 
+[^1]: Here is the footnote.
+ 
+[^longnote]: Here&#39;s one with multiple blocks.
+ 
+    Subsequent paragraphs are indented to show that they
+belong to the previous footnote.</code></pre>
+<p>这个例子中，“Subsequent…”也是脚注的一部分，因此脚注的结束符号将在“footnote.”之后。</p>
+<blockquote>
+<p><strong>提醒</strong>：与 Hexo 默认的 Markdown 引擎相比，<a href="https://github.com/celsomiranda/hexo-renderer-markdown-it">Markdown-it</a> 引擎要严格一些：默认的引擎可以解释 html 中的 md 部分，但 Markdown-it 在遇到 html 中的 md 时，会跳过去。当然，不选择默认引擎的重要原因是默认引擎没有脚注支持。</p>
+</blockquote>
+<hr />
+<ol style="list-style-type: decimal">
+<li>根据<a href="/2017/04/17/Hexo/">这篇博客</a>的解释，原生的 Markdown 支持的内容最少，在 Pandoc 的 Markdown 扩展中，除了<code>&lt;script&gt;, &lt;style&gt;</code>之间的 html 内容，其它部分 html 中的 markdown 都可以得到正常的解释。因此上面提醒中的笔记实际上是非常不准确的；</li>
+<li><code>emoji</code>只在<code>Markdown-it</code>中可以得到支持，在 Pandoc 中并不支持。</li>
+</ol>
+<hr />
+</div>
+<div id="-markdown--pandoc-" class="section level1">
+<h1>与 Markdown 的冲突解决（使用 Pandoc 后不再有问题）</h1>
+<p>原文地址：<a href="http://blog.csdn.net/emptyset110/article/details/50123231" class="uri">http://blog.csdn.net/emptyset110/article/details/50123231</a></p>
+<p>hexo先用<code>marked.js</code>渲染，然后再交给MathJax渲染。在<code>marked.js</code>渲染的时候下划线<code>_</code>是被escape掉并且换成了<code>&lt;em&gt;</code>标签，即斜体字，另外LaTeX中的<code>\\</code>也会被转义成一个<code>\</code>，这样会导致MathJax渲染时不认为它是一个换行符了。</p>
+<p>修改<code>marked.js</code>源码的方式来避开这些问题 - 针对下划线的问题，取消<code>_</code>作为斜体转义，因为<code>marked.js</code>中<code>*</code>也是斜体的意思，所以取消掉<code>_</code>的转义并不影响我们使用markdown，只要我们习惯用<code>*</code>作为斜体字标记就行了。 - 针对<code>marked.js</code>与Mathjax对于个别字符二次转义的问题，我们只要不让<code>marked.js</code>去转义<code>\\,\{,\}</code>在MathJax中有特殊用途的字符就行了。</p>
+<p>具体修改方式，用编辑器打开<code>marked.js</code>（在<code>./node_modules/marked/lib/</code>中），将其中的：</p>
+<pre><code>escape: /^\\([\\`*{}\[\]()# +\-.!_&gt;])/,1
+em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,1</code></pre>
+<p>替换成：</p>
+<pre class="white">
+<code>escape: /^\\([`*\[\]()# +\-.!_>])/,1
+em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</code>
+</pre>
+</div>

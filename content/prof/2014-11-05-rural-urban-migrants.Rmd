@@ -1,0 +1,199 @@
+---
+title: 重返北上广：中国人真的喜欢大城市么？ - 慧航 - 专栏
+author: 慧航
+date: 2014-11-05
+categories: ["6-经济 - 城市"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记"]
+slug: rural-urban-migrants
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19885852>
+
+![](/images/Eco/Urban/ruralUrbanMigrants/1.jpg)
+
+之前一段时间，“逃离北上广”的呼声一直在网上流传。而知乎社区也曾经出现过关于留在大城市还是回小城市的讨论。
+
+在经济学里面，这个问题自然的跟城市的大小这个问题密切相关。城市规模的差别为何如此之大？一个城市最优的大小是多大？这些是城市经济学比较关注的问题。
+
+同时，政策的因素对于城市大小这个问题也是至关重要的。比如相对独裁的政府可能倾向于把资源分配给首都，而且政府可以通过投资、劳动力迁移政策（户口）等工具对城市的规模加以控制。
+
+改革开放以来的中国经历了快速的城市化进程：1978年只有18%的居民生活在城市，而现在已经有超过半数的城市居民。这些变化是与中国的快速工业化以及移动人口管制的放松密不可分的。那么，中国人真的喜欢大城市么？
+
+为了回答这个问题，北京师范大学的 Chunbing Xing 和 Clark 大学的 Junfu Zhang 的文章：[《The preference for larger cities in China: Evidence from rural-urban migrants》](http://www.econstor.eu/bitstream/10419/89798/1/dp7562.pdf)通过估计迁移人员对城市规模的支付意愿（willingness to pay），即为了去大城市而放弃的工资收入，而回答了这一问题。
+
+------
+
+为了估计willingness to pay， 首先作者建立了一个个体的选择模型。假设效用函数为：
+
+$$
+\left\{
+\begin{aligned}
+& \max\, U_{ij}=C_{ij}^{\alpha_C}H_{ij}^{\alpha_H}\exp\left[\beta_S\ln S_j+\sum^K_{k=1}\beta_k\ln X_{jk}+M_{ij}+\xi_j+\eta_{ij}\right]\\
+& \begin{aligned}
+s.t.\;\; & C_{ij}+p_jH_{ij}=I_{ij}
+\end{aligned}
+\end{aligned}\right.
+$$
+
+其中$c$为消费，$H$为不可交易的消费，比如房产等。$S$为城市规模，$X$为城市的特征，比如公共品的提供等等，$M$为城市与家乡的距离。$I$为$i$在城市$j$的收入。
+
+解这个效用最大化问题，可以得到间接效用函数：
+
+$$V_{ij}=-\alpha_H\ln p_j+\alpha I_{ij}+\beta_S\ln S_j+\sum^K_{k=1}\beta_k \ln X_{jk}+M_{ij}+\xi_{j}+\eta_{ij}$$
+
+那么 willingness to pay(WTP) 就可以定义为：
+
+$$\mathrm{WTP}_i=\frac{\partial V_{ij}}{\partial S_j}\bigg /\frac{\partial V_{ij}}{\partial I_{ij}}=\frac{\beta^\ast_S}{\alpha}\frac{I_{ij}}{S_j}$$
+
+或者其弹性形式：
+
+$$\frac{\Delta_{ij}}{I_{ij}}\bigg/\frac{\Delta S_j}{S_j}\approx\frac{\partial \ln I_{ij}}{\partial \ln S_j}=\frac{\beta^\ast_S}{\alpha}$$
+
+这个模型的估计可以分为两步。首先，通过估计个体的城市选择(离散选择)，得到对与城市的偏好系数$\theta$:
+
+$$\mathrm{Pr}(\ln V_{ij}>\ln V_{ik},\forall k\neq j)=\frac{\exp(\alpha\ln \hat{I}_{ij}+\pi_D\ln D_{ij}+\pi_1 d^1_{ij}+\pi_2 d^2_{ij}+\theta_j)}{\sum^J_{s=1}\exp(\alpha\ln \hat{I}_{is}+\pi_D\ln D_{is}+\pi_1 d^1_{is}+\pi_2 d^2_{is}+\theta_s)}$$
+
+这一步的困难在于，个体在其他城市的收入是看不到的，我们只能看到个体在最终选择的城市的收入。通过使用 Dahl 的半参数方法，作者得到了这些 conterfactural 的收入水平。
+
+第二步，得到了这些城市的偏好系数之后，看一下是不是城市的 size 越大，偏好系数越大：
+
+$$\theta_j=\beta^\ast_S\ln S_j+\sum^K_{k=1}\beta^\ast_k\ln X_{jk}+\xi^\ast_j$$
+
+------
+
+使用全国人口普查的 1% 抽样数据，作者对以上模型进行了估计。首先是城市固定效应$\theta$的估计结果（前 20 的城市，北京=0）：
+
+![](/images/Eco/Urban/ruralUrbanMigrants/2.jpg)
+
+数值越大，说明人们对城市的偏好程度越强（北上广深的排名原来应该是上深北广，上海优势明显，南京败给莆田？）。
+
+那么，是不是城市越大，人们对这个城市的偏好也越强呢？一个简单的相关图如下：
+
+![](/images/Eco/Urban/ruralUrbanMigrants/3.jpg)
+
+当然，简单的线性关系图不能替代严谨的回归分析。但是在回归中，一些不可观测的因素总是会被遗漏。为了解决这一问题，作者首先控制了城市所在地区的固定效应，其次使用 1953 年时的城市人口作为城市规模的工具变量，得到如下的回归结果：
+
+![](/images/Eco/Urban/ruralUrbanMigrants/4.jpg)
+
+可见，个人在选择城市时，的确会更偏好大城市。此外，回归结果还显示，个人做选择时对污染情况也十分敏感。
+
+那么，个人为什么会更喜欢大城市呢？作者认为有这么几种可能的解释。
+
+首先，大城市可以给个人提供更好的学习机会，从而个人可以更快的积累人力资本。
+
+其次，大城市为个人及其子女提供了未来更好的生活。
+
+再次，模型假设消费品同质，但实际上，大城市的消费品更加丰富。
+
+最后，也是之前知友们经常提到的，大城市对外来人口更友好，更少的依赖关系。
+
+所以，你会选择去哪里呢？
+
+<blockquote class="gray">
+
+**zc deng**：no structure, no good. just joking.
+
+<blockquote class="white">
+**慧航**：感觉这篇文章最关键的地方都用 reduced-form 去避开了，而且我觉着他的 IV 本身也有问题。
+
+</blockquote>
+
+**zc deng**：看 argue 了，中国的城市挺路径依赖的吧。当然 IV 难找...
+
+<blockquote class="white">
+**慧航**：感觉可以从政策变量里面去找，外生性更好 argue 吧。
+
+</blockquote>
+
+</blockquote>
+
+<blockquote class="gray">
+
+**Andrew Lau**：看不懂那个图，哪位麻烦解释一下为啥成都孤零零地掉在右下角。
+
+<blockquote class="white">
+
+**慧航**：说明成都虽然不小，但是大家不喜欢跑到成都去工作。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**歌未歌**：有些地方没有看懂或者搞清楚，但感觉这个思路挺不错的，似乎可以推广到为何人们选择 startup 而不是大公司（或反之），为什么不愿意离开故乡远游等问。这样的研究是归纳与解释现象的，个体使用它检验或者验证结论的合理性没有什么意义。
+
+</blockquote>
+
+<blockquote class="gray">
+**大锴**：我怎么感觉一堆数学之后推论了几个无关痛痒人尽皆知的结论来呢。
+
+<blockquote class="white">
+**慧航**：说明你还没懂什么是经济学，你来告诉我到底大家更喜欢去北京还是上海，有那么显然麽？文章的结论是排除了公共品等其他条件的净效应，跟你想的喜欢大城市完全不是一码事。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**Fire Ling**：文献里说的是 migrant 吧，这意味着被调查的群体本身就有要更换城市/地区的意愿啊，于是人往高处走，水往低处流，去好的地方（这不废话么），您这样一写“中国人”，似乎全国人民都有要向大城市进军的意愿一样啊。
+
+<blockquote class="white">
+**慧航**：good point，你可以认为我是标题党， 实际上我也在想作者为什么不把非迁移的也计算一下。实际上很多人并非没有去大城市的意愿，而是没有这个客观条件（能力以及政策）。
+
+</blockquote>
+
+**Fire Ling**：“实际上很多人并非没有去大城市的意愿，而是没有这个客观条件（能力以及政策）”这个仅能当猜测了，因为也可以说，去大城市本身就是为了更好的政策或让自己变得更有能力。
+
+<blockquote class="white">
+**慧航**：exactly, 后面的解释有说。我没有必要去帮原作者为了模型的设定去 fight，你说的“中国人”的问题的确有标题党嫌疑。anyway，标题党无处不在。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**SS元元**：看了下没有$D$，只有$M$，$M$是$i$到$j$城市的费用与距离相关联。另外$\xi$和$\eta$两个指的东西也略微社会学了点。
+
+<blockquote class="white">
+**慧航**：后面实证模型还有加入是否与家乡相邻等。$\xi$和$\eta$是非常标准的 fixed effects 和误差项的假定，什么叫社会学了点？
+
+</blockquote>
+
+**SS元元**：没看下去，因为$M$在这模型里代表了从家乡出来到城市的成本，上面有人问过你这一块。嗯，果然要看下去。最后将不能量化的城市特性——友好度和城市人口规模大小正相关了。这样，城市越大人越多果然更友好，楼上有些话没有说错。社会学的参数都是人为设定的。只是我个人观感。
+
+<blockquote class="white">
+**慧航**：模型都是人为设定的。
+
+</blockquote>
+
+**SS元元**：至少有些是量化的不是么。好感度什么的……
+
+<blockquote class="white">
+**慧航**：frankly, i don't know what you are saying。
+
+</blockquote>
+
+**SS元元**：就是我上面说的城市特性友好度。社会学会给个统计，但这个统计纳入到模型里去就有些过于主观了。所以我的意思是，尽管我对科学地研究这个问题也很感兴趣，但这个模型这个结论还就是越大的城市给的收入越高正相关越高啊，楼下有说越大的越有人要去他也知道。就是这个意思。
+
+<blockquote class="white">
+**慧航**：首先，这个偏好不是通过调查得到的，而是基于个人的选择估计出来的。社会学怎么做我是不知道了，但是这个设定在计量经济学是没有问题的。
+
+其次，收入的问题已经在第一步排除了，而且还排除了大城市的公共品比小城市更好的因素等等，这篇文章的结论不是说大家都喜欢大城市，而是在排除了其他因素之后，大家有某种很难解释的对大城市的偏好。
+
+如果感兴趣，请仔细读原文。虽然我觉着这篇文章做的问题不少，但是上面批评的没几个在点子上的。
+
+</blockquote>
+
+**SS元元**：是么，我觉得作为一个和城市大小正相关的函数来设定，不就是加大了城市规模大就更有好的权重么？而你说的有某种很难解释的对大城市的偏好，我的理解，影响就在这个参数。而这个参数
+As mentioned above, observed city size $S_j$ and unobserved city characteristics $\Xi*j$ are likely to be correlated. As a solution, we will instrument for city size.
+
+<blockquote class="white">
+**慧航**：我觉着，首先，你先好好学习一下计量经济学。
+
+</blockquote>
+
+**SS元元**：是高校教师么？我是挺想学学的，我是搞商业地产的，也经常有这种调研和预测的研究，由于设计到的都是实际的投资，因此有时候也满无奈的需要说服投资人。总是上过学不是，微观宏观还是学过的。一些工具也会用，数学不是太好，因此不会太深入。但总觉得有各种问题。比如类似这样的问题，这是讨论城镇化移民对大城市的偏好研究，最后如果归结到大城市因为人多而导致政策透明度高、某些城市政府行政较为规范，这的确是因素，但这说服不了投资人。专栏查看评论很麻烦，如果还有指导请私信。
+
+<blockquote class="white">
+**慧航**：指导不敢，不过对于业界的话，倒是不用这么复杂的工具。
+
+</blockquote>
+
+</blockquote>

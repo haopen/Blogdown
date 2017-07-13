@@ -1,0 +1,59 @@
+---
+title: Raj Chetty 谈作为科学的经济学 - 慧航 - 专栏
+author: 慧航
+date: 2015-03-23
+categories: ["6-经济 - 杂"]
+tags: ["6-慧航", "6-知乎专栏"]
+slug: economics-science
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19724219>
+
+> Yes, Economics Is a Science
+
+Published: October 20, 2013
+
+CAMBRIDGE, Mass. — THERE’S an old lament about my profession: if you ask three economists a question, you’ll get three different answers.
+
+<!-- more -->
+
+This saying came to mind last week, when the Nobel Memorial Prize in Economic Science was awarded to three economists, two of whom, [Robert J. Shiller](https://www.nytimes.com/topic/person/robert-j-shiller?inline=nyt-per) of Yale and Eugene F. Fama of the University of Chicago, might be seen as having conflicting views about the workings of financial markets. At first blush, Mr. Shiller’s thinking about the role of “irrational exuberance” in stock markets and housing markets appears to contradict Mr. Fama’s work showing that such markets efficiently incorporate news into prices.
+
+What kind of science, people wondered, bestows its most distinguished honor on scholars with opposing ideas? “They should make these politically balanced awards in physics, chemistry and medicine, too,” the Duke sociologist Kieran Healy wrote sardonically on Twitter.
+
+But the headline-grabbing differences between the findings of these Nobel laureates are less significant than the profound agreement in their scientific approach to economic questions, which is characterized by formulating and testing precise hypotheses. I’m troubled by the sense among skeptics that disagreements about the answers to certain questions suggest that economics is a confused discipline, a fake science whose findings cannot be a useful basis for making policy decisions.
+
+That view is unfair and uninformed. It makes demands on economics that are not made of other empirical disciplines, like medicine, and it ignores an emerging body of work, building on the scientific approach of last week’s winners, that is transforming economics into a field firmly grounded in fact.
+
+It is true that the answers to many “big picture” macroeconomic questions — like the causes of recessions or the determinants of growth — remain elusive. But in this respect, the challenges faced by economists are no different from those encountered in medicine and public health. Health researchers have worked for more than a century to understand the “big picture” questions of how diet and lifestyle affect health and aging, yet they still do not have a full scientific understanding of these connections. Some studies tell us to consume more coffee, wine and chocolate; others recommend the opposite. But few people would argue that medicine should not be approached as a science or that doctors should not make decisions based on the best available evidence.
+
+As is the case with epidemiologists, the fundamental challenge faced by economists — and a root cause of many disagreements in the field — is our limited ability to run experiments. If we could randomize policy decisions and then observe what happens to the economy and people’s lives, we would be able to get a precise understanding of how the economy works and how to improve policy. But the practical and ethical costs of such experiments preclude this sort of approach. (Surely we don’t want to create more financial crises just to understand how they work.)
+
+Nonetheless, economists have recently begun to overcome these challenges by developing tools that approximate scientific experiments to obtain compelling answers to specific policy questions. In previous decades the most prominent economists were typically theorists like Paul Krugman and Janet L. Yellen, whose models continue to guide economic thinking. Today, the most prominent economists are often empiricists like David Card of the University of California, Berkeley, and Esther Duflo of the Massachusetts Institute of Technology, who focus on testing old theories and formulating new ones that fit the evidence.
+
+This kind of empirical work in economics might be compared to the “micro” advances in medicine (like research on therapies for heart disease) that have contributed enormously to increasing longevity and quality of life, even as the “macro” questions of the determinants of health remain contested.
+
+Consider the politically charged question of whether extending unemployment benefits increases unemployment rates by reducing workers’ incentives to return to work. Nearly a dozen economic studies have analyzed this question by comparing unemployment rates in states that have extended unemployment benefits with those in states that do not. These studies approximate medical experiments in which some groups receive a treatment — in this case, extended unemployment benefits — while “control” groups don’t.
+
+These studies have uniformly found that a 10-week extension in unemployment benefits raises the average amount of time people spend out of work by at most one week. This simple, unassailable finding implies that policy makers can extend unemployment benefits to provide assistance to those out of work without substantially increasing unemployment rates.
+
+Other economic studies have taken advantage of the constraints inherent in a particular policy to obtain scientific evidence. An excellent recent example concerned health insurance in Oregon. In 2008, the state of Oregon decided to expand its state health insurance program to cover additional low-income individuals, but it had funding to cover only a small fraction of the eligible families. In collaboration with economics researchers, the state designed a lottery procedure by which individuals who received the insurance could be compared with those who did not, creating in effect a first-rate randomized experiment.
+
+The study found that getting insurance coverage increased the use of health care, reduced financial strain and improved well-being — results that now provide invaluable guidance in understanding what we should expect from the Affordable Care Act.
+
+Even when such experiments are unfeasible, there are ways to use “big data” to help answer policy questions. In a study that I conducted with two colleagues, we analyzed the impacts of high-quality elementary school teachers on their students’ outcomes as adults. You might think that it would be nearly impossible to isolate the causal effect of a third-grade teacher while accounting for all the other factors that affect a child’s life outcomes. Yet we were able to develop methods to identify the causal effect of teachers by comparing students in consecutive cohorts within a school. Suppose, for example, that an excellent teacher taught third grade in a given school in 1995 but then went on maternity leave in 1996. Since the teacher’s maternity leave is essentially a random event, by comparing the outcomes of students who happened to reach third grade in 1995 versus 1996, we are able to isolate the causal effect of teacher quality on students’ outcomes.
+
+Using a data set with anonymous records on 2.5 million students, we found that high-quality teachers significantly improved their students’ performance on standardized tests and, more important, increased their earnings and college attendance rates, and reduced their risk of teenage pregnancy. These findings — which have since been replicated in other school districts — provide policy makers with guidance on how to measure and improve teacher quality.
+
+These examples are not anomalous. And as the availability of data increases, economics will continue to become a more empirical, scientific field. In the meantime, it is simplistic and irresponsible to use disagreements among economists on a handful of difficult questions as an excuse to ignore the field’s many topics of consensus and its ability to inform policy decisions on the basis of evidence instead of ideology.
+
+[Raj Chetty](http://www.rajchetty.com/index.php/bio-cv) is a professor of economics at Harvard.
+
+<blockquote class="gray">
+**谢了不送**：经济学要贴近科学，就要有实验，自然实验可遇不可求，于是 Even when such experiments are unfeasible, there are ways to use “big data” to help answer policy questions. 接着说了一个自己如何剥离出好老师对学生影响的例子。最后说 These examples are not anomalous. And as the availability of data increases, economics will continue to become a more empirical, scientific field. 随着数据的可获得性可用性日益改善，经济学将...巴拉巴拉...所以俺说“大数据”。 解释完了这跟大数据到底有什么毛线关系之后。我还是想问原先的问题。
+
+<blockquote class="white">
+**慧航**：他这里仅仅说的是自己的研究，他用的也不是互联网意义上的“大”数据。经济学的核心问题是识别问题，跟数据多大没有什么关系。Chetty 个人做的东西数据都“大”，这倒是真的。
+
+</blockquote>
+</blockquote>

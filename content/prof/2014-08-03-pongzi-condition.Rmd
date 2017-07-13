@@ -1,0 +1,43 @@
+---
+title: 横截条件
+author: 彭浩
+date: 2014-08-03
+categories: ["6-经济 - 数学与动态"]
+tags: ["6-Pongzi条件", "6-横截条件", "6-库恩—塔克条件", "6-Transversality condition", "6-Kuhn-Tucker conditions"]
+slug: pongzi-condition
+---
+
+**横截条件**(Transversality condition)也称**边界条件**，实际上是**库恩—塔克条件**(the Kuhn-Tucker conditions)的`极限形式`。让我们先来看一个很简单的最优化问题。
+
+<!-- more -->
+
+假设一个只能再活两期(1和2期)的消费者，每一期都有禀赋$\omega_t$，在0期时遗留下来债券为$b_0$，可以借贷，没有劳动。该消费者的最优化问题为(贴现到第0期)：
+
+\begin{equation}
+\left\{
+\begin{aligned}
+& \max\;\beta u(c_1)+\beta^2u(c_2)\\
+& \begin{aligned}
+s.t.\;\; & (1)\; b_1+c_1\leqslant \omega_1+(1+r_0)b_0\\
+         & (2)\; b_2+c_2\leqslant \omega_2+(1+r_1)b_1
+\end{aligned}
+\end{aligned}\right.
+\end{equation}
+
+可是这些条件是否足够我们求得所需的最优解呢？答案是否定的，原因在于如果对于第2 期，也就是最后一期的借贷没有限制的话，则该消费者一定会设法借入无穷的债务，即令$b_2=-\infty$，由此来达到更高的效用。因此，我们必须对$b_2$做出一个“合理”的限制，来确保可以得到符合现实的解。一个很自然的限制^[即**非 Ponzi 博弈条件**，含义是在最后一期时该消费者不能有负债。]是$b_2\geqslant 0$，加上这个条件以后，我们再来求解这个最优化问题。
+
+写出拉格朗日函数：
+$$
+\begin{aligned}
+\mathcal{L}=\beta u(c_1)+\beta^2u(c_2)& +\beta\lambda_1[\omega_1+(1+r_0)b_0-b_1-c_1]\\
+ & +\beta^2\lambda_2[\omega_2+(1+r_1)b_1-b_2-c_2]
+\end{aligned}
+$$
+对于$b_2\geqslant 0$的Kuhn-Tucker条件为：
+$$
+\frac{\partial \mathcal{L}}{\partial b_2}\leqslant 0; \quad b_2\cdot\frac{\partial \mathcal{L}}{\partial b_2}=0
+$$
+上式中的第二个条件即为$\beta^2\lambda_2b_2=0$，如果是三期的消费者，可以写出该条件为$\beta^3\lambda_3b_3=0$，继续推广下去，到无穷期时，就成为横截条件：
+$$
+\lim_{t\to\infty}\beta^t\lambda_tb_t=0
+$$

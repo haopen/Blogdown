@@ -1,0 +1,276 @@
+.nav {
+  max-width: 1010px;
+}
+.content {
+  max-width: 910px;
+}
+
+div#images-container {
+  display: none;
+}
+
+
+input#local-search-input {
+  font-size: 19px;
+  height: 20px;
+  font-family: 'Alegreya', 'Palatino Linotype', 'Book Antiqua', Palatino, 'source-han-serif-sc', 'Source Han Serif SC', 'Source Han Serif CN', 'Source Han Serif TC', 'Source Han Serif TW', 'Source Han Serif', 'Songti SC', '仿宋', 'FangSong', 'NSimSun', 'Microsoft YaHei', serif !important;
+}
+.local-search-popup .search-icon, .local-search-popup .popup-btn-close {
+  padding-top: 5px !important;
+}
+#local-search-result, .search-result-title, .local-search-popup .search-keyword {
+  font-size: 18px !important;
+}
+b.search-keyword {
+  font-size: 18px !important;
+  color: #2dbe60 !important;
+  border-bottom: solid 2px #cbf8df !important;
+}
+
+.article-taxonomies {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1em;
+}
+.article-taxonomies a:hover {
+  color: #000;
+}
+.tag-prefix {
+  margin-left: 1em;
+}
+.taxonomy-category, .taxonomy-tag {
+  padding: 2px;
+}
+
+
+p.imgCaption {
+  text-align: center;
+  margin-top: -1em;
+}
+div.figure {
+  text-align: center;
+}
+
+/* 修改了本文件最后面自带的 pre .nohighlight 的背景颜色和字体大小，用于保证 R Markdown 和 Plain Markdown 的 pre 标签显示效果相同 */
+/* 完全中文标题，Pandoc 不能指定好的 id，这部分对应的目录无法消除链接的下划线 */
+div#TOC {
+  background-color: #f8f8f8;
+}
+div#TOC ul {
+  list-style-type: none
+}
+div#TOC a:link {
+  border-bottom: initial;
+  box-shadow: initial;
+  color: #000000;
+}
+div#TOC a:hover {
+  color: #2dbe60;
+  background-color: transparent;
+}
+
+/* matlab 统计工具箱专用 */
+#leftDivPre pre, #leftDivPre1 pre {
+  font-family: 'PT Mono', 'STKaiti', 'KaiTi', 'SimKai', monospace;
+  font-size: 85%;
+}
+
+/* 标签云页面 */
+.page-tags {
+  margin-top: 1.5em;
+  background-color: #f8f8f8;
+  padding: 1em 1.5em;
+  text-align: center;
+}
+.page-tags .tags {
+  margin: 10px 5px;
+  display: inline-block;
+}
+.page-tags .tags a:hover {
+  border-bottom: solid 2px #ddd;
+  color: #000 !important;
+}
+
+/* https://github.com/auth0/kbd/blob/gh-pages/kbd.css */
+/* https://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
+kbd
+{
+  -moz-border-radius: 3px;
+  -moz-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  color: #333;
+  display: inline-block;
+  font-family: Consolas, "Lucida Console", monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin: 0 .1em;
+  padding: .1em .6em;
+  text-shadow: 0 1px 0 #fff;
+}
+
+kbd:hover, kbd:hover * {
+  color: black;
+  /* box-shadow: 1px 1px 1px #333; */
+}
+kbd:active, kbd:active * {
+  color: black;
+  box-shadow: 1px 1px 0px #ddd inset;
+}
+
+kbd kbd {
+  padding: 0px;
+  margin: 0 1px;
+  box-shadow: 0px 0px 0px black;
+  vertical-align: baseline;
+  background: none;
+}
+
+kbd kbd:hover {
+  box-shadow: 0px 0px 0px black;
+}
+
+kbd:active kbd {
+  box-shadow: 0px 0px 0px black;
+  background: none;
+}
+
+/* Deep blue */
+kbd.deep-blue, .deep-blue kbd {
+  background: steelblue;
+  color: #eee;
+}
+
+kbd.deep-blue:hover, kbd.deep-blue:hover *, .deep-blue kbd:hover {
+  color: white;
+}
+
+/* Dark apple */
+kbd.dark-apple, .dark-apple kbd {
+  background: black;
+  color: #ddd;
+}
+
+kbd.dark-apple:hover, kbd.dark-apple:hover *, .dark-apple kbd:hover {
+  color: white;
+}
+
+/* Type writer */
+kbd.type-writer, .type-writer kbd {
+  border-radius: 10px;
+  background: #333;
+  color: white;
+}
+::selection {
+  background-color: #000;
+  color: #00ff00;
+}
+::-moz-selection{
+  background-color: #000;
+  color: #00ff00;
+}
+
+/* 以下部分为原始主题中的内容 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.nav-links .active a, .nav-links a:hover, .nav-links a:focus {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 2px;
+}
+.article-content {
+  hyphens: auto;
+}
+.cn {
+ text-align: justify;
+}
+code {
+  hyphens: none;
+}
+.article-content a {
+  border-bottom: 1px solid #CBF8DF;
+  box-shadow: inset 0 -2px 0 #CBF8DF;
+}
+.article-content img, iframe {
+  max-width: 100%;
+}
+#article-nav, .article-date {
+  display: flex;
+  align-items: stretch;
+  clear: both;
+}
+#article-nav {
+  margin-bottom: 15px;
+}
+#article-nav-older, #article-nav-newer, .article-date span {
+  flex: 1;
+}
+#article-nav-newer, .article-date .article-toolbar {
+  text-align: right;
+}
+.article-nav-link-wrap {
+  display: block;
+  text-decoration: none;
+}
+.article-toolbar a {
+  margin-left: .2em;
+}
+.article-toolbar a:hover, .article-toolbar a:focus {
+  color: #222;
+}
+iframe, twitterwidget {
+  display: block;
+  margin: auto;
+}
+.article-subtitle {
+  font-size: .8em;
+  color: #696969;
+}
+h1 .article-subtitle {
+  display: block;
+}
+#TableOfContents {
+  background-color: #f8f8f8;
+}
+#TableOfContents ul {
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+table {
+  min-width: 50%;
+  max-width: 100%;
+  margin: auto;
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+table thead th {
+  border-bottom: 1px solid #e8e8e8;
+}
+main {
+  display: block;
+}
+pre .nohighlight {
+  border: 0px solid #f3f3f3;
+  display: block;
+  padding: .5em;
+  overflow-x: auto;
+  background-color: #f8f8f8;
+  font-size: 85%;
+}
+.footnotes {
+  font-size: .9em;
+}
+
+@media (min-width: 600px) {
+  .archive-item-link {
+    text-overflow: ellipsis;
+    max-width: calc(100% - 100px);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

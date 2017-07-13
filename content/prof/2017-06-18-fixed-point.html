@@ -1,0 +1,53 @@
+---
+title: 不动点定理
+date: 2017-06-18
+categories: ["6-经济 - 数学与动态"]
+tags: ["6-泛函分析", "6-不动点"]
+slug: fixed-point
+---
+
+
+
+<p><strong>参考资料</strong>：《经济数学方法与模型》, by de la Fuente, p191</p>
+<div class="section level1">
+<h1>简介</h1>
+<ul>
+<li>Brouwer (<strong>布劳维尔</strong>)不动点定理给出的是函数存在不动点的充分条件；</li>
+<li>Kakutani (<strong>角谷静夫</strong>)不动点定理给出的是有限维空间中对应存在不动点的充分条件；</li>
+</ul>
+<!-- more -->
+</div>
+<div class="section level1">
+<h1>不动点定理</h1>
+<ol style="list-style-type: decimal">
+<li><p><strong>压缩映射原理</strong>(Émile Picard(1890)；Stefan Banach(1922))：设<span class="math inline">\(X\)</span>是一个完备的度量空间，映射<span class="math inline">\(f:X\to X\)</span> 把每两点的距离至少压缩<span class="math inline">\(\lambda\)</span>倍，即<span class="math inline">\(\mathrm{d}(f(x), f(y))\leqslant\lambda\mathrm{d}(x,y)\)</span>，这里<span class="math inline">\(\lambda\)</span>是一个小于<span class="math inline">\(1\)</span>的常数，那么<span class="math inline">\(f\)</span>必有而且只有一个不动点，而且从<span class="math inline">\(Χ\)</span>的任何点<span class="math inline">\(x_0\)</span>出发作出序列<span class="math inline">\(x_1=f(x_0),x_2=f(x_1),\dotsc,x_n=f(x_{n-1}),\dotsc\)</span>，这序列一定收敛到那个不动点。这条定理是许多种方程的解的存在性、惟一性及迭代解法的理论基础。由于分析学的需要，这定理已被推广到非扩展映射、概率度量空间、映射族、集值映射等许多方面。</p></li>
+<li><p><strong>Brouwer 不动点定理</strong>(1910): 设<span class="math inline">\(Χ\)</span>是欧氏空间中的紧凸集，那么<span class="math inline">\(Χ\)</span>到自身的每个连续映射都至少有一个不动点。</p></li>
+</ol>
+<p>用这定理可以证明<strong>代数基本定理</strong>：复系数的代数方程一定有复数解。把布劳威尔定理中的欧氏空间换成巴拿赫空间，就是<strong>绍德尔不动点定理</strong>(1930)，常用于偏微分方程理论。这些定理可以从单值映射推广到集值映射，除微分方程理论外还常用于对策论和数理经济学。</p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Kakutani 不动点定理</strong>: 设<span class="math inline">\(C\)</span>是<span class="math inline">\(\mathbb{R}^n\)</span>中的紧凸集，<span class="math inline">\(f\)</span>为从<span class="math inline">\(C\)</span>到<span class="math inline">\(C\)</span>的非空凸子集的上半连续的点—集映射，则至少存在一点<span class="math inline">\(x^\ast\)</span>, 使得<span class="math inline">\(x^\ast\in f(x^\ast)\)</span>。</li>
+</ol>
+<p>1941 年，Kakutani 把 Brouwer 不动点定理推广到有限维空间中多值映射的情形。不动点的个数有两种数法。代数上通常说<span class="math inline">\(n\)</span>次复多项式有<span class="math inline">\(n\)</span>个复根，是把一个<span class="math inline">\(k\)</span>重根算作<span class="math inline">\(k\)</span>个根的。如果不把重数统计在内，根的个数就可以小于<span class="math inline">\(n\)</span>。推广<strong>根的重数</strong>概念，可以定义不动点的指数，它是一个整数，可正可负可零，取决于映射在不动点附近的局部几何性质。一个映射的所有不动点的指数的总和，称为这映射的<strong>不动点代数个数</strong>，以别于不动点的实际个数。</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>莱夫谢茨不动点定理</strong>：设<span class="math inline">\(Χ\)</span>是紧多面体，<span class="math inline">\(f:Χ\to Χ\)</span>是映射，那么<span class="math inline">\(f\)</span>的不动点代数个数等于<span class="math inline">\(f\)</span>的莱夫谢茨数<span class="math inline">\(L(f)\)</span>，它是一个容易计算的同伦不变量，可以利用同调群以简单的公式写出。当<span class="math inline">\(L(f)\neq 0\)</span>时，与<span class="math inline">\(f\)</span>同伦的每个映射都至少有一个不动点。这个定理既发展了布劳威尔定理，也发展了关于向量场奇点指数和等于流形的欧拉数的<strong>庞加莱－霍普夫定理</strong>，把它进一步推广到泛函空间而得的<strong>勒雷－绍德尔参数延拓原理</strong>，早已成为偏微分方程理论的标准的工具。</li>
+</ol>
+<p>J.尼尔斯 1927 年发现，一个映射<span class="math inline">\(f\)</span>的全体不动点可以自然地分成若干个不动点类，每类中诸不动点的指数和都是同伦不变量。指数和不为<span class="math inline">\(0\)</span>的不动点类的个数，称为这映射的<strong>尼尔斯数</strong><span class="math inline">\(N(f)\)</span>。只要<span class="math inline">\(Χ\)</span>是维数大于<span class="math inline">\(2\)</span>的流形，<span class="math inline">\(N(f)\)</span>恰是与 <span class="math inline">\(f\)</span>同伦的映射的最少不动点数。这就提供了研究方程的解的实际个数（而不只是代数个数）的一种方法。</p>
+<p>莱夫谢茨定理的一个重要发展是关于微分流形上椭圆型算子与椭圆型复形的<strong>阿蒂亚－辛格指标定理</strong>与<strong>阿蒂亚-博特不动点定理</strong>。</p>
+</div>
+<div class="section level1">
+<h1>参考文献</h1>
+<ol style="list-style-type: decimal">
+<li>江泽涵，《不动点类理论》，科学出版社，北京，1979。</li>
+<li>V. I. Istratescu. Fixed Point Theory (An Introduction)[M]. Reidel, 1981.</li>
+<li>B.Jiang,Lectures on Nielsen Fixed Point Theory,Amer. Math. Soc., Providence, 1983.</li>
+<li>M.J.Todd,The Computation of Fixed Points and Applications, Springer-Verlag, New York, 1976.</li>
+<li>L. E. J. Brouwer. Beweis der Invarianz der Dimensionenzahl[J]. Math. Ann., 1911, (70): 161–165.</li>
+<li>S. Kakutani. A Generalization of Brouwer Fixed Point Theorem[J]. Duke Math. J., 1941, (8): 457–459.</li>
+<li>熊金城. 点集拓扑讲义(第三版)[M]. 高等教育出版社, 2003.</li>
+</ol>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Picard%E2%80%93Lindel%C3%B6f_theorem">Picard–Lindelöf theorem</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem">Banach fixed-point theorem</a></li>
+<li><a href="https://zhidao.baidu.com/question/1671784868029411107.html" class="uri">https://zhidao.baidu.com/question/1671784868029411107.html</a></li>
+</ul>
+</div>

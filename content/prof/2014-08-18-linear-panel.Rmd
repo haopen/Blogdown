@@ -1,0 +1,35 @@
+---
+title: 线性面板数据模型的各种关系整理 - 慧航 - 专栏
+author: 慧航
+date: 2014-08-18
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-计量", "6-面板数据"]
+slug: linear-panel
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19828028>
+
+很多人问我关于线性面板数据里面各种估计量的关系，稍微整理了一下，传上来，以后就不用费口舌了。
+
+![](/images/Eco/Econometrica/huihang/linearPanel.jpg)
+
+上面每个箭头都是可以证明的，感兴趣的可以自己证明，不会证的。也没必要证这么无聊的东西。
+
+<blockquote class="gray">
+**Dessy**：fd 的 gls 形式是 fixed effect？
+
+<blockquote class="white">
+**慧航**：yes。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**loveapple**：右边那个一阶差分之后不就可以用 ols 了吗？
+
+<blockquote class="white">
+**慧航**：嗯，就是这么做的啊，只不过再 gls 之后就是 fixed effects。
+
+</blockquote>
+
+</blockquote>

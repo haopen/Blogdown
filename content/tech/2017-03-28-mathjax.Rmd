@@ -1,0 +1,94 @@
+---
+title: Hexo 的 NexT 主题中的 pre 环境、Mathjax 公式
+date: 2017-03-28
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Mathjax", "4-LaTeX", "4-Markdown", "4-Hexo"]
+slug: mathjax
+---
+
+Mathjax 指令参考：<http://docs.mathjax.org/en/latest/tex.html>
+
+> **提醒**：现在通过 Pandoc 解释 Hexo 下的 Markdown，基本上可以保证解释的结果能够与 Mathjax 良好兼容，但要注意 Pandoc 对 LaTeX 语法的支持中，行内公式和行间公式分别用 `` `$...$` `` 和 `` `$$ $$` `` 完成，不支持使用 `` “\(...\)” `` 和 `` “\[...\]” `` 语法，当然 `“\begin{equation}...\end{equation}”` 还是可以正常使用的。
+
+<!-- more -->
+
+# 公式
+
+## 支持带编号的公式
+
+在原有的`themes\next\layout\_third-party.mathjax.swig`中添加如下内容：
+
+```javascript
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	"HTML-CSS": {linebreaks: {automatic: true}},
+	SVG: {linebreaks: {automatic: true}}
+});
+</script>
+```
+
+之后可以像 LaTeX 一样添加`\label{}`以及`\eqref{}, \ref{}`。
+
+## `mathop`
+
+```tex
+\mathop{\arg\,\min}
+```
+
+# pre 环境
+
+本模板提供了一个`<pre class="white"><code>...</code></pre>`的环境用于生成背景为白色的代码环境，注意`<pre>`与`<code>`之间可以换行，但`<code>`与文本之间要紧密相联；还提供了`<pre class="center"></pre>`用于生成文字居中效果，不需要在行与行之间换行！
+
+由于`>`和<code>\`\`\`</code>生成的代码与 html 中的`<pre>`没有关系，因此无法通过 Pandoc 提供的代码额外属性添加功能添加`center`或者`white`，只能用手工方法自己添加 html 来生成上面两种特殊的`<pre>`环境，普通的`<pre><code>`通过缩进 4 个空格的方式完成。
+
+下面是`emoji`和`脚注`的示例（注意用<code>\`\`\`...\`\`\`</code>生成的代码有行号，而用 4 个空格生成的没有。）：
+
+```markdown
+:smile: :smirk: :relieved:
+
+Here is an inline note.^[Inlines notes are easier to write, since
+you don't have to pick an identifier and move down to type the
+note.]
+
+Here is a footnote reference,[^1] and another.[^longnote]
+ 
+[^1]: Here is the footnote.
+ 
+[^longnote]: Here's one with multiple blocks.
+ 
+	Subsequent paragraphs are indented to show that they
+belong to the previous footnote.
+```
+
+这个例子中，“Subsequent...”也是脚注的一部分，因此脚注的结束符号将在“footnote.”之后。
+
+> **提醒**：与 Hexo 默认的 Markdown 引擎相比，[Markdown-it](https://github.com/celsomiranda/hexo-renderer-markdown-it) 引擎要严格一些：默认的引擎可以解释 html 中的 md 部分，但 Markdown-it 在遇到 html 中的 md 时，会跳过去。当然，不选择默认引擎的重要原因是默认引擎没有脚注支持。
+
+<hr />
+
+1. 根据[这篇博客](/2017/04/17/Hexo/)的解释，原生的 Markdown 支持的内容最少，在 Pandoc 的 Markdown 扩展中，除了`<script>, <style>`之间的 html 内容，其它部分 html 中的 markdown 都可以得到正常的解释。因此上面提醒中的笔记实际上是非常不准确的；
+2. `emoji`只在`Markdown-it`中可以得到支持，在 Pandoc 中并不支持。
+
+<hr />
+
+# 与 Markdown 的冲突解决（使用 Pandoc 后不再有问题）
+原文地址：http://blog.csdn.net/emptyset110/article/details/50123231
+
+hexo先用`marked.js`渲染，然后再交给MathJax渲染。在`marked.js`渲染的时候下划线`_`是被escape掉并且换成了`<em>`标签，即斜体字，另外LaTeX中的`\\`也会被转义成一个`\`，这样会导致MathJax渲染时不认为它是一个换行符了。
+
+修改`marked.js`源码的方式来避开这些问题 
+- 针对下划线的问题，取消`_`作为斜体转义，因为`marked.js`中`*`也是斜体的意思，所以取消掉`_`的转义并不影响我们使用markdown，只要我们习惯用`*`作为斜体字标记就行了。 
+- 针对`marked.js`与Mathjax对于个别字符二次转义的问题，我们只要不让`marked.js`去转义`\\,\{,\}`在MathJax中有特殊用途的字符就行了。 
+
+具体修改方式，用编辑器打开`marked.js`（在`./node_modules/marked/lib/`中），将其中的：
+
+    escape: /^\\([\\`*{}\[\]()# +\-.!_>])/,1
+	em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,1
+
+替换成：
+
+<pre class="white">
+<code>escape: /^\\([`*\[\]()# +\-.!_>])/,1
+em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</code>
+</pre>

@@ -1,0 +1,297 @@
+---
+title: Hugo 博客平台应用笔记
+subtitle: 平台搭建、功能订制、主题调整、使用心得
+author: 彭浩
+date: '2017-07-09'
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: hugo
+categories: ["4-Hugo"]
+tags: [4-Hugo, 4-博客, 4-LaTeX, 4-Mathjax, 4-GitHub, "4-R Markdown"]
+---
+
+# 安装与运行{#install}
+
+## RStudio 安装
+
+暂时不能直接用官方网站的正式版安装，而要用 <https://dailies.rstudio.com/> 提供的开发测试版，否则无法直接通过 RStudio 的新建 Project 向导创建一个 Hugo 的博客站点。
+
+## Hugo 安装
+
+    C:\Users\Howard\AppData\Roaming\Hugo 这是一个 dos 命令的示例：dir *.txt
+
+[Hugo](https://gohugo.io/) 基于 [Go](https://golang.org/) 语言编写，与 [Jekyll](https://jekyllrb.com/) 和 [Hexo](https://hexo.io/) 相比，虽然 Hugo 目前[主题](https://themes.gohugo.io/)和插件还不如 Hexo 丰富，但它运行速度极快，并且安装非常容易，用户只需要[下载](https://github.com/gohugoio/hugo/releases)主程序 `Hugo.exe` 并复制到指定目录即可^[这个目录是本人电脑上的目录，可自行根据实际情况修改。]：
+
+```txt
+C:\Users\Howard\AppData\Roaming\Hugo
+```
+
+具体使用时可以参考[官方文档](https://gohugo.io/overview/introduction/)（[中文](http://www.gohugo.org/)）进一步了解如何使用 Hugo，还可以到 GitHub 了解存在的问题以及目前的开发进度，到 [Community](https://discourse.gohugo.io/) 与其他用户讨论使用过程中遇到的各种问题。
+
+## 博客搭建
+
+### 方法 1
+首先，切换到放置博客文件的目录，比如 `D:\GitHub`，接下来右键并选择 `GUI Bash Here`，之后在弹出的命令对话框中输入如下命令：
+
+```bash
+git clone --recursive https://github.com/yihui/blogdown-yihui-template.git
+```
+
+就可以从谢益辉的 Github 上将 `hugo-lithium-theme` 所需的文件全部下载到本地的 `D:\GitHub\blogdown-yihui-template\` 目录之中，这个目录名称可以自行修改，比如修改成 `blogdown_Haopeng`。
+
+其次，打开 RStudio，输入如下命令：
+
+```r
+setwd('D:/GitHub/blogdown_Haopeng')
+blogdown::serve_site()
+```
+
+当控制台显示 `Serving the directory D:\GitHub\blogdown_Haopeng at http://127.0.0.1:4321` 类似的文字时，就可以在浏览器中输入 `http://127.0.0.1:4321` 进行预览，因为具有 Hugo 实时预览功能，因此对目录中相关文件进行修改后，甚至不需要刷新浏览器就可以看到更新后的结果。
+
+### 方法 2
+
+如果没有安装 git 客户端，也可以跳过上面的两个步骤，直接在 RStudio 中输入如下命令：
+
+```r
+setwd('D:/GitHub/blogdown_Haopeng')
+blogdown::new_site(theme = 'yihui/hugo-lithium-theme')
+blogdown::serve_site()
+```
+
+这样生成的博客站点和上面的非常类似，但细节和相关功能上可能会有比较多的问题。
+
+### 方法 3
+
+先复制一份打包好的 `blogdown_Haopeng` 目录到指定位置，然后参考方法 1 第二步进行操作。
+
+### 方法 4（推荐）
+
+方法 1 和 方法 3 的思路会遇到一个比较奇怪的事情，在 <https://github.com/rstudio/blogdown/issues/140> 反映了此问题：就是在 Rmd 中~~**无法**~~成功通过如下的设置来生成文章内的目录，并给每个小标题添加编号，
+
+```yaml
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+```
+
+根据试验的结果来看，直接在 RStudio 中按 <https://bookdown.org/yihui/blogdown/rstudio-ide.html> 给出的说明：
+
+1. 点击 `File -> New Project -> New Directory`，然后按照下面两张图的设置进行站点初始化：
+
+![Create a new website project in RStudio.](/images/Tech/Hugo/RStudio/NewProject/1.png)
+
+![Create a website project based on blogdown.](/images/Tech/Hugo/RStudio/NewProject/2.png)
+
+2. 将 `yihui/blogdown-yihui-template.git` 下面的 `\layouts\*` 和 `\static\*` 复制到 `Blogdown` 中；
+3. 复制 `config.yaml` 并删除默认的 `config.toml`；
+4. 在 Rmd 文件头中添加上面给出的 `output` 设置；
+5. ~~不复制~~ `blogdown-yihui-template\R` 中的 `build_one.R` 和 `build.R`；
+6. 在 RStudio 中运行 `blogdown::serve_site()`。
+
+这样又可以成功得到 Pandoc 风格的 toc 和 编号后的标题。但目前不清楚为什么用方法 1 和方法 3 不能成功，也不确定方法 2 和这里的方法 4 的完整区别（至少方法 4 中的指定 `Create project as subdirectory of` 是方法 2 默认没有的）。
+
+> **注意**：如 <https://bookdown.org/yihui/blogdown/output-format.html> 最下方指出的，方法 4 可能会导致语法高亮等失效，可以通过 `highlight.js` 的方法来修正，在实际运行过程中，IE 下在线加载该语法高亮工具的 CSS 文件可能会比较慢，而在 Chrome 下这个过程很迅速。另外，这个页面中说使用 R Markdown 时，公式需要通过 `` `$...$` `` 才可以正常工作，但实际上模板已经可以直接用 <code>`$...`$</code> 来完成公式的输入。
+
+<https://support.rbind.io/2017/04/25/yihui-website/> 是谢益辉对自己网站模板的比较详细的思路介绍，值得多读一下，了解更多的细节。
+
+# 站点配置与功能订制
+
+## 站点配置
+
+站点配置主要在 `config.yaml` 文件中进行，直接参考谢益辉的 `config.yaml` 文件进行修改即可，注意目前暂时不添加 `googleAnalytics` 相关的信息，因此这一部分的取值为空。
+
+> **说明**：Hugo 的配置包含两部分，一部分位于主题目录之中，比如 `themes\hugo-lithium-theme\` 下的 `static\` 或 `layout\`，另一部分位于站点根目录之中，比如 `\layout\` 或 `\static\`，其中后者的优先级要高于前者。在后续的内容中，涉及到相关目录时，如果没有提及“主题中的”相关字眼，通常指的是站点根目录中的相关目录或文件。
+
+## 功能订制
+
+功能订制主要是在谢益辉已提供功能的基础上进行修正和添加，首先需要从谢益辉的 `\static\` 和 `\layout\` 中复制全部文件到博客的根目录中，接下来，
+
+- **logo**：在 `\static\images\` 中放置已经做好的头像文件，如果觉得不满意，可以在 Photoshop 中参考已经做好的头像文件自行调整；
+- **disqus**：将 `\layouts\partials\disqus.html` 文件中的：
+
+```javascript
+var disqus_js = '//{{ .Site.DisqusShortname }}.disqus.com/embed.js';
+```
+
+替换成：
+
+```javascript
+var disqus_js = 'https://{{ .Site.DisqusShortname }}.disqus.com/embed.js';
+```
+
+- **OK**：关于异步加载字体功能，将 `\static\js\load-typekit.js` 文件中的 `kitId: 'kwz5xar'` 修改成 `kitId: 'oqz0fck'`，这里的 `kitId` 需要[注册](https://typekit.com/plans)获得^[必需通过 VPN 方式才能注册，无法用 Chrome 带的翻墙功能注册。]；
+- 从 `\layouts\partials\head_custom.html` 可以看出：
+	- **OK**：FontAwesome 相关的字体也是异步在线加载的，现在已迁移到本地，否则 Ad block 有可能产生不好的影响，导致图标无法显示；
+	- **OK**：只有 `cn/` 目录下的文章会异步加载思源宋体，已修改，参考 `head_custom.html`；
+	- **OK**：谢益辉设定 2017 年以前的文章会异步加载 [`pangu`](https://github.com/vinta/pangu.js) 插件，这里将 `{{ if lt (.Date.Year) 2017 }}` 修改成 `{{ if lt (.Date.Year) 2005 }}`，相当于不再加载该插件；
+- **OK**：时间格式正文页中的时间格式显示比较怪，在没有了解 Hugo 的语法前，将 `\layouts\partials\article_meta.html` 文件中的 `{{ .Date.Format (default "January 2, 2006" .Site.Params.dateFormat ) }}` 修改成 `{{ .Date.Format "2006/01/02" }}`；
+- **OK**：GitHub Edit 在 Windows 上，文件路径中使用 `\`，而 `\layouts\partials\article_meta.html` 中没有考虑到这一点，导致生成的链接中包含 `%5c` 字样，这正是 `\` 对应的 html 转义码，因此将文件中的`{{ $.Scratch.Set "filePath" $.File.Path }}` 修改成 `{{ $.Scratch.Set "filePath" (replace $.File.Path "\\" "/") }}`，注意不是替换 `%5c`，而是 `\\`；
+- **OK**：关于页面标题居中通过修改 `\layouts\partials\article_meta.html` 将“关于”页面的标题剧中，具体的，需要将如下代码
+
+```html
+<h1 class="article-title">{{ .Title }}
+```
+
+修改为：
+
+```html
+{{if findRE "-about$" $.File.BaseFileName }}
+<h1 class="article-title" style="text-align: center;">{{ .Title }}
+{{ else }}
+<h1 class="article-title">{{ .Title }}
+{{ end }}
+```
+
+## 待实现{#futureFeatures}
+
+1. R Markdown 下面设定超链接在新窗口中打开，Plain Markdown 中在 `_config.yaml` 的 `blackfriday` 设置即可；
+1. 标签和分类相关的问题：
+    - 标签和分类中的空格会被自动忽略，怎么禁止；
+    - 标签和分类为中文时，Blogdown 对应的当前分类（标签）条目汇总页无法显示，但是 <https://blog.coderzh.com/categories/读书笔记/> 是正常工作的，这说明有可能是 blogdown 或者模板的问题；
+    - 另一个问题是当前分类（标签）汇总页的标题不能是 `.Title`，否则取值为 `年份`，这里由于 `tags` 和 `categories` 都位于站点根目录下，因此唯一的可能是获取用户进到本页面之前的前一个页面对应的 section，然后根据该 section 展示一个与 section 有关的标签页或分类页，然而这样做的基础是可以在不同的 section 下面生成各自的 `tags` 和 `categories` 页，估计会有比较大的困难；
+    - **已解决**：**标签云**功能的实现，默认的分类和标签都是同一类对象，而现在需要将两类对象分离出来，查看 <https://github.com/kakawait/hugo-tranquilpeak-theme> 中 kakawait-tranquilpeak 的主题效果时，发现里面有一个 `\layouts\taxonomy` 目录，其中包含了 `archive.terms.html`, `category.html`, `category.terms.html`, `tag.html`, `tag.terms.html`，再根据 <https://gohugo.io/templates/terms/> 的文档说明，显然存档页、分类页、标签页都可以分开定义模板，其中 `tag.terms.html` 是标签汇总页（标签云），那么 `tag.html` 就应该是某个标签下的 post 的展示页，暂时不清楚 `archive.terms.html` 的作用。在 `\layouts\taxonomy` 中添加了一个自定义的 `tag.terms.html`，之后就可以生成标签汇总页。具体生成标签汇总页时，发现 <https://www.josephearl.co.uk/tags> 的标签云效果很不错，于是： (1) 到 <https://github.com/josephearl/website> 下载了对应的源代码（主题的其它功能可以到 <https://github.com/nodejh/hugo-theme-cactus-plus> 查阅），提取其中的 `themes\cactus-plus\static\js\js.tags` 到自己博客的 `\static\js\，(2) 参考这个模板中的 `\layouts\section\tags.html` 文件的内容，同时参考 <https://github.com/kakawait/hugo-tranquilpeak-theme> 的目录结构，在 `\layouts\taxonomy` 中添加了一个自定义的 `tag.terms.html`，(3) 修改 `tags.js` 中的 `var tagcloudOptions={size:{start:12,end:30,unit:"pt"},color:{start:"#bbbbbb",end:"#2dbe60"}}`，将其中的两个 `start`, `end` 修改成现在的取值，用于指定标签云字体的大小和颜色。
+    - <https://www.josephearl.co.uk/tags> 是一个非常好的标签云的效果；
+1. 标签：正文中的标签，标签汇总页（**已解决**），单个标签对应文章列表（分页，**待解决**）；
+1. 分类：正文中显示所属分类，分类目录页（分页），单个分类中的文章列表（分页）；
+    - <https://tranquilpeak.kakawait.com/categories/>：这个分类页面显示了标签，还显示了全部 post，不同分类下的 post，值得参考；
+1. **可解决非 tags 部分**：除了 EN 下外，其它地方的 tags list/paper list 的标题都用中文，这些地方的标题都居中；
+1. 能不能每个 section 中包含一个 `tags` 和 `categories` 页面？
+1. 存档：按年份倒序的存档页（分页），根据 <https://gohugo.io/templates/terms/>，可以用 `len .Data.Terms` 和 `len .Data.Pages` 得到标签数和页数；
+1. Hexo 中的 `<ol>` 标记默认可以添加一个 `start` 属性，但是本主题中还不支持，用 R Markdown 可以通过 Pandoc 的能力来实现；
+1. FontAwesome 相关的字体也是异步在线加载的，可以考虑将来迁移到本地；
+1. **可解决**：只有 `cn/` 目录下的文章会异步加载思源宋体，需要修改；
+1. **可解决**：页面摘要：用 `<!-- more -->` 生成的目录页和存档页不同，这种类型的页面中包含一部分正文内容，并且需要支持分页；
+1. **可解决**：**搜索**功能：
+    - 可以用 `lunr.js` 或者其增强版 [`elasticlunr.js`](http://blog.csdn.net/watkinsong/article/details/47168075) 来实现，其中 `lunr.js` 的比较好的主题示例可以参考 [DocDock](https://themes.gohugo.io/docdock/)；
+    - 另一种方案是 Hexo 的 NexT 主题使用的 [`instantsearch.js`](https://github.com/algolia/react-instantsearch/)，<https://community.algolia.com/instantsearch.js/v2/getting-started.html> 有一个比较详细的使用步骤介绍，<https://codepen.io/Algolia/pen/ZOyoJg> 是一个非常好的演示例子。
+    - <https://www.josephearl.co.uk/> 的在线搜索感觉非常轻量，也还不错，一些小细节的 CSS 问题还可以参考 <https://www.josephearl.co.uk/post/css-overlay/>。这个博客用的是 <https://github.com/nodejh/hugo-theme-cactus-plus>，从 <https://github.com/josephearl/website> 下载的源代码中的 `\themes\cactus-plus\static\js` 目录中可以发现，同时有 `search.js` 和 `lunr.js`，因此感觉应该是一个 `lunr.js` 的包装，不过这个站点的搜索好像只针对标题和标签，虽然快但是没有全文搜索的能力；
+    - Hexo 的 NexT 主题实际上本人现在用的是一种本地搜索的实现方式，`themes\next\layout\_third-party\search` 中的 `localsearch.swig` 以及 `next\source\css\_common\components\third-party` 中的 `localsearch.styl` 是两个最为重要的文件，还有一个 `next\layout\_partials\search` 中的 `localsearch.swig` 可以参考，这是目前最满意的方案，可惜需要用到 `db.json`，这个文件目前还没有找到好的方案来生成，但感觉上与 Hugo 的 `index.xml` 文件的生成有关联。
+    - [Search Index .json-file for Lunr.js](https://discourse.gohugo.io/t/search-index-json-file-for-lunr-js/6286/8)：没看明白；
+    - [Save data to "data/pages.json" #144](https://github.com/gohugoio/hugo/issues/144)：没有解决方案；
+    - [Add generator for a search index #1853](https://github.com/gohugoio/hugo/pull/1853)：没有解决方案；
+    - 生成全站的 `json` 文件（**未解决**）：
+        - <https://bitquabit.com/post/json-feed-with-hugo/>：已试验不成功；
+        - <https://github.com/bep/bepsays.com/commit/1d7bf7fd6e7c637f28a04f93a97ebfed084c27ff>：未试验，但感觉是一个 post 生成一个文件，这个地址来自 [Simple JSON site index in Hugo](https://discourse.gohugo.io/t/simple-json-site-index-in-hugo/2854)；
+        
+1. **可解决**：图片浏览器：`fancybox`；
+1. **OK**：图片保存的路径，在 `\static\images\` 中保存是比较好的选择，Rmd 文件生成的图像在 `static\figures\`之中，不需要人工干预；
+1. **OK**：文章内目录：`\layouts\_default\single.html` 显示目前的主题是支持 toc 功能的，需要弄清楚如何开启，目前模板的 `single.html` 中，可以在 YAML 头中添加 `show_toc: true` 来开启；
+1. **OK**：文章内的子标题编号，由于 Hugo 的 Markdown 引擎 [blackfriday](https://github.com/russross/blackfriday) 还不支持 Auto numbering，因此这个功能暂时不好实现，Rmd 提供了接口，但目前运行不成功；
+1. **可解决**：pdf、视频文件的显示，参考 [Shortcodes](https://gohugo.io/extras/shortcodes/) 可以了解更多关于短代码的说明，里面有 Youtube 的支持，但是感觉这会导致不同的系统不兼容，另外还可以参考主题 `Castanet` 的实现方法；需要进一步了解自己怎样定义好的短代码；
+1. **OK**：图片的标题是用 `*...*` 还是直接用一个 `<p class="text-align: center">...</p>`，最终决定定义一个 `imgCaption` 和 `tabCaption`，这里使用了 Pandoc 的转换功能，将 Markdown 代码中的可选文本自动转换成 Caption；
+1. **OK**：`cool\` 中的内容的命名规则能不能参考 `cn` 或 `en` 目录下的文件，可以参考也可以自己用 `slug` 直接指定；
+1. 如果将幻灯片等和本博客集成到一起，需不需要集成；
+1. **OK**：试验添加 `Rmd` 文件，并在 RStudio 中查看运行效果，原生的 Rmd 格式的 YAML 头和 blogdown 中的并不完全相同；
+1. **可解决**：像 <https://github.com/bep/bepsays.com/blob/master/config.toml> 一样，提供不同语言界面的支持，或者像 <https://github.com/kakawait/hugo-tranquilpeak-theme> 中的 `hugo-tranquilpeak-theme-master\i18n` 那样用不同 YAML 提供语言支持的做法也非常值得参考；
+1. 多主题：<https://yulinling.net/> 中 blog 部分是卡片列表，而相册部分是另外一种主题，不知道是不是可以在不同的 Section 中用不同的主题，还是压根是两个站点；
+1. 如何通过 Hugo 删除一些不想要的 post 在 `public\` 中的 html 存档；
+
+# 主题调整
+
+## 页面宽度
+
+在 `static/css/fonts/` 中修改 `custom.css`，相关内容参考该文件中的注释。
+
+## 字体
+
+在 `static/css/fonts/` 中修改 `fonts.css`，调整字体相关的设置为如下内容：
+
+```css
+body {
+  font-family: 'Alegreya', 'Palatino Linotype', 'Book Antiqua', Palatino,
+    'source-han-serif-sc', 'Source Han Serif SC', 'Source Han Serif CN',
+    'Source Han Serif TC', 'Source Han Serif TW', 'Source Han Serif', 'Songti SC',
+    '仿宋', 'FangSong', 'NSimSun', 'Microsoft YaHei', serif;
+}
+blockquote {
+  font-family: 'Source Sans Pro', Tahoma, Geneva, 'STKaiti', 'KaiTi', '楷体', 'SimKai',
+    'DFKai-SB', 'NSimSun', serif;
+}
+.cn blockquote {
+  font-family: 'Alegreya', 'Palatino Linotype', 'Book Antiqua', Palatino, 'STKaiti',
+    'KaiTi', '楷体', 'SimKai', 'DFKai-SB', 'NSimSun', serif;
+}
+code {
+  font-family: 'PT Mono', 'STKaiti', 'KaiTi', 'SimKai', monospace;
+  font-size: 85%;
+}
+p code, li code {
+  font-size: 90%;
+}
+strong {
+  color: #2dbe60;
+}
+```
+
+# 使用心得
+
+1. 在 yml 头中加入 `subtitle: A subtitle` 可以为 post 添加一个副标题；
+2. 这里是一个 `<kbd>...</kbd>` 的例子：<kbd>Ctrl</kbd>；
+3. `slug: "cn/about"` 中的 `slug` 是 Hugo 特有的一种机制，这里对应的文件实际上只是 `\content\cn_about.md`，但最终这个文件在 URL 中显示的却是 `/cn/about/`，所以 Slug 可以同时设定所属的博客子分类以及在 URL 中的文件名称，相当于强制重定向到了某一指定的路径。
+4. 要实现 <code>`$...`$</code> 这样的效果，需要使用 `<code>` 标记，具体参考此处的源代码；
+5. 用 R Markdown 时，生成的 toc 如果是全中文的条目，可能链接的下划线无法用 css hack 很好的消除，但给对应的标题一个 `{#idName}` 时，这个问题自动消失，详细参考本文档上方的目录；
+6. R Markdown 的[说明文档](https://bookdown.org/yihui/blogdown/content.html#body)中说在 R Markdown 中不能直接使用 Shortcode，而要用下面的语法^[这段代码的插入需要用比较特殊的语法，与传统的 R Markdow 中使用 backtick 的方法还不相同，具体参考源文件。]：
+
+````markdown
+`r ''````{r echo=FALSE}
+blogdown::shortcode('tweet', '852205086956818432')
+```
+````
+
+# 功能解读
+
+- Hugo 中的相关统计数据，如字数(`.WordCount`)、估计阅读时间(`.ReadingTime`)、页数、文章数、分类数等可以参考[变量列表](https://gohugo.io/templates/variables/)，特殊功能实现参考[函数列表](https://gohugo.io/templates/functions/)；
+- `.Site.Params` 开头的是站点的`全局`参数，可以自定义；
+- `.Params` 开头的是当前文章中的`局部`参数，在 yml 头中定义，但暂时不清楚是否可以自定义，当然即使可以支持，为了保持和其它系统或 Markdown 的良好兼容，不推荐在文章内用自定义的参数；
+- 下面的代码实现了一个循环：
+
+```html
+{{ range .Site.Params.customJS }}
+<script async src="{{ . | relURL }}"></script>
+{{ end }}
+```
+
+- `{{ with FOO }}{{ . }}{{ end }}` 是 `{{if FOO }}{{ FOO }}{{ end }}` 的另一种写法，可以不用写两次 `FOO`；
+- `.Data` is dynamic, and its value changes according to the specific list you want to generate. For example, the list page `https://xmin.yihui.name/post/` only contains pages under `content/post/`, and `https://xmin.yihui.name/note/` only contains pages under `content/note/`；
+- `content\` 目录下的 `_index.md` 对应的是存档页，对应 `list.html`，用于生成全部 post 的存档列表；分类、标签汇总页对应 `terms.html`，是自动生成的，`single.html` 对应一篇 post 的生成；分类、汇总还可以通过 `list.html` 生成各自的存档页，对分类、标签设置不同的模板参考“待解决问题”；
+- `_index.md` 中有内容时（YAML 除外），本主题将 `list.html` 转换成一个类似于网站主页说明的 `index.html`，但这个转换不是用 `single.html` 的模板，而是 `list.html` 的 `if` 分支的模板，没有内容时，填充当前 section 下的全部文章的 list。但不同位置的 `_index.md` 的管辖范围不同；
+- 模板文件不能用 Markdown，只能用 html 语法格式；
+- 主题中一段比较有参考价值的代码的解释：
+
+```txt
+{{ if .File.Path }}
+
+{{ $Rmd := (print .File.BaseFileName ".Rmd")) }}
+
+{{ if (where (readDir (print "content/" .File.Dir)) "Name" $Rmd) }}
+  {{ $.Scratch.Set "FilePath" (print .File.Dir $Rmd) }}
+{{ else }}
+  {{ $.Scratch.Set "FilePath" .File.Path }}
+{{ end }}
+
+{{ with .Site.Params.GithubEdit}}
+<a href='{{ . }}{{ $.Scratch.Get "FilePath" }}'>Edit this page</a>
+{{ end }}
+
+{{ end }}
+```
+
+The basic logic is that for a file, if the same filename with the extension .Rmd exists, we will point the Edit link to the Rmd file. First, we define a variable `$Rmd` to be the filename with the `.Rmd` extension. Then we check if it exists. Unfortunately, there is no function in Hugo like `file.exists()` in R, so we have to use a hack: list all files under the directory and see if the Rmd file is in the list. `$.Scratch` is the way to dynamically store and obtain variables in Hugo templates. Most variables in Hugo are read-only, and you have to use `$.Scratch` when you want to modify a variable. We set a variable FilePath in `$.Scratch`, whose value is the full path to the Rmd file when the Rmd file exists, and the path to the Markdown source file otherwise. Finally we concatenate a custom option GithubEdit in `config.toml` with the file path to complete the Edit link `<a>`. Here is an example of the option in `config.toml`:
+
+- `.Data.Terms` 解读：`.Data.Terms` stores all terms under a taxonomy, e.g., all category names. The variable `$key` denotes the term and `$value` denotes the list of pages associated with this term. The link of the term is passed to the Hugo function relURL via a pipe `|` to make it relative, `$` is required because we are inside a loop, and need to access variables from the outside scope. 注意 `$value` 中是全部文章对象
+
+```html
+<ul class="terms">
+  {{ range $key, $value := .Data.Terms }}
+  <li>
+    <a href='{{ (print "/" $.Data.Plural "/" $key) | relURL }}'>
+      {{ $key }}
+    </a>
+    ({{ len $value }})
+  </li>
+  {{ end }}
+</ul>
+```

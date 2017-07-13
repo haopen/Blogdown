@@ -1,0 +1,97 @@
+---
+title: 断点回归设计（RD Design）与添加虚拟变量有什么区别？ - 慧航 - 问答
+author: 慧航
+date: 2014-01-29
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎问答", "6-计量", "6-断点回归", "6-RDD"]
+slug: rdd-dummy
+---
+
+**原文地址**：<https://www.zhihu.com/question/22612514/answer/22021130>
+
+# 慧航
+
+如果问这个问题，说明你根本没有理解什么是 RD。建议先读一下关于 treatment effect 的基础知识。（sharp）RD 的意思是，个体接受某种 treatment 是根据某个连续的变量（`z`）来外生决定的。比如某次考试大于 90 分的可以参加某项竞赛辅导，小于 90 分的不可以。这里的 treatment 是参加竞赛辅导，`1(z>90)`是个虚拟变量，指示的是个体有没有参加竞赛辅导，而参不参加竞赛辅导是由某次考试分数决定的。所以关键的区别是，这里的虚拟变量是指示的 **treatment**，而非一般的`男女`、`种族`等的 dummy variables，`性别`、`种族`不是 treatment。
+
+<!-- more -->
+
+<blockquote class="gray">
+**诸小默**：那么接受 treatment 的依据是否可以是时间序列呢？时间可以看做连续变量，在某一时刻上做了 treatment，由此对这一时刻前后进行 RD Design 处理？
+
+<blockquote class="white">
+**慧航**：有拿跟时间有关的比如年龄作为`z`的，但是一般很少有人拿时间直接做为`z`。这里面问题很多，首先是有些问题可能同一个人只有一个`outcome`^[这句没有理解。]。其次，RD 设计最关键的是要保证未观察到的变量不存在断点，但是从时间层面上来看，太多的东西容易改变，需要 argue 的东西太多。具体问题具体分析吧。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**曾阿屎**：running variable 不一定是连续的，也可以有离散的，像年龄，很多时候我们拿到的数据是以年或者月为单位的，严格说，应该是离散的。不过 RD 设计依然有效，只是要比连续的复杂一点。
+
+<blockquote class="white">
+**慧航**：对，的确有人做，台湾有几个人做了离散的，特别是时间上离散的时候的 RD 该怎么处理，抱歉论文名字忘掉了，这种的话不同应用情景可能差别很大，有的可以，有的不可以，具体看应用场景。
+
+其实你仔细想一想，如果是时间上离散的 sharp rd，如果你用 nonparametric 的办法做，等同于相邻两个月份之间`y`的平均值的差。所以这种东西拿出来的时候，别人会有很多质疑的，你为啥不直接减一减呢^[这句没有理解。]？建议最好不要直接这样做。以日期作为 running variable 的发的最好的我印象中的是这篇：`Peer Effect in Program Participation`，你可以去看一下，他的数据非常好，有每个孩子的出生日期。如果只有月份的话，我猜再做 RD 就要被质疑了
+
+</blockquote>
+</blockquote>
+
+# JoeyM
+
+还是用录取学校这个例子来说假设要研究录取到一本学校对学生未来工资的影响。
+
+首先，没法做随机试验是肯定的现在如果我们用 OLS 的方法，为了排除“录取到一本学校”这个 treatment 的内生性我们就要往加入足够多的解释变量，比如说家庭教育，个人能力，经济能力等等等，变量越多估计结果越准确。以及和这个 treatment 的虚拟变量。
+
+但如果我们只加入一个虚拟变量，说明我们默认了是否被录取一本学校对不同能力、不同家庭背景的学生的影响都是一样的，这显然让人难以信服。
+
+为了更好地识别录取到一本学校的影响，我们再往方程里加入它与各个变量的交互项，这个回归跑出来，理论上我们就可以得出，对于任意一类学生，是否录取到一本学校对他的影响有多大。想想都知道一旦变量多起来这个回归有多不靠谱。
+
+但是如果用断点回归的方法，我们起码可以`在有限的数据集中估计出一个相对准确的结果。在“连续性”的假设下，我们并不需要控制住那么多变量`，因为我们认为以 running variable 为参考的某个点附近，比如高考分 500 分附近的人，他们的学习成绩，乃至智商、情商、abcdQ 等其他因素都是差不多的（这个说法可能要斟酌一下），而在这个 499 分和 500 分这群人差不多的人以后工资的差异，就可以被看做是录取到一本学校的纯的影响。
+
+但显然，这个影响显然是针对那群差不多的人而言的，对另一群学生来说，这个影响就毫无说服力了，因为你认为录取到一本学校的影响对于不同群体而言是不一样的。这句话是不是和上面下划线那句话很像（其实就是一个意思嘛）。所以我认为两者的关系是，RD（上面其实是个 Sharp RD 的例子）估计出来的影响，相当于在回归方程中加入足够多的虚拟变量交互项，再估计出 treatment 在某个点的偏效应。多元回归做不好这件事，而 RD 能做好。
+
+<blockquote class="gray">
+**Chinhogo**：要斟酌的那段应该这么说：因为 RD 假定个体在断点周围接受 treatment 是一个随机事件，所以你所说的那些不可观测的变量与 treatment 这个 dummy 的相关性为 0，所以不会产生内生性问题。
+
+</blockquote>
+
+# Chinhogo
+
+主要差别有以下几种：
+
+1. RD 运用于 quasi-experiment 实验，有别于自然随机实验下直接添加 dummy 采用 OLS 估计的模型。如果你能明白为什么经济学家偏好自然随机实验，你就能明白为什么 RD 在很多情况下估计的准确度要优于 OLS。自然随机事件下，不可观测变量（即性别、IQ 等等等）与个体接收 treatment 的相关性为 0，故我们可以用添加 dummy 的方法来估计 treatment effect，但是一旦这个随机事件并不完全随机（用一个计量史学上蛮经典的例子讲解，隋炀帝挖运河对于经济是否有增益作用，你使用 dummy 就不再合适了，因为地理和经济环境的因素会影响隋政府对于运河挖掘的选择，导致你对挖河这一政策对经济作用估计的偏差）。如果要准确估计这种 treatment effect，你必须准确地将所有可能导致你估计偏误的 variable 加入模型，控制起来，但那样做不经济有时也不可能（有时遗漏变量不可观测）。所以我们退而求其次，使用 RD 进行估计，假定个体在断点周围接受 treatment 是一个随机事件，所以你所说的那些不可观测的变量与 treatment 这个 dummy 的相关性为 0，所以不会产生内生性问题。
+
+2. 估计方法的不同。RD 通常采用**局部线性回归**的方法（即不选用~~`全样本`~~，而选用`一定带宽内的样本`，），本质上是对断点周围局部效应（LATE，Local Average Treatment Effect)的一个估计。最优带宽的估计由 Imbens and Kalyanaraman(2009) 提供，并且一般要提供不同带宽的结果以显示结果的 robustness。有时，RD 还采用核回归的非参方法。
+
+3. RD需要检验内生分组（endogenous sorting)的问题，即要假设如果个体事先知道分组规则，并可通过自身努力而完全控制分组变量，引起断点回归的失效。
+
+4. 如果在RD中加入协变量，还需检验协变量对于的条件密度是否在断点处连续，即断点处的`jump`不是由协变量的`jump`产生。
+
+**注**：以上内容主要面向 Sharp RD. Fuzzy RD 使用时分组变量是否大于断点的 dummy（称为`Z`）作为处理变量（称为`D`，即我们主要的估计量）的工具变量。`Z`显然与`D`相关，而`Z`在断点附近相当于局部随机实验，故只通过`D`影响变量`y`，与扰动项不相关，故满足外生性。可以使用`Z`作为`D`的工具变量，使用 2SLS 进行估计。
+
+# 王小毛
+
+基本同意之前各位的回答，RD 其实就是一种计算 treatment effect 的方法，但是你在 estimate 的时候只加一个 treated/controlled 的 dummy variable 还有些交互项（interaction terms）就说你做了 RD 是有问题的。
+
+RD 的使用很麻烦，更 restrict，一个很大的 assumption 就是你起码要确保你的 running variable 在 cutoff 的两侧是 as good as a randomized experiment，意思就是这个 treated/controlled 的 dummy variable 不能轻易就被人操控 （当然这也需要跑大量的测试）。
+
+建议看这篇文章: [Regression Discontinuity Designs in Economics](http://www.nber.org/papers/w14723)，文章第 55 页有个 checklist 可以最后检查一下结果，这些都是必须要考虑的 robustness check。
+
+# FlyRideR
+
+确定形的断点回归和添加虚拟变量有点像，不过还有一种模糊型的断点回归（Fuzzy Regression Discontinuity），即个体接受处置效应的概率均大于 0 小于 1，个体在临界值一边接受处置的概率大于在临界值另一边接受处置的概率。
+
+# 曾阿屎
+
+RD和添加虚拟变量关系不是太大呢，问 RD 和 IV（工具变量）的关系更确切。
+
+如楼上所言，RD 分为 Sharp 型（running variable 超过门槛值个体就一定会 get treated，低于这个值就不会。）和 Fuzzy 型（get treated 只是部分地与 running variable 超过门槛值相关，也就是说，存在某些超过门槛值的个体没有 treated，也有些低于门槛值的个体 get treated）。
+
+在 Fuzzy RD 中，我们就把这个 running variable 作为 treatment 的 IV 啦，然后就可以用 2SLS 求解，流程和 IV 的 2SLS 估计差不多。
+
+# Lullaby
+
+今天刚看到一篇文章，刚好可以回答这个问题 Calonico, Sebastian, et al. `Regression Discontinuity Designs Using Covariates`. working paper, University of Michigan, 2016. 他们主要观点就是，以前大家得过且过都这么用的，RD 里面加 covariates, 不过从来没有人知道为什么。他们这篇文章证明在简单的 regularity condition 下，实际上加 covariates 会更好一些。
+
+以下取自原文：
+
+    "Applied researchers often include additional pre-intervention" covariates in their speci cations to increase e ciency. However, no results justifying covariate adjustment have been formally derived in the RD literature, leaving applied researchers with little practical guidance and leading to a proliferation of ad-hoc methods that may result in invalid estimation and inference. We examine the properties of a local polynomial estimator that incorporates discrete and continuous covariates in an additive separable, linear-in-parameters way and imposes a common (likely misspeci ed) covariate e ffect on both sides of the cuto . Under intuitive, minimal assumptions, we show that this covariate-adjusted RD estimator remains consistent for the standard RD treatment effect, while also providing point estimation and inference improvements."

@@ -1,0 +1,54 @@
+---
+title: Bootstrap 的一些注意事项 - 慧航 - 专栏
+author: 慧航
+date: 2015-04-08
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-计量", "6-Bootstrap", "6-自举"]
+slug: bootstrap
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19996637>
+
+自从 bootstrap 被发明出来，就受到来统计学家、计量经济学家的极大关注。有人开玩笑说，自从这个方法出来，统计学的文章长度平均增加了半页。
+
+当然，在计量经济学领域，这个方法主要用在假设检验上，实际应用中做 bias reduction 的至少我没怎么见过。
+
+但是由于对统计理论的不熟悉，有些人使用 bootstrap 的方法其实是错的或者至少是不太好的，而自己也没有察觉。最近刚好在做关于 bootstrap 的东西，之前我也不是很懂，做了这个项目之后才发现自己之前的一些理解是错的。姑且做一些小的总结，也希望能吸引各位计量经济学、统计学大神深入讨论。
+
+<!-- more -->
+
+Bootstrap 的思想是，我们已经得到了从未知总体$F_0$中抽样的样本，假设为$s$，那么为了获得更好的估计或者进行假设检验，我们可以把这个样本$s$作为总体，在$s$的分布函数$F_1$里面进行抽样。由于$s$的经验分布函数（EDF）的性质，在$F_1$中抽样即在$s$中有放回的抽样。Peter Hall 在他的著作《The bootstrap and Edgeworth Expansion》中把 bootstrap 比作俄罗斯套娃，我觉着再形象不过。
+
+![Peter Hall 书中略恐怖的俄罗斯套娃，还是我找的图可爱](/images/Eco/Econometrica/huihang/RussianMatryoshkaDoll.jpg)
+
+但是在实际使用中，有一些细节需要格外注意。
+
+Horowitz 在 Ch52 The Bootstrap, Handbook of Econometrics 中提出了几条 bootstrap 的原则：
+
+1. bootstrap 的统计量一定要是 pivotal 的，也就是说，这些统计量的渐进分布不依赖于未知的总体参数；
+2. 在一个过度识别的系统，做 bootstrap 的时候一定要中心化（centering）；
+3. 不要对非参数、半参数或者不平滑的估计量使用 bootstrap。
+
+第一条，统计量需要时 pivotal 的。比如我们做最平常的 t 检验。我们当然可以对参数$\hat{\beta}$进行 bootstrap，得到 bootstrap 的$\hat{\beta}$的分布，然而这个统计量的渐进分布是依赖于未知总体参数的（方差），因而我们需要对$\frac{\hat{\beta}}{s.e.(\hat{\beta})}$进行 bootstrap，这个统计量的渐进分布如果是$\mathrm{N}(0,1)$，那么就是 pivotal 的了。
+
+第二条，比如我们在做 2SLS 的时候，如果使用了多于内生变量个数的工具变量，可以想象，GMM 的目标函数$\sum_i (y_i-x_i'\hat{\beta}_{IV})z_i'(Z'Z)^{-1}z_i(y_i-x_i'\hat{\beta}_{IV})\neq0$，所以如果我们直接使用放回抽样，因为对于原先的抽样，以上不等式成立，所以 bootstrap 抽样的 2SLS 矩条件不成立，所以 bootstrap 估计量是不一致的。解决的办法就是使用$\hat{\beta}_{IV}$对矩条件 recentering（详见 Handbook of Econometrics pp. 3186-3187）。
+
+第三条，很多统计量是不能用 bootstrap 的，比如常见的非参数 kernel 回归，以及一些目标函数不是非常平滑的估计量，例如 quantile 回归、maximum score estimators 等等。
+
+另外还有需要提醒的是精炼（refinement）。比如有些人（比如刚学 bootstrap 时候的我），以为做假设检验只需要 bootstrap 出$s.e.(\hat{\beta})$就可以了。但是我们发现，$s.e.(\hat{\beta})$不是 pivotal 的。正确的做法是对$t=\frac{\hat{\beta}}{s.e.(\hat{\beta})}$进行 bootstrap，记为$\{t_1,t_2...t_m\}$，然后找出$(1-\alpha)$th quantile of $\{|t_1|,|t_2|...|t_m|\}$作为 critical value，与$\frac{\hat{\beta}}{s.e.(\hat{\beta})}$进行比较，如果$t>t_{1-\alpha}$则拒绝原假设。
+
+另外 bootstrap 的抽样方法除了最简单的有放回抽样之外，还有各种其他的抽样方法，有参数的、非参数的，有不放回懂，有 bolck，有 residual-based。这些方法如果扩展起来就有点复杂了。如果是要做 test，那么不同的抽样方法会导致不同的 size 和 power。在这方面可以写一本书了，我也不是完全了解所有的抽样方法，因而在这里只做个提醒，欢迎讨论。
+
+之前两个星期一直在做 bootstrap，但是一直是错的。昨晚翻 handbook，有一段话给了我灵感，就把正确的写出来了。所以做研究没事还是要翻 handbook 啊！
+
+<blockquote class="gray">
+**细雨平湖**：有放回抽样，目的是为弥补样本不足造成的随机性欠缺。不过从信息论角度讲，样本不足的缺陷实际上是信息含量低，bootstrap 多少遍也弥补不了这个问题。
+
+</blockquote>
+
+<blockquote class="gray">
+**talich**：bootstrap 不建议用来做 bias reduction。Efron 当年提这个 Bootstrap 时就说用来做 Bias reduction 虽然能得到一个 unbiased estimator，但方差太大，应该比原来的 estimator 还差。
+
+不过他自己后来搞了一个 bootstrap 635+，在不少情况下做错误估计效果还不错，缺点是理论支持很弱。
+
+</blockquote>

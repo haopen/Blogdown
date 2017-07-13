@@ -1,0 +1,72 @@
+---
+title: 滤波的基本概念
+date: 2013-07-10
+categories: ["4-信号与系统"]
+tags: ["4-滤波", "4-增益"]
+slug: filter
+---
+
+
+
+<div class="section level1">
+<h1>参考资料：</h1>
+<ol style="list-style-type: decimal">
+<li>滤波(filter)：<a href="http://baike.baidu.com/view/162707.htm" class="uri">http://baike.baidu.com/view/162707.htm</a></li>
+<li>增益(gain)：<a href="http://baike.baidu.com/view/343150.htm" class="uri">http://baike.baidu.com/view/343150.htm</a></li>
+<li>低通滤波(Low-pass filter)：<a href="http://baike.baidu.com/view/1669798.htm" class="uri">http://baike.baidu.com/view/1669798.htm</a></li>
+<li>高通滤波(high-pass filter)：<a href="http://baike.baidu.com/view/1877222.htm" class="uri">http://baike.baidu.com/view/1877222.htm</a></li>
+</ol>
+<!-- more -->
+</div>
+<div class="section level1">
+<h1>滤波</h1>
+<ul>
+<li>滤波是将信号中特定波段频率滤除的操作，是抑制和防止干扰的一项重要措施。分<strong>经典滤波</strong>和<strong>现代滤波</strong>。</li>
+<li>滤波是将信号中特定波段频率滤除的操作，是抑制和防止干扰的一项重要措施。是根据观察某一随机过程的结果，对另一与之有关的随机过程进行估计的概率理论与方法。</li>
+</ul>
+<div class="section level2">
+<h2>起源</h2>
+<p>滤波一词起源于通信理论，它是从含有干扰的接收信号中提取有用信号的一种技术。“接收信号”相当于被观测的随机过程，“有用信号”相当于被估计的随机过程。例如用雷达跟踪飞机，测得的飞机位置的数据中，含有测量误差及其他随机干扰，如何利用这些数据尽可能准确地估计出飞机在每一时刻的位置、速度、加速度等，并预测飞机未来的位置，就是一个滤波与预测问题。这类问题在电子技术、航天科学、控制工程及其他科学技术部门中都是大量存在的。历史上最早考虑的是维纳滤波，后来R.E.卡尔曼和R.S.布西于20世纪60年代提出了卡尔曼滤波。现对一般的非线性滤波问题的研究相当活跃。</p>
+</div>
+<div class="section level2">
+<h2>经典滤波</h2>
+<p>经典滤波的概念，是根据傅立叶分析和变换提出的一个工程概念。根据高等数学理论，任何一个满足一定条件的信号，都可以被看成是由无限个正弦波叠加而成。换句话说，就是工程信号是不同频率的正弦波线性叠加而成的，组成信号的不同频率的正弦波叫做信号的<strong>频率成分</strong>或叫做<strong>谐波成分</strong>。</p>
+<blockquote>
+<p><strong>滤波器</strong> 只允许一定频率范围内的信号成分正常通过，而阻止另一部分频率成分通过的电路，叫做经典滤波器或滤波电路。实际上，任何一个电子系统都具有自己的频带宽度(对信号最高频率的限制)，频率特性反映出了电子系统的这个基本特点。而滤波器，则是根据电路参数对电路频带宽度的影响而设计出来的工程应用电路。</p>
+</blockquote>
+</div>
+<div class="section level2">
+<h2>现代滤波</h2>
+<p>用模拟电子电路对模拟信号进行滤波，其基本原理就是利用电路的频率特性实现对信号中频率成分的选择。根据频率滤波时，是把信号看成是由不同频率正弦波叠加而成的模拟信号，通过选择不同的频率成分来实现信号滤波。</p>
+<ol style="list-style-type: decimal">
+<li>当允许信号中较高频率的成分通过滤波器时，这种滤波器叫做<strong>高通滤波器</strong>。</li>
+<li>当允许信号中较低频率的成分通过滤波器时，这种滤波器叫做<strong>低通滤波器</strong>。</li>
+<li>设低频段的截止频率为fp1，高频段的截止频率为fp2:
+<ol style="list-style-type: decimal">
+<li>频率在fp1与fp2之间的信号能通过其它频率的信号被衰减的滤波器叫做<strong>带通</strong>滤波器。</li>
+<li>反之，频率在fp1到fp2的范围之间的被衰减，之外能通过的滤波器叫做<strong>带阻</strong>滤波器。</li>
+</ol></li>
+</ol>
+<p>理想滤波器的行为特性通常用<strong>幅度-频率</strong>特性图描述，也叫做滤波器电路的<strong>幅频特性</strong>。</p>
+</div>
+<div class="section level2">
+<h2>滤波问题及分类</h2>
+<p>对于滤波器，增益幅度不为零的频率范围叫做通频带，简称<strong>通带</strong>，增益幅度为零的频率范围叫做<strong>阻带</strong>。例如对于LP，从-w1到w1之间，叫做LP的通带，其他频率部分叫做阻带。通带所表示的是能够通过滤波器而不会产生衰减的信号频率成分，阻带所表示的是被滤波器衰减掉的信号频率成分。通带内信号所获得的增益，叫做<strong>通带增益</strong>，阻带中信号所得到的衰减，叫做<strong>阻带衰减</strong>。在工程实际中，一般使用dB作为滤波器的幅度增益单位。</p>
+<p>按照滤波是在一整段时间上进行或只是在某些采样点上进行，可分为连续时间滤波与离散时间滤波。前者的时间参数集<span class="math inline">\(T\)</span>可取为实半轴<span class="math inline">\([0,\infty)\)</span>或实轴<span class="math inline">\((-\infty,\infty)\)</span>;后者的<span class="math inline">\(T\)</span>可取为非负整数集<span class="math inline">\(\{0,1,2,\dotsc\}\)</span>或整数集<span class="math inline">\(\{\dotsc,-2,-1,0,1,2,\dotsc\}\)</span>。设<code>$X=\{X_t\in T=\{Y,t\in T)\}\}$</code>有穷，即其中<span class="math inline">\(X\)</span>为被估计过程，它不能被直接观测；<span class="math inline">\(Y\)</span>为被观测过程，它包含了<span class="math inline">\(X\)</span>的某些信息。用表示到时刻<span class="math inline">\(t\)</span>为止的观测数据全体，如果能找到中诸元的一个函数?(),使其均方误差达到极小，就称为<span class="math inline">\(X_t\)</span>的最优滤波；如果取极小值的范围限于线性函数，就称为<span class="math inline">\(X_t\)</span>的线性最优滤波。可以证明，最优滤波与线性最优滤波都以概率1惟一存在。对于前者，悯t就是<span class="math inline">\(X_t\)</span>关于<span class="math inline">\(\sigma()\)</span>(生成的<span class="math inline">\(\sigma\)</span>域)的条件期望，记作对于后者，若进一步设均值<span class="math inline">\(E(X_t)\)</span>呏<span class="math inline">\((EY_t)\)</span>呏0,则悯t就是<span class="math inline">\(X_t\)</span>在所张成的希尔伯特空间上的投影，记作如果<span class="math inline">\((X,Y)\)</span>是二维正态过程，则最优滤波与线性最优滤波是一致的。<strong>这部分有错</strong></p>
+<p>为了应用和叙述的方便，有时还把上面的定义更细致地加以分类。设<span class="math inline">\(\tau\)</span>为一确定的实数或整数，且考虑被估计过程。按照<span class="math inline">\(\tau=0,\tau&gt;0,\tau&lt;0\)</span>，分别称为最优滤波、(<span class="math inline">\(\tau\)</span>步)预测或外推、(<span class="math inline">\(\tau\)</span>步)平滑或内插，分别为对应的误差与均方误差，而统称这类问题为滤波问题。滤波问题的主要课题是研究对哪些类型的随机过程<span class="math inline">\(X\)</span>和<span class="math inline">\(Y\)</span>，可以并且如何用观测结果的某种解析表示式，或微分方程，或递推公式等形式,表达出并进而研究它们的种种性质。此外，上面所指的一维随机过程<span class="math inline">\(X,Y\)</span>，都可以推广为多维随机过程。</p>
+<div class="section level3">
+<h3>维纳滤波</h3>
+<p>历史上最先考虑的是宽平稳过程(见<a href="http://baike.baidu.com/view/754539.htm">平稳过程</a>)的线性预测和滤波问题，它的一般模型是<span class="math inline">\(Y_t=X_t+N_t\)</span>，其中<span class="math inline">\((X，N)\)</span>为二维宽平稳过程或序列，其谱分布函数已知，其均值为零。设从<span class="math inline">\(-\infty\)</span>到时刻<span class="math inline">\(t\)</span>为止的全部<span class="math inline">\(Y\)</span>的值都已被观测到，求<span class="math inline">\(X\)</span>的<span class="math inline">\(\tau\)</span>步线性预测及其均方误差。如果限于考虑<span class="math inline">\(N=0,\tau&gt;0\)</span>的情形，则变成在无误差观测条件下<span class="math inline">\(X\)</span>本身的线性预测问题；如果<span class="math inline">\(N\neq 0,\tau\leqslant 0\)</span>，则变成从受到噪声<span class="math inline">\(N\)</span>干扰的接收信号<span class="math inline">\(Y\)</span>中提取有用信号<span class="math inline">\(X\)</span>的滤波问题。1939~1941 年，Α.Η.柯尔莫哥洛夫利用平稳序列的沃尔德分解(见<a href="http://baike.baidu.com/view/754539.htm">平稳过程</a>)，给出了线性预测的一般理论与处理办法，随即被推广到连续时间的平稳过程。N.维纳则在1942年对于平稳序列与过程的谱密度存在且满足某种正则条件的情形，利用谱分解导出了线性最优预测和滤波的明显表达式，即维纳滤波公式，并在防空火力控制、电子工程等部门获得了应用。上述模型在50年代被推广到仅在有限时间区间内进行观测的平稳过程以及某些特殊的非平稳过程，其应用范围也扩充到更多的领域。至今它仍是处理各种动态数据（如气象、水文、地震勘探等）及预测未来的有力工具之一。</p>
+<p>维纳滤波公式是通过平稳过程的谱分解导出的，难以推广到较一般的非平稳过程和多维情形，因而应用范围受到限制。另一方面，在不断增加观测结果时，不易从已算出的滤波值及新的观测值较简单地求出新的滤波值，特别是不能满足在电子计算机上快速处理大量数据的需要。</p>
+</div>
+<div class="section level3">
+<h3>卡尔曼滤波</h3>
+<p>由于高速电子计算机的发展以及测定人造卫星轨道和导航等技术问题的需要，R.E.卡尔曼与 R.S.布西于 20 世纪 60 年代初期提出了一类新的线性滤波的模型与方法，通称为卡尔曼滤波。其基本假设是，被估计过程<span class="math inline">\(X\)</span>为随机噪声影响下的有限阶多维线性动态系统的输出，而被观测的<span class="math inline">\(Y_t\)</span>则是<span class="math inline">\(X_t\)</span>的部分分量或其线性函数与量测噪声的叠加，这里并不要求平稳性，但要求不同时刻的噪声值是不相关的。此外，观测只需从某一确定时刻开始，而不必是无穷长的观测区间。更重要的是，适应电子计算机的特点，卡尔曼滤波公式不是将估计值表成观测值的明显的函数形式，而是给出它的一种递推算法(即实时算法)。具体地说，对于离散时间滤波，只要适当增大<span class="math inline">\(X\)</span>的维数，就可以将<span class="math inline">\(t\)</span>时刻的滤波值表成为前一时刻的滤波值与本时刻的观测值<span class="math inline">\(Y_t\)</span>的某种线性组合。对于连续时间滤波,则可以给出与<span class="math inline">\(Y_t\)</span>所应满足的线性随机微分方程。在需要不断增加观测结果和输出滤波值的情形，这样的算法加快了处理数据的速度，而且减少了数据存贮量。卡尔曼还证明，如果所考虑的线性系统满足某种“可控性”和“可观测性”(这是现代控制理论中由卡尔曼提出的两个重要概念)，那么最优滤波一定是“渐近稳定”的。大致说来，就是由初始误差、舍入误差及其他的不准确性所引起的效应，将随着滤波时间的延长而逐渐消失或趋于稳定， 不致形成误差的积累。这在实际应用上是很重要的。</p>
+<p>卡尔曼滤波也有多种形式的推广，例如放宽对噪声不相关性的限制，用线性系统逼近非线性系统，以及所谓“自适应滤波”，等等，并获得了日益广泛的应用。</p>
+</div>
+<div class="section level3">
+<h3>非线性滤波</h3>
+<p>前已说明，一般的非线性最优滤波可归结为求条件期望的问题。对于有限多个观测值的情形，条件期望原则上可以用贝叶斯公式来计算。但即使在比较简单的场合，这样得出的结果也是相当繁杂的，无论对实际应用或理论研究都很不方便。与卡尔曼滤波类似，人们也希望能给出非线性滤波的某种递推算法或它所满足的随机微分方程。但一般它们并不存在，因此必须对所讨论的过程X与Y加以适当的限制。非线性滤波的研究工作相当活跃，它涉及随机过程论的许多近代成果，如随机过程一般理论、鞅、随机微分方程、点过程等。其中一个十分重要的问题，是研究在什么条件下，存在一个鞅 M，使得在任何时刻，M 和 Y 都包含同样的信息；这样的M称为Y的新息过程。目前对于一类所谓“条件正态过程”，已经给出了非线性最优滤波的可严格实现的递推算式。在实际应用上，对非线性滤波问题往往采用各种线性近似的方法。</p>
+</div>
+</div>
+</div>

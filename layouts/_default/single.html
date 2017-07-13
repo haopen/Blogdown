@@ -1,0 +1,25 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+
+  <article class="article">
+    {{ if eq .Section "en" }}
+    <span class="article-duration">{{ .ReadingTime }} min read</span>
+    {{ else if in (split "cn,arts,tech,prof" ",") .Section }}
+    <span class="article-duration">{{ .WordCount }} 字</span>
+    {{ end }}
+
+    {{ partial "article_meta.html" . }}
+
+    {{ if .Params.show_toc }} {{ .TableOfContents }} {{ end }}
+    <div class="article-content{{ if not (eq .Section "en") }} cn{{ end }}" id="articleContent">
+      {{ (replace .Content "<br /></li>" "</li>") | safeHTML }}
+    </div>
+    {{ partial "prev_next.html" . }}
+  </article>
+
+  {{ partial "disqus.html" .}}
+
+</main>
+
+{{ partial "footer.html" . }}

@@ -1,0 +1,273 @@
+---
+title: 多个 \expandafter 的展开过程是怎样的？
+author: "刘海洋 等"
+date: 2014-12-05
+categories: ["4-LaTeX"]
+tags: ["4-LaTeX", "4-底层命令"]
+slug: expandafter
+---
+
+**原文地址**：<https://www.zhihu.com/question/26916597>
+
+虽然宏展开这方面有更好的解决方案，如 `etoolbox` 和 LaTeX3，但是想把底层这些东西弄懂，就举当前 CTAN 上的 `ctex1.02d` 里的一个替换宏名的例子：
+
+```tex
+\def\CTEX@replacecommand#1#2#3{%
+  \expandafter\expandafter\expandafter\let\expandafter
+    \csname #1#3\expandafter\endcsname
+    \csname #2#3\endcsname
+  \expandafter\expandafter\expandafter\def\expandafter
+    \csname #2#3\expandafter\endcsname
+    {\csname #1#3\endcsname}
+}
+```
+
+<!-- more -->
+
+# 刘海洋
+
+其实本来没那么复杂，那个宏写得不好，只不过后来没有人较真，一直那么用而已。正确的写法是：
+
+```tex
+\def\replacecommand#1#2#3{%
+  \expandafter\let
+    \csname #1#3\expandafter\endcsname
+    \csname #2#3\endcsname
+  \expandafter\def
+    \csname #2#3\endcsname
+    {\csname #1#3\endcsname}%
+}
+```
+
+并不需要多重 `\expandafter`。上述定义可以分成形式类似的独立的两组，相互展开互不干涉。第一组中：
+
+```tex
+\expandafter\let
+  \csname #1#3\expandafter\endcsname
+  \csname #2#3\endcsname
+```
+
+第一个 `\expandafter` 保证先展开 `\csname` 后进行 `\let`；第二个 `\expandafter` 保证先展开第二组 `\csname ... \endcsname`，再完成第一组 `\csname ... \endcsname`。于是两组 `\csname ... \endcsname` 都完成了才进行 `\let` 的赋值，效果就是（`etoolbox` 中的）
+
+```tex
+\csletcs{#1#3}{#2#3}
+```
+
+后一组代码类似，效果是
+
+```tex
+\csdef{#2#3}{\csname#1#3\endcsname}
+```
+
+原来的宏写得更复杂了，多写了几个`\expandafter`，就多了几个展开步骤。
+
+**多重**`\expandafter`的用处还是改变展开次序，不过就是人肉解释起来更累一点而已。
+
+以前多余的写法可能是来自一个展开定式：
+
+```tex
+\expandafter\expandafter\expandafter\A\expandafter\B\C
+```
+
+它的效果是先展开`\C`，然后是`\B`，最后是`\A`。我们首先来分析一下这个定式：
+
+1. 展开第一个`\expandafter`，于是按定义，我们知道效果是第二个`\expandafter`后面跟上「第三个`\expandafter`的展开」。即
+
+    ②\expandafter①\expandafter\A\expandafter\B\C
+	
+其中用数字`①②`标出展开顺序。
+
+2. 下面先展开前面`①`标出的`\expandafter`，按定义，知道效果是`\A`后面跟上「最后一个`\expandafter`的展开」。即变成：
+
+    ②\expandafter\A①\expandafter\B\C
+
+3. 然后`\expandafter\B\C`展开一步你已经懂了，相当于先展开`\C`然后前面放上`\B`。所以得到：
+
+    ②\expandafter\A\B①\C
+
+即
+
+```tex
+\expandafter\A\B「\C的展开」
+```
+
+4. 然后又展开`\expandafter\A\B`，就是先展开`\B`，前面再放上`\A`。最后总结一下，我们就知道，这个展开定式：
+
+```tex
+\expandafter\expandafter\expandafter\A\expandafter\B\C
+```
+
+的效果就是先展开`\C`，然后`\B`，最后`\A`。展开次序与排列次序相反。回到原来`ctex`宏包的例子，它的形式其实是：
+
+```tex
+\expandafter\expandafter\expandafter\let\expandafter
+  \csname foo\expandafter\endcsname
+  \csname bar\endcsname
+```
+
+最前面部分不就是我们讲的定式么？效果是先展开`foo`中的`f`，然后展开`\csname`，最后展开`\let`。展开`f`并没有什么可展的，展开后还是`f`；而到`\csname`的部分，按`\csname ... \endcsname`的语义，则需要向后展开到`\endcsname`为止——此时`\endcsname`之前的`\expandafter`起效果，就进入下一个部分了。后面的分析和最前面的简化代码其实一样。分析`ctex`原来的例子就可以看到，旧的代码会最先展开`\csname`后面的内容（上面的分析是`f`，原例子是`#1`传参的结果中的第一个 token），这当然是多余的做法。实际上，只需要保证`\let`在两个`\csname`之后被展开生效就足够了——这也是一开始简化代码做的事。关于`\csname`的语义，读**TeXbook**第`7`章（或**TeX by Topic**相关章节）有解释：对`\csname <tokens> \endcsname`的展开，是完全展开`<tokens>`到底，留下里面的字符部分，然后把这些字符生成一个宏。这对于理解上面的分析是有益的。这就是整个过程的详细分析，希望你没有被吓到。
+
+为了检验你已经理解了`\expandafter`的语义和上面说的逆转`3`个 token 展开次序的定式，你可以再试着理解一下这段代码：
+
+```tex
+\let\ep\expandafter % 简化下面的记号
+
+\ep\ep\ep\ep\ep\ep\ep\A
+\ep\ep\ep\B
+\ep\C
+\D
+```
+
+第一行就是`7`个`\expandafter`，有点吓人是么？注意`\expandafter`是跳着生效的，所以上面的代码的一轮展开之后，就变成了
+
+```tex
+\ep\ep\ep\A
+\ep\B
+\C
+「\D 的展开」
+```
+
+是不是有点眼熟？所以其实就是把`\A\B\C\D`这`4`个记号的展开顺序逆转一遍。现在你可以考虑：如果要逆转`5`个记号`\A\B\C\D\E`的展开顺序，一共需要用几个`\expandafter`？很有规律性不是么？最后推介 TUGboat 1988 年的一篇很早的文章，叫《A Tutorial on `\expandafter`》，希望你会喜欢：
+
+<https://www.tug.org/TUGboat/tb09-1/tb20bechtolsheim.pdf>
+
+# 李清
+
+多个`\expandafter`也是按照顺序展开的。[`@李阿玲`](https://www.zhihu.com/people/2ae8b3af01d40abc77ebeda7ecc350a9) 已经推荐了很好的资料，作为例子，我们来看看 `\CTEX@replacecommand{CTEX}{CJK}{underlinesep}` 的展开过程。代入参数后，就展开成
+
+```tex
+\expandafter\expandafter
+\expandafter\let
+\expandafter\csname CTEXunderlinesep\expandafter\endcsname
+  \csname CJKunderlinesep\endcsname
+\expandafter\expandafter
+\expandafter\def
+\expandafter\csname CJKunderlinesep\expandafter\endcsname{%
+  \csname CTEXunderlinesep\endcsname}
+```
+
+只看前面四行，后面的类似。首先被执行的是左边一列的`\expandafter`，但其实没有什么意义，因为最后的是
+
+```tex
+\expandafter\csname C
+```
+
+字母`C`不可展开。然后执行
+
+```tex
+\expandafter\let
+  \csname CTEXunderlinesep\expandafter\endcsname
+  \csname CJKunderlinesep\endcsname
+```
+
+`\expandafter`将展开`\let`后的`\csname`。`\csname`将展开随后的记号，直到遇到匹配的`\endcsname`为止。因而`\endcsname`前面的`\expandafter`将把
+
+```tex
+\csname CJKunderlinesep\endcsname
+```
+
+展开成 `\CJKunderlinesep`。最后就得到了结果
+
+```tex
+\let\CTEXunderlinesep\CJKunderlinesep
+```
+
+按照顺序慢慢看就可以。动手写代码，还是使用封装好的工具吧，不然有时候写起来是很费劲的。你可以感受一下下面的例子（http://latex-project.org/papers/expl3-boolexpr-example.pdf）：
+
+![](/images/Tech/LaTeX/df8adb1665b8d2388dd9897471712d28_b.jpg)
+
+# 孟晨
+
+答案分成两个部分。第一个部分讲怎么**看**：怎样判断一堆`\expandafter`修饰的代码的展开顺序；第二个部分讲怎么**写**：怎么根据展开顺序的需要来写`\expandafter`。以下讨论用`\ep`代表`\expandafter`，即
+
+```tex
+\let\ep\expandafter
+```
+
+有时为了方便，用`\ep1`代表代码串中第一个`\expandafter`。
+
+## 1
+
+判断的步骤如下：
+
+1. 划掉`\ep`；
+2. 跳过一个记号；
+3. 如果该记号是`\ep`，回到`1`；如果该记号不是`\ep`，展开它，然后找到代码片段里第一个没有被划掉的`\ep`，回到`1`。
+
+如此往复，直到所有的`\ep`都被划掉，再依次展开剩下尚未展开的宏。
+
+Ex.1
+
+```tex
+\ep1\ep2\ep3\A
+\ep4\B
+\C
+```
+
+步骤：
+
+1. 划掉`\ep1`，跳到`\ep3`；
+2. 划掉`\ep3`，跳到`\ep4`；
+3. 划掉`\ep4`，跳到`\C`，展开`\C`，跳到`\ep2`；
+4. 划掉`\ep2`，跳到`\B`，展开`\B`；
+5. 没有剩余的`\ep`，展开剩下的`\A`。
+
+得到展开顺序是`C - B - A`。这正是题主问题里的内容。
+
+Ex.2
+
+```tex
+\ep1\ep2\ep3\ep4\ep5\ep6\ep7\A
+\ep8\ep9\ep10\B
+\ep11\C
+\D
+```
+
+步骤：
+
+1. 划掉`\ep1`，跳到`\ep3`；
+2. 划掉`\ep3`，跳到`\ep5`；
+3. 划掉`\ep5`，跳到`\ep7`；
+4. 划掉`\ep7`，跳到`\ep8`；
+5. 划掉`\ep8`，跳到`\ep10`；
+6. 划掉`\ep10`，跳到`\ep11`；
+7. 划掉`\ep11`，跳到`\D`，展开`\D`，跳到`\ep2`；
+
+```tex
+% 整理一下，此时剩下的代码是
+\ep2\ep4\ep6\A
+\ep9\B
+\C
+```
+
+根据**Ex.1**得到`C - B - A`的展开顺序。因此展开顺序是`D - C - B - A`。这正是[@刘海洋](https://www.zhihu.com/people/dae56e83a09288121be52a7cb6a6f8b6)前辈在答案中举出的例子。
+
+Ex.3
+
+```tex
+\ep1\ep2\ep3\A
+\ep4\ep5\ep6\B
+\ep7\C
+\D
+```
+
+步骤：
+
+1. 划掉`\ep1`，跳到`\ep3`；
+2. 划掉`\ep3`，跳到`\ep4`；
+3. 划掉`\ep4`，跳到`\ep6`；
+4. 划掉`\ep6`，跳到`\ep7`；
+5. 划掉`\ep7`，跳到`\D`，展开`\D`，跳到`\ep2`；
+
+```tex
+% 整理一下，此时剩下的代码是
+\ep2\A
+\ep5\B
+\C
+```
+
+6. 划掉`\ep2`，跳到`\ep5`；
+7. 划掉`\ep5`，跳到`\C`，展开`\C`；
+8. 展开剩下的`\A`和`\B`。因此展开顺序是`D - C - A - B`。
+
+> **李清**：一般是`2^n-1`个`\expandafter`，所以分析

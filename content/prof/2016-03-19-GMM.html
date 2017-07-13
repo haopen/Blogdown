@@ -1,0 +1,286 @@
+---
+title: 什么是 Generalized Method of Moments (GMM)？z
+date: 2016-03-19
+categories: ["6-经济 - 计量"]
+tags: ["6-计量", "6-GMM", "6-广义矩估计"]
+slug: gmm
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://www.zhihu.com/question/41312883" class="uri">https://www.zhihu.com/question/41312883</a></p>
+<div class="section level1">
+<h1>慧航</h1>
+<p>既然被邀请和提到，在这里我来写一个最简单的 GMM 快速入门手册吧，因为这个技术听起来非常的高大上，但其实非常简单。如果你有本科的统计知识，看懂下文是不成问题的。</p>
+<p>GMM 的全名是 Generalized Method of Moments，也就是广义矩估计。只看这个名字的话，如果去掉<code>广义</code>这个词，可能学过本科统计的人都认识，就是<code>矩估计</code>。</p>
+<p>矩估计是什么呢？简单的说，就是用样本矩代替总体矩进行统计推断的方法。一个最基础的例子是正态总体的参数估计问题。如果<span class="math inline">\(x_i\sim N(\mu,\sigma^2)\)</span>，如何估计<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma\)</span>呢？</p>
+<!-- more -->
+<p>本科的统计学一般会介绍两种方法：极大似然估计和矩估计。其中矩估计是我们今天的主角。观察到：</p>
+<p><span class="math display">\[\mathrm{E}(x_i)=\mu,\quad\mathrm{E}(x_i^2)=\mu^2+\sigma^2\]</span></p>
+<p>而根据大数定理，在一定的条件下，我们有：</p>
+<p><span class="math display">\[\overline{x_i}-\mu=o_p(1),\quad\overline{x^2_i}=\mu^2+\sigma^2+o_p(1)\]</span></p>
+<p>也就是说，当样本量足够大的时候，样本矩与总体矩只差了一个无穷小量，那么我们是不是可以用样本矩代替总体矩得到参数的估计呢？</p>
+<p>按照上面的思路，我们把<span class="math inline">\(o_p(1)\)</span>去掉，同时把未知的总体参数写成其估计值，也就是带<code>^</code>的形式，我们得到了：</p>
+<p><span class="math display">\[\hat{\mu}=\overline{x_i},\quad \hat{\sigma}^2=\overline{x^2_i}-(\overline{x_i})^2\]</span></p>
+<p>如此，我们得到了两个总体矩的点估计。在这个简单的例子里面，你只要把上面的大数定理的结论带到上面两个式子里面，很容易的就可以证明出两个点估计是<code>一致</code>的估计量。</p>
+<p>当然，值得注意的是，即便我使用的是矩条件，<span class="math inline">\(\sigma\)</span>的估计也不是<del><code>无偏</code></del>的。一般而言，除了特殊情况，不管是 MLE 还是 MM 还是 GMM，都不一定可以得到无偏的估计量。特别是在比较复杂的应用里面，一致就很不错了，无偏性的讨论真的繁琐。</p>
+<p>好了，上面是矩估计，非常简单是吧？但是什么又是广义矩估计呢？</p>
+<p>在上面的例子中，我们只使用了两个矩条件。然而我们知道，正态分布的矩是有无穷多个可以用的，那么我们是不是可以使用更多的矩条件呢？</p>
+<p>但是有个<strong>问题</strong>不好解决。在这个例子里面，我们有两个未知参数，如果只使用一阶矩，那么只有一个方程解两个未知数，显然是不可能的。像上面一样，我们用两个矩条件解两个未知数，就解出来了。然而，当我们用一到三阶矩，总共三个方程求解的时候，三个方程求解两个未知数，可能无解。</p>
+<p>方程数多了，反而没有解了，为什么呢？其实很简单，用三个方程中的任意两个方程，都可以求出一组解，那么三个方程我们就可以求出三组解。所以应该如何把这些矩条件都用上呢？</p>
+<p>到这里我们不妨引入一些记号。还是使用上面的例子，我们把上面的三个矩条件写到一个向量里面去，记：</p>
+<p><span class="math display">\[g(x_i,\theta)=\left[ x_i-\mu, x_i^2-\mu^2-\sigma^2, x_i^3-\mu^3-3\mu\sigma^2\right]^\prime,\;\theta=\{\mu, \sigma^2\}\]</span></p>
+<p>我们可以得到一个<code>3*1</code>的列向量，并且：</p>
+<p><span class="math display">\[\mathrm{E}[g(x_i,\theta)]=0\]</span></p>
+<p>上面就是我们要用的矩条件。而根据上面的思路，用其样本矩代替总体矩：</p>
+<span class="math display">\[\begin{equation}
+\frac{1}{N}\sum_i g(x_i,\hat{\theta})=0
+\end{equation}\]</span>
+<p>解这个方程应该就可以得到参数<span class="math inline">\(\theta\)</span>的估计。但是正如上面所说的，三个方程两个未知数，并不能确保这个方程有解，所以必须想一些其他办法。</p>
+<p>一个比较自然的想法是，上面的矩条件等于<span class="math inline">\(0\)</span>，虽然我不太可能保证三个方程同时等于<span class="math inline">\(0\)</span>，但是仿照 OLS，我们可以让他们的平方和最小，也就是：</p>
+<p><span class="math display">\[\min_{\hat{\theta}} \left[ \frac{1}{N}\sum_i g(x_i,\hat{\theta}) \right] &#39; \left[ \frac{1}{N}\sum_i g(x_i,\hat{\theta}) \right]\]</span></p>
+<p>这样我们就能保证三个矩条件的样本矩都足够贴近于<span class="math inline">\(0\)</span>，当然不可能同时为<span class="math inline">\(0\)</span>。这样不就综合使用了三个矩条件的信息么？</p>
+<p>更一般的，由于上面的<span class="math inline">\(g\)</span>函数是一个<code>3*1</code>的列向量，我们可以使用一个权重矩阵<span class="math inline">\(W\)</span>来赋予每个矩条件以不同的权重：</p>
+<span class="math display">\[\begin{equation}
+\min_{\hat{\theta}} \left[ \frac{1}{N}\sum_i g(x_i,\hat{\theta}) \right] &#39; W \left[ \frac{1}{N}\sum_i g(x_i,\hat{\theta}) \right]
+\end{equation}\]</span>
+<p>只要这个<span class="math inline">\(W\)</span>是一个正定矩阵，那么仍然可以保证每个样本矩都足够贴近于<span class="math inline">\(0\)</span>。</p>
+<p>那么问题来了，既然对<span class="math inline">\(W\)</span>的要求只要求正定矩阵，那么使用不同的权重矩阵就有可能得到不同的结果。问题是，有没有一个最优的权重矩阵呢？当然是有的。可以证明，最优的权重矩阵应该是：</p>
+<span class="math display">\[\begin{equation}
+\left\{\mathrm{E} [g(x_i,\theta)g(x_i,\theta)^\prime] \right\}^{-1}
+\end{equation}\]</span>
+<p>使用这个权重矩阵，就得到了最有效的估计。</p>
+<p>比如上面的例子，用 gretl 分别估计两个矩条件、三个矩条件使用单位阵作为W、三个矩条件使用最优权重矩阵做估计：</p>
+<pre class="txt"><code>nulldata 1000
+set seed 1988
+series x=randgen(N,1,2)
+series x2=x^2
+series x3=x^3
+series e
+series e2
+series e3
+scalar mu=0
+scalar sigma2=1
+matrix W2=I(2)
+gmm
+    series e=x-mu
+    series e2=x2-sigma2-mu^2
+    orthog e; const
+    orthog e2; const
+    weights W2
+    params mu sigma2
+end gmm
+matrix W3=I(3)
+scalar mu=0
+scalar sigma2=1
+gmm
+    series e=x-mu
+    series e2=x2-sigma2-mu^2
+    series e3=x3-3*mu*sigma2-mu^3
+    orthog e; const
+    orthog e2; const
+    orthog e3; const
+    weights W3
+    params mu sigma2
+end gmm
+scalar mu=0
+scalar sigma2=1
+gmm
+    series e=x-mu
+    series e2=x2-sigma2-mu^2
+    series e3=x3-3*mu*sigma2-mu^3
+    orthog e; const
+    orthog e2; const
+    orthog e3; const
+    weights W3
+    params mu sigma2
+end gmm --iterate</code></pre>
+<p>首先是使用两个矩条件的结果：</p>
+<div class="figure">
+<img src="/images/Eco/Econometrica/huihang/GMM/1.png" />
+
+</div>
+<ol style="list-style-type: decimal">
+<li>为什么两个矩条件的时候不使用最优权重矩阵呢？因为两个未知参数，两个矩条件，不存在过度识别的问题，存在唯一解的，所以不管使用任何的正定矩阵，得到的结果都是一样的。</li>
+</ol>
+<p>三个矩条件，这个时候使用什么样的权重矩阵就不一样了。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>先使用<strong>单位阵</strong>作为权重矩阵：</li>
+</ol>
+<div class="figure">
+<img src="/images/Eco/Econometrica/huihang/GMM/2.png" />
+
+</div>
+<p>这里需要注意的是，即使使用了更多的矩条件，估计量的 standard error 还是变大了。感兴趣的可以做一个蒙特卡洛模拟试试，一定是会变大的。为什么呢？因为没有使用最优的权重矩阵，所以使用单位阵作为权重矩阵得到的结果不是最有效的。</p>
+<ol start="3" style="list-style-type: decimal">
+<li>那么如果使用<strong>最优的权重矩阵</strong>呢？结果：</li>
+</ol>
+<div class="figure">
+<img src="/images/Eco/Econometrica/huihang/GMM/3.png" />
+
+</div>
+<p>嘿！standard error 是变小了，但是跟使用两个矩条件的好像没有什么本质变化啊？为什么呢？</p>
+<p>因为这里举的这个例子太特殊了，我们使用的前两个矩条件，刚好是一个充分统计量，也就是说，使用额外的矩条件不会带来附加信息的。但是如果是<code>其他情况，一般来说更多的矩条件是可以带来更多的信息的</code>，比如工具变量的回归。</p>
+<p>另外如果细心观察，最后一张表格多了一个 <strong>J-test</strong>。这又是啥呢？</p>
+<p>这个东西就比较有意思了。直到现在，我们都是假设使用的矩条件成立，那么这些矩条件真的是成立的么？未必啊。比如，如果<span class="math inline">\(x\)</span>本来就不服从正态分布，那么使用上面的估计显然是错的。那么<code>是不是可以检验矩条件是否成立呢</code>？</p>
+<p>一般来说，如果你有<span class="math inline">\(K\)</span>个未知的参数，以及<span class="math inline">\(K\)</span>个矩条件，那么矩条件是不能检验的。但是如果你有更多的矩条件，那么就有了检验的可能。这个检验的直觉很简单，比如上面的例子里面，我们有<span class="math inline">\(3\)</span>个矩条件。我可不可以<code>先使用前两个矩条件估计这两个参数，然后把这两个参数带入到第三个矩条件里面，看看是不是充分接近于$0$，如果充分接近，那么看来这三个矩条件彼此印证了</code>。</p>
+<p>实际使用的时候没有那么麻烦。可以<strong>证明</strong>，当使用了最优的权重矩阵的时候，GMM 的目标函数渐进服从卡方分布，因而只要检验这个卡方分布就可以了，也就是上面的 J-test。p-value 为<code>0.6884</code>，看来这三个矩条件没有矛盾的地方。</p>
+<p>但是一定要<strong>注意</strong>，即使通过了这个检验，也不代表矩条件一定是成立的，因为有可能三个矩条件都是错的，只不过错的方向是一致的。比如这个例子里面，有可能<span class="math inline">\(x\)</span>的分布前三阶矩跟正态分布是一样的，但第四阶就不一样了。因而通过这个检验不代表x一定服从正态分布。当然，如果通不过，可以比较自信的说，<span class="math inline">\(x\)</span>不服从正态分布。</p>
+<p>比如，我们把上面的数据生成过程改为 gamma 分布，得到的结果：</p>
+<div class="figure">
+<img src="/images/Eco/Econometrica/huihang/GMM/4.png" />
+
+</div>
+<p>p-value 为<code>0.0000</code>，拒绝了原假设，也就是说，三个矩条件不同时成立，数据很有可能不是从正态分布中生成的。</p>
+<hr />
+<p>计量经济学的很多很多问题基本都可以归结为 GMM 的问题。从最简单的 OLS、2SLS 到稍微复杂一点的面板数据、动态面板等等，本质上都是在找矩条件。比如工具变量的 2SLS，可以发现矩条件不过就是：</p>
+<p><span class="math display">\[\mathrm{E}[(y_i-x_i^\prime\beta)z_i]=0\]</span></p>
+<p>套一下上面的公式，最优权重矩阵(的逆)为：</p>
+<p><span class="math display">\[\mathrm{E}[(y_i-x_i^\prime\beta_0)z_i z_i^\prime(y_i-x_i^\prime\beta_0)^\prime]=\mathrm{E}[e_i^2z_i z_i^\prime]=\sigma^2\mathrm{E}[z_iz_i^\prime]\]</span></p>
+<p>带入到目标函数中，就得到了 2SLS。</p>
+<p>甚至，一些其他的估计量，比如 MLE、M-estimator 等，在一定的条件下也可以转化为 GMM，因为这些估计量的一阶条件可以看成是矩条件。所以 GMM 也就变成了一个统一的框架。</p>
+<p>为什么 GMM 这么受欢迎呢？因为 GMM 把复杂的统计过程抽象化成为一个（看似）简单的过程：找矩条件。只要你能找到矩条件，你就能估计。GMM 把估计的繁琐细节全都抽象了，面对一个模型，你所需要做的所有事情就是找到矩条件，证明这个模型是可以识别的，然后什么也不用管，一股脑儿塞进去，结果就出来了。</p>
+<p>所以呢如果你去看一些稍微复杂的模型，基本都可以归结为矩条件。</p>
+<p>至于题主提到的资产定价，刚好 Gretl 提供了一个可以使用的数据集和 code。资产定价最简单的模型应该就是 C-CAPM 了，其重要结论就可以直接归结为这么一个矩条件：</p>
+<span class="math display">\[\begin{equation}
+\mathrm{E}\left[\delta\frac{r_{j,t+1}}{p_{j,t}}\left(\frac{C_{t+1}}{C_t}\right)^{\alpha-1}\Bigg|\mathcal{F}_t\right]=1
+\end{equation}\]</span>
+<p>其中<span class="math inline">\(\mathcal{F}_t\)</span>为第<span class="math inline">\(t\)</span>期所知道的所有信息，包括<span class="math inline">\(C_t\)</span>、<span class="math inline">\(r_t\)</span>等等。所以根据这个式子，如果令</p>
+<p><span class="math display">\[e_t=\delta\frac{r_{j,t+1}}{p_{j,t}}\left(\frac{C_{t+1}}{C_t}\right)^{\alpha-1}-1\]</span></p>
+<p>那么<span class="math inline">\(e_t\)</span>跟<span class="math inline">\(C_t\)</span>、<span class="math inline">\(r_t\)</span>等等都是<code>正交</code>的，自然可以作为矩条件来用。</p>
+<p>Gretl 自带了<code>Hall</code>的数据集，在 user guide 第 206 页开始给出了说明和代码，以及结果，感兴趣的可以去看看，很简单的一个程序。</p>
+<p>我猜想上面的两个例子已经足够简单了，特别是正态分布的例子，应该不可能更简单了。</p>
+<blockquote class="gray">
+<p><strong>KF CHE</strong>：剛開始學 GMM，這個答案幫助很大，萬分感謝。有問題還想請教一下，希望先生有空賜教一下。如果 instrument rank 剛好就和要估計的 estimators 數目一樣，這時是 just-identified，用不著去管 j-stat。於是這時候我就只能用經濟常識去支持我的 instruments 是有效的，而沒有什麼統計工具可以幫忙嗎?</p>
+<blockquote class="white">
+<p><strong>慧航</strong>：是的，没有。</p>
+</blockquote>
+</blockquote>
+</div>
+<div id="huang-zhibin" class="section level1">
+<h1>Huang Zhibin</h1>
+<p>GMM 简直是计量的良心，它可以涵盖几乎所有常用的 estimator，OLS, IV, 2SLS, GLS, RE, FE, SUR, 3SLS, Pooled OLS…全是它的特殊情况。所以 LZ 你说用简单的例子解释一下，我瞬间不知道该从何讲起…因为 GMM 的应用…实在广泛了。</p>
+<p>LZ 看样子是做宏观或者金融的，那我就来根据 Hayashi 的 econometrics 来大致解释一下 GMM。GMM 是一个 framework，本质是运用矩条件，对参数进行估计。所以我们叫它广义矩估计。</p>
+<p>我们先在线性模型</p>
+<p><span class="math display">\[y_{i} =x&#39;_{i}\beta +\varepsilon _{i}\]</span></p>
+<p>的框架下讨论，这样比较清晰。假设<span class="math inline">\(y\)</span>是因变量，<span class="math inline">\(x\)</span>是原自变量，<span class="math inline">\(z\)</span>是工具自变量（可以和原自变量一致，也可以不一致），我们定义</p>
+<p><span class="math display">\[g_{i}=z_{i}*\varepsilon _{i}\]</span></p>
+<p>所谓矩条件，就是我们假设模型的真实参数和总体，满足这样一个条件：</p>
+<span class="math display">\[\begin{equation}
+\mathrm{E}[g(z,\beta)]=0
+\end{equation}\]</span>
+<p>也就是</p>
+<p><span class="math display">\[
+\mathrm{E}(z_{i}*(y_{i}-x&#39;_{i}\beta ))=0
+\]</span></p>
+<p>然后在这个条件下，我们用某种方法去估计参数<span class="math inline">\(\beta\)</span>，看上去是不是很混乱？OK 让我们做一个小小的变换，假设向量<span class="math inline">\(x_i=z_i\)</span>，也就是说工具变量和自变量完全一样。这时候矩条件就变成了：</p>
+<p><span class="math display">\[\mathrm{E}(x_{i}*(y_{i}-x&#39;_{i}\beta ))=0\]</span></p>
+<p>回想起来这是啥了没？就是简单的线性投影条件呀！它的 sample analogue 是啥？就是 OLS！好，OLS 首先被装到了 GMM 这个框里。但是当<span class="math inline">\(z_i\)</span>不完全和<span class="math inline">\(x_i\)</span>一样的时候呢？那我们就得分类讨论了。</p>
+<ol style="list-style-type: decimal">
+<li>如果<span class="math inline">\(z_i\)</span>里的变量数量<code>小于</code><span class="math inline">\(x_i\)</span>，那就是 under-identified（<strong>识别不足</strong>），这个时候我们没办法用 GMM 估计。（想想简单 IV 里最基本的估计条件就是 IV 数量比内生变量数量多）</li>
+<li>如果<span class="math inline">\(z_i\)</span>里的变量数量<code>等于</code><span class="math inline">\(x_i\)</span>里的，那就是 just-identified（<strong>恰好识别</strong>），这个时候我们的 sample analogue 和用样本估计参数的方法都很直接而且简单，就是用简单算术平均。定义</li>
+</ol>
+<p><span class="math display">\[g_{n}=\frac{1}{n} *\sum_{i=1}^{n}{z_{i}*(y_{i}-x&#39;_{i}\beta) }\]</span></p>
+<p>估计方法就是直接让<span class="math inline">\(g_{n}=0\)</span>，解出对应的<span class="math inline">\(\beta\)</span>就好了，没啥花样儿。所以我们很清楚可以看到，恰好识别的时候，GMM Estimator 就是：</p>
+<p><span class="math display">\[\hat{\beta } _{\text{GMM}}=(\sum_{i=1}^{n}{z_{i}x&#39;_{i}})^{-1}*(\sum_{i=1}^{n}{z_{i}y_{i}} )\]</span></p>
+<p>是不是很熟悉？YES！就是简单的 IV Estimator，当<span class="math inline">\(z_i=x_i\)</span>时，就直接变成 OLS Estimator 了。</p>
+<ol start="3" style="list-style-type: decimal">
+<li>如果<span class="math inline">\(z_i\)</span>里的变量数量大于<span class="math inline">\(x_i\)</span>里的，那就是over-identified（<strong>过度识别</strong>），这就到了 GMM 不一样的地方了。这时候我们不能直接简单用<span class="math inline">\(g_{n}=0\)</span>的条件去求解<span class="math inline">\(\beta\)</span>了，因为这时候我们的<code>矩条件比未知数要多</code>，也就是说方程组里的方程数量比未知数多，一般情况下找不到解。咋办？那我们就找一个解得出来的方程组，并且要让<span class="math inline">\(g_{n}\)</span>尽量“靠近”零。因为<span class="math inline">\(g_{n}\)</span>其实是空间里的一个点，所以我们这里用一个小技巧，把这种靠近，定义为最小化<span class="math inline">\(g_{n}\)</span>这个点，和原点的空间距离。我们定义</li>
+</ol>
+<p><span class="math display">\[J(\hat{\beta},\hat{W})=n* g&#39;_{n}(\hat{\beta})\hat{W}g_{n}(\hat{\beta})\]</span></p>
+<p>这个<span class="math inline">\(J\)</span>就是我们要的距离。<span class="math inline">\(W\)</span>是一个对称且正定的矩阵，表示我们对这个空间距离的某种度量。当<span class="math inline">\(W=I\)</span>的时候，我们定义的这个距离就是简单的欧式空间距离。前面乘以一个<span class="math inline">\(n\)</span>没啥别的意思，是为了某些统计量比较好算…，所以我们估计参数<span class="math inline">\(\beta\)</span>的方法就是：</p>
+<p><span class="math display">\[\hat{\beta}_{\text{GMM}}=\arg\min_{\hat{\beta}}J(\hat{\beta},\hat{W})\]</span></p>
+<p>取一个让距离最小的<span class="math inline">\(\hat{\beta}\)</span>，就得到了我们要的 GMM 估计量。简单求个导，解一下一阶条件我们就有了显性表达式：</p>
+<p><span class="math display">\[\hat{\beta}_{\text{GMM}}=(S&#39;_{zx}\hat{W}S_{zx})^{-1}S&#39;_{zx}\hat{W}S_{zy}\]</span></p>
+<p>其中<span class="math inline">\(S_{zx}=\sum_{i-=1}^{n}{z_{i}x&#39;_{i}},\;S_{zy}=\sum_{i-=1}^{n}{z_{i}y_{i}}\)</span>，这就是单方程 GMM 的一般解。当我们选取不同的<span class="math inline">\(W\)</span>矩阵，也就是选择不同的空间距离度量时，GMM 会变成各种我们熟悉的 estimator，比如 2SLS 等等。</p>
+<p>以上是关于线性模型的。</p>
+<p>更一般的 GMM，其实差别不是很大，无非是去掉了<code>矩条件是线性</code>的这个假设。这时候我们有：</p>
+<p><span class="math display">\[\mathrm{E}[g(x,\beta)]=0\]</span></p>
+<p><span class="math inline">\(x\)</span>是自变量，<span class="math inline">\(\beta\)</span>是真实参数，同样我们也是最小化一个空间距离：</p>
+<p><span class="math display">\[J(\hat{\beta},\hat{W})=n* g&#39;_{n}(\hat{\beta})\hat{W}g_{n}(\hat{\beta})\]</span></p>
+<p><span class="math display">\[\hat{\beta}_{\text{GMM}}=\arg\min_{\hat{\beta}}J(\hat{\beta},\hat{W})\]</span></p>
+<p>只不过在具体求解的时候，如果<span class="math inline">\(g\)</span>是一个很复杂的非线性函数的话，那就不一定有解析解，需要用数值逼近，然后渐进方差要用 delta method 计算。（这块 general 的 GMM 具体操作方法我也不是很了解，hayashi 和 hansen 的书上也都没有太多介绍，可以咨询<code>@慧航</code>）</p>
+<p>以上是最基本的 GMM 内容，从 0 开始定义。更多的重要内容，包括<strong>最优权矩阵</strong>，<strong>多方程 GMM</strong> 等等，还是看书吧。推荐 Bruce Hansen 的 Econometrics，里面关于 GMM 的章节很精练，适合快速阅读快速理解，并且是基于<code>iid sample</code>假设。Hayashi 的 Econometrics 对 GMM 的介绍非常全面，适合进阶阅读，基于<code>ergodic stationary</code>假设，偏时间序列。</p>
+<p>参考：</p>
+<ul>
+<li>Hayashi, Econometrics</li>
+<li>Bruce Hansen, Econometrics</li>
+</ul>
+<blockquote>
+<p>J-test 是关于 orthogonal condition，也就是我们的矩条件的 test。在模型的 specification 都成立，我们假设的矩条件都真实成立的情况下，<span class="math inline">\(J\)</span>值会收敛到一个卡方分布（其实这里就是我之前提到的为什么算<span class="math inline">\(J\)</span>最优化前面要多乘一个<span class="math inline">\(n\)</span>的原因！因为可以让<span class="math inline">\(J\)</span>和卡方分布联系上），这样我们就能用<span class="math inline">\(J\)</span>做统计检验。所以如果<span class="math inline">\(J\)</span><code>太大</code>的话，我们就得怀疑模型是不是错了，是不是有些矩条件错了。这里的直观理解很简单，我们假设了矩条件等于零，那<span class="math inline">\(n\)</span>很大的时候，样本算出来的和零的距离就不应该太大，不然就不对了。</p>
+</blockquote>
+</div>
+<div class="section level1">
+<h1>缄默的老橡树（补充）</h1>
+<p>今天复习 GMM 的时候想到了一个工具变量的找法很开森，于是愉快地决定强答一发 GMM，然后发现前面三位大神已经把能填的坑都填上了。</p>
+<p>找个没填完的小坑，稍微灌点水吧，补充一下<code>@刘澈</code>，没讲完的具体的 GMM 提升精度的方法。</p>
+<p>前面大神们提到了，GMM 估计相当于给不同的矩条件赋予了不同的权重，然后才能这个权重得到最小化条件，不同的权重阵其实就对不同的估计量，就像<code>@Huang Zibin</code>说的，“OLS, IV, 2SLS, GLS, RE, FE, SUR, 3SLS, Pooled OLS…全是它的特殊情况”。</p>
+<p>那么结果来了，权重矩阵辣么多，要挑不过来，怎么选取最好呢，<code>@慧航</code>也指出了，最优权重阵这样，</p>
+<p><span class="math display">\[\left\{\mathrm{E}[g(x_i,\theta)g(x_i,\theta)&#39;]\right\}^{-1}\]</span></p>
+<p>当然了，根据 slutsky’s theorem，拿样本模拟总体一般错不了。所以样本模拟最优权重阵的结果就是这样：</p>
+<p><span class="math display">\[\left\{\frac{1}{n}\sum\left[g(x_i,\hat{\theta})g(x_i,\hat{\theta})&#39;\right]\right\}^{-1}\]</span></p>
+<p>那么<strong>问题</strong>来了，<code>要估计最优权重阵就要估计参数，要估计参数就要知道最优权重阵</code>（循环一二起，要估计最优权重阵就要估计参数，要估计参数就要知道最优权重阵…）。不要担心，我们有Hansen（1982）。</p>
+<ol style="list-style-type: decimal">
+<li>第一种叫 one-step GMM，玩不出来我就不玩了呗，没有胡屠夫还不吃带毛猪了，我找不到最优权重阵，我找个过的去权重阵差不多意思意思，反正满足内生性条件之后，大样本性质总归是好的，至于小样本性质，那再说吧。</li>
+</ol>
+<p>一般<span class="math inline">\(W_n=\mathrm{I}_n\)</span>（单位阵）或者<span class="math inline">\(=\mathrm{inv}(Z’Z)\)</span>（工具变量阵乘积的逆）</p>
+<ol start="2" style="list-style-type: decimal">
+<li>第二种叫做 two-step GMM，现在不是根据第一种方法有了参数的一个估计了嘛，那往前再走一步咯，我根据参数得到最优权重阵的一个估计，</li>
+</ol>
+<p><span class="math display">\[\left\{\frac{1}{n}\sum\left[g(x_i,\hat{\theta})g(x_i,\hat{\theta})&#39;\right]\right\}^{-1}\]</span></p>
+<p>然后再来一次 GMM 估计嘛。</p>
+<p>第一、二种方法有一个小小的缺陷，就是初始权重阵的选取，会影响到参数的数值（numerical value）。</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>第三种叫做 Iterated Efficient（迭代有效）GMM，怎么讲，2 步迭代不够那 3 步迭代，3 步不够迭代 4 步，总有一步，会得到最优的估计的。那怎么判定是不是差不多最优了呢，一般用这次迭代得到的新参数和上次的参数做差，差充分小的时候，就表示逼近已经很成功了。</p></li>
+<li><p>第四种方法理解起来复杂，叫做 Continuous-updating （连续更新）GMM。GMM 估计是在最小化方程</p></li>
+</ol>
+<p><span class="math display">\[\min_{\hat{\theta}}\left[\frac{1}{N}\sum_ig(x_i,\hat{\theta})\right]^\prime W\left[\frac{1}{N}\sum_ig(x_i,\hat{\theta})\right]\]</span></p>
+<p>然后最优权重阵</p>
+<p><span class="math display">\[W=\left\{\frac{1}{n}\sum\left[g(x_i,\hat{\theta})g(x_i,\hat{\theta})&#39;\right]\right\}^{-1}\]</span></p>
+<p>我们直接代进去嘛，这样这个估计方程里面不就没有<span class="math inline">\(W\)</span>只有参数了，然后估计参数就好了。</p>
+<p>第三第四种方法的解，不依赖初始权重阵。理论上说，第三第四种方法的估计应该是渐进等价的，当然小样本性质可能有所差异。</p>
+<p>但要注意，如果矩条件不是线性的，那没啥好说的大家都是非线性参数估计；如果矩条件是个线性的，前三种就是线性估计第四种方法还是非线性估计，相比来说，计算更加繁重，但其有限样本性质要稍好些，另外如果存在弱工具变量的问题，其也相对稳健（robust）。</p>
+</div>
+<div class="section level1">
+<h1>刘澈（金融）</h1>
+<p>之前的答案没有针对金融/Asset pricing的，补充一个。</p>
+<p>题主看 Cochrane 的 Asset Pricing 学 GMM，是想了解宏观金融。GMM 即是 Hansen and Singleton (1982) 专门为了解决宏观金融模型的参数估计问题开发的；Hansen 因其突出贡献还与其他两位金融经济学家共同获得了 2013 年诺贝尔经济学奖。GMM 被资产定价学者开发以后，由于其泛用性，传播到了经济学的其他各个领域，成为了计量经济学中的一种典型方法。</p>
+<p>总的来说，GMM 想解决的是复杂系统中的参数估计问题。对于一个复杂的含参系统，估计其中的参数是很困难的，因为你的估计策略不可能照顾到这个系统的所有特征。GMM 方法提出，如果你的估计策略不能面面俱到，那么退而求其次，你的<code>估计策略至少应当考虑到这个系统最重要的特征</code>。GMM 的精髓就是这种简化的思路。</p>
+<p>设想你只有一个简单的含参系统，例如一个线性均值方程<span class="math inline">\(\mathrm{E}(y|X)=b_0 + b_1X\)</span>。如果你想估计整个系统，那么你只需要估计其中的参数<span class="math inline">\(b_0\)</span>与<span class="math inline">\(b_1\)</span>即可。假设方程真实成立，那么想用数据<code>{y, X}</code>估计出<span class="math inline">\(b_0\)</span>与<span class="math inline">\(b_1\)</span>非常简单：只需将<span class="math inline">\(y\)</span>对<span class="math inline">\(X\)</span>做最简单的线性 OLS 回归即可。</p>
+<p>但是设想你的参数系统比较复杂，比如宏观资产定价里最简单的一种 Euler Equation (with power utility)：</p>
+<span class="math display">\[\begin{equation}\label{eq:zhihuGMM:Liu1}
+\mathrm{E}_t\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{i,t+1}\right] = 1
+\end{equation}\]</span>
+<p>其中<span class="math inline">\(\mathrm{E}_t\)</span>是<span class="math inline">\(t\)</span>时刻的条件期望，<span class="math inline">\(R_i\)</span>是市场中任意一种资产的毛收益率，<span class="math inline">\(C_t\)</span>为<span class="math inline">\(t\)</span>时刻的消费，<span class="math inline">\(\beta\)</span>是<strong>主观折现因子</strong>，<span class="math inline">\(\gamma\)</span>是<strong>风险厌恶系数</strong>。如果你想估计整个系统，那么你只需要估计其中的参数<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>即可。但是很显然，假设你能拿到消费、任意资产的毛收益率等一些经济数据，而且假设经济数据（作为随机变量）真的服从等式，那么一个简单的 OLS 是不能搞定参数估计的。原因很简单，因为这个系统太复杂了。所以，想估计这个系统，就必须简化问题。这个系统复杂的原因在于：</p>
+<ul>
+<li>式\eqref{eq:zhihuGMM:Liu1}对于市场上的所有资产全都成立。所以实际上式\eqref{eq:zhihuGMM:Liu1}包含了无穷多个方程。但是这个太复杂了，估计出使得式\eqref{eq:zhihuGMM:Liu1}对于所有资产都成立的<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>很困难。所以我们退而求其次。如果有<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>会使得式\eqref{eq:zhihuGMM:Liu1}对于所有资产都成立，那么他们也会使得式\eqref{eq:zhihuGMM:Liu1}对你认为的最重要的资产成立。比如，如果你认为一个市场中最重要的资产是市场指数与无风险债券，那么当然式\eqref{eq:zhihuGMM:Liu1}对市场指数与无风险债券均成立，亦即</li>
+</ul>
+<span class="math display">\[\begin{align}
+ &amp; \mathrm{E}_t\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{m,t+1}\right] = 1\label{eq:zhihuGMM:Liu21}\\
+ &amp; \mathrm{E}_t\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}\right]R_{f,t} = 1\label{eq:zhihuGMM:Liu22}
+\end{align}\]</span>
+<p>如果估计和就能够成功得到<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>，那么就估计更为简单的和好了，因为其得到的<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>也能使\eqref{eq:zhihuGMM:Liu1}成立。</p>
+<ul>
+<li>但是，估计式\eqref{eq:zhihuGMM:Liu21}和\eqref{eq:zhihuGMM:Liu22}也太复杂了，因为式\eqref{eq:zhihuGMM:Liu21}和\eqref{eq:zhihuGMM:Liu22}仍然用“<span class="math inline">\(t\)</span>时刻的条件期望”写成：对于任意的时间<span class="math inline">\(t\)</span>，\eqref{eq:zhihuGMM:Liu21}和\eqref{eq:zhihuGMM:Liu22}式都必须成立。所以式\eqref{eq:zhihuGMM:Liu21}和实际包含了无穷多个方程，这种复杂程度使得我们没法进行参数估计。所以，我们必须进一步简化，简化的方式就是将\eqref{eq:zhihuGMM:Liu21}和\eqref{eq:zhihuGMM:Liu22}中的条件期望<span class="math inline">\(\mathrm{E}_t[...]\)</span>简化为无条件期望<span class="math inline">\(\mathrm{E}[...]\)</span>——自然是通过期望迭代定律（Law of Iterated Expectations）实现。但是，如果我直接将条件期望简化为无条件期望，我将无穷多等式简化为两个等式，损失的信息实在太多，这样不好。所以，为了避免在简化的过程中损失过多信息，我们一般会使用一些“工具变量”（instrumental variables）来丰富信息含量。</li>
+</ul>
+<p>假设你认为市场中的 Price-dividend ratio 是比较重要的经济变量，你希望在你的估计中体现它，那么你就可以用它来做一个工具变量。记<span class="math inline">\(t\)</span>时刻的 Price-dividend ratio 为<span class="math inline">\(z_t\)</span>。式\eqref{eq:zhihuGMM:Liu21}可以变换为：<span class="math inline">\(z_t\mathrm{E}_t[\beta(\frac{C_{t+1}}{C_t})^{-\gamma}R_{m,t+1} -1] = 0\)</span>，因为<span class="math inline">\(z_t\)</span>是时刻<span class="math inline">\(t\)</span>的变量，所以可以进一步变换为<span class="math inline">\(\mathrm{E}_t[z_t(\beta(\frac{C_{t+1}}{C_t})^{-\gamma}R_{m,t+1} -1)] = 0\)</span>。等式两边使用迭代期望定律，得到无条件期望等式</p>
+<span class="math display">\[\begin{equation}\label{eq:zhihuGMM:Liu31}
+\mathrm{E}\left\{z_t\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{m,t+1} -1\right]\right\}= 0
+\end{equation}\]</span>
+<p>同理，式\eqref{eq:zhihuGMM:Liu22}也可以变换为</p>
+<span class="math display">\[\begin{equation}\label{eq:zhihuGMM:Liu32}
+\mathrm{E}\left\{z_t\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{f,t} -1\right]\right\} = 0
+\end{equation}\]</span>
+<p>这样，我们就进一步将复杂的\eqref{eq:zhihuGMM:Liu21}和\eqref{eq:zhihuGMM:Liu22}简化成了\eqref{eq:zhihuGMM:Liu31}和\eqref{eq:zhihuGMM:Liu32}。</p>
+<p>采用一个<span class="math inline">\(z_t\)</span>，我们将无穷多个式子简化为了两个式子，简化程度很大。为了避免简化程度过大，我们一般会多选用一些工具变量。每选用一个工具变量，就增加两个无条件期望等式。比如，常数变量“1”显然也是一个工具变量。重复上面的操作，我们得到</p>
+<span class="math display">\[\begin{equation}\label{eq:zhihuGMM:Liu33}
+\mathrm{E}\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{m,t+1} -1\right]= 0
+\end{equation}\]</span>
+<p>和</p>
+<span class="math display">\[\begin{equation}\label{eq:zhihuGMM:Liu34}
+\mathrm{E}\left[\beta\left(\frac{C_{t+1}}{C_t}\right)^{-\gamma}R_{f,t} -1\right] = 0
+\end{equation}\]</span>
+<p>所以，为了估计\eqref{eq:zhihuGMM:Liu1}，我们利用<strong>合理选用重要资产</strong>与<strong>工具变量+迭代期望定律</strong>的策略将\eqref{eq:zhihuGMM:Liu1}式简化为了几个较为简单的等式，并且选用了多个工具变量（本例为 2 个）来避免简化过度。最终，我们得到式\eqref{eq:zhihuGMM:Liu31}、\eqref{eq:zhihuGMM:Liu32}、\eqref{eq:zhihuGMM:Liu33}、\eqref{eq:zhihuGMM:Liu34}（本例包含 4 个式子/无条件期望等式/“矩条件”）。这个系统中有两个参数，四个等式。等式个数多于待估参数个数，可以进行估计。需要的数据为消费、市场指数收益率、无风险收益率和 Price-dividend ratio。事实上，这就是你建立的 GMM 问题。</p>
+<p>为了避免实际计算时可能出现的过度识别（Over-identification）问题，采取<code>@慧航</code>和<code>@Huang Zibin</code>答案中的策略求解<span class="math inline">\(\beta\)</span>和<span class="math inline">\(\gamma\)</span>的 GMM 估计量：将\eqref{eq:zhihuGMM:Liu31}、\eqref{eq:zhihuGMM:Liu32}、\eqref{eq:zhihuGMM:Liu33}、\eqref{eq:zhihuGMM:Liu34}简记成<span class="math inline">\(\mathrm{E}[\mathbf{g}(C, R_f, R_m, z; \beta, \gamma)] = \mathbf{0}\)</span>，这是一个<code>4*1</code>的向量等式。用样本矩<span class="math inline">\(\bar{\mathbf{g}} = \frac{1}{T}\sum_t g_t\)</span>（平均数）替代总体矩（期望），对于一个<code>4*4</code>维的正定矩阵<span class="math inline">\(W\)</span>，求解<span class="math inline">\(\min_{\beta, \gamma} \bar{\mathbf{g}}&#39; W \bar{\mathbf{g}}\)</span>，得到的解即为估计结果。求解一般通过数值方法，另如需提升估计精度可以使用两阶段 GMM、Continuous-updating GMM 等，均数细节，不再赘述。</p>
+<p>本例与 Hansen and Singleton(1982) 不尽相同。可补充阅读 Hansen and Singleton(1982)。</p>
+</div>

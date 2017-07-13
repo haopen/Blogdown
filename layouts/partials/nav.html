@@ -1,0 +1,24 @@
+<nav class="nav">
+  <a href="{{ "/" | relURL }}" class="nav-logo">
+    <img src="{{ print "images/" .Site.Params.logo.url | relURL }}"
+         width="{{ .Site.Params.logo.width }}"
+         height="{{ .Site.Params.logo.height }}"
+         alt="{{ .Site.Params.logo.alt }}">
+  </a>
+
+  <ul class="nav-links">
+    {{ $currentPage := . }}
+	<!-- 这里定义一个 $section 并操作赋值成功后，在下面的 range 中无法提取值，只能用 $.Scratch.Set -->
+	<!-- $sectionID: 4-web-server ~ 4- ~ Tech -->
+    {{ $.Scratch.Set "section" (replaceRE "^/([^/]+)/.*" "$1" .URL) }}
+	{{ if in (split "tags,categories" ",") ($.Scratch.Get "section") }}
+	{{ $.Scratch.Set "section" (index .Site.Params.sectionID (substr (replaceRE "^/([^/]+)/([^/]+)/.*" "$2" .URL) 0 2)) }}
+	{{ end }}
+
+	<!-- Get 到 section 的值以后，不用 string 转换成字符串会出错 -->
+    {{ range (default .Site.Menus.main (index .Site.Menus (string ($.Scratch.Get "section")))) }}
+    <li class="{{ if eq .URL $currentPage.URL }}active{{ end }}">{{ if .Pre }}<a href="javascript:;" class="popup-trigger"><i class="fa fa-{{ .Pre }}" aria-hidden="true" title="{{ .Name }}"></i></a>{{ else }}<a href="{{ .URL }}">{{ .Name }}</a>{{ end }}</li>
+    {{ end }}
+  </ul>
+</nav>
+{{ partial "search_window.html" . }}

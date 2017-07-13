@@ -1,0 +1,23 @@
+---
+title: 各位涉及过的最复杂的计量经济学模型的例子是什么？ - 慧航 - 问答
+author: 慧航
+date: 2014-02-11
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎问答", "6-计量"]
+slug: econometrica-model
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://www.zhihu.com/question/22718515" class="uri">https://www.zhihu.com/question/22718515</a></p>
+<p>首先谢邀。但是这个问题问的好像很模糊。“大规模”是指的计算难度还是方程数目？计量结构模型也指代不明确。还有就是，什么叫“是什么样的”？这个问题问的我难以回答。一般来说计量经济学里面的“结构模型”指的是 structural form，跟 reduced from 相对。一般 structural model 在 IO（产业组织理论）和 trade（贸易理论）里面用的较多，但是在 labor（劳动经济学）等领域用的很少。在宏观里面也有 Structural VAR 的识别和估计问题。如果是按照计算难度的话，一般来说 structural model 多数用 MLE 和 GMM 来进行估计，涉及到非线性的最优化，所以计算难度一般较高，耗费时间非常的长。当然现在发展了很多方法解决计算的问题。</p>
+<!-- more -->
+<p>如果是按照规模（scale）的话，我听说过（没做过）美联储用的宏观模型有几百个变量，不过我没有仔细追究他们具体用的什么模型。当然可以肯定不是SVAR，不然就算解决了识别问题，计算难度也已经无法想象了。希望提问者可以补充一下问题，我们可以针对具体问题具体讨论。</p>
+<hr />
+<p>非线性最优化意味着不能简单的通过线性代数的运算得到估计值。实际上除了一般的最小二乘、线性面板、线性联立方程、SUR、VAR 等模型，几乎都要牵涉到求非线性函数的极值。打个比方，求解线性问题类似于<code>x+y=5; x-y=3</code>的问题，但是非线性的问题类似于求解<code>x^4+e^y=5; ln(x)+sin(y)=0</code>这样的问题。一般解决这类问题不会用到插值法，根据不同的问题，有不同的求最优化的方法。这里面有很多问题，首先是识别问题，也就是说，你要保证你最优化的目标函数有且仅有一个。其次是局部最优的问题，计算最优化的算法有可能会落入到局部最优，即在这个值的邻域内是极值，但是并不是全局的最大（小）值。最后才是效率的问题，一些问题的算法程序运行动辄几天，几月，很夸张的。如果说例子的话，比如 IO 里面的 BLP 模型。最简单的 BLP 模型几分钟就可以出结果，复杂的计算时间无上限。</p>
+<blockquote class="gray">
+<p><strong>徐昇</strong>：能举个你涉及到过的需要考虑效率问题的计量经济模型的例子吗？</p>
+<blockquote class="white">
+<p><strong>Huang Zibin</strong>：你随便找一个现在宏观的 DSGE 模型，都是不可能找到解析解的。宏观这里有时候和慧航提到的方法不一定一样。一般都先选几个一阶矩条件用 GMM 校准参数，然后用数值分析的办法找方程组的解，一般是 stationary equilibrium，不是定值。比如这篇文章：<code>Agency Costs, Net Worth, and Business Fluctuations: A Computable General Equilibrium Analysis</code>. by Charles T. Carlstrom and Timothy S. Fuerst, The American Economic Review. Vol. 87, No. 5 (Dec., 1997), pp. 893-910</p>
+</blockquote>
+</blockquote>

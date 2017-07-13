@@ -1,0 +1,8 @@
+{{ `<?xml` | safeHTML }} version="1.0" encoding="utf-8" ?><!-- Hugo 在转换模板时，< 这个符号总是被强制转换为 &lt; --><!-- 根据 https://github.com/gohugoio/hugo/issues/1740 使用如下的 Hack 可以解决 --><!-- part1 和 part2 的内容在 "/cn/" 这样的情形中，前者是 cn，后者是 /cn/ --><!-- 第一个 if：是不是只有一级路径 /cn/ --><!-- 第二个 if：是不是特殊的二级路径 --><!-- 第三个 if：是不是特殊的一级路径 --><!-- 第四个 if：search.xml 和 主页 -->
+<search>{{ range $index, $page := .Site.Pages }}{{ $.Scratch.Set "urlPart1" (replaceRE "^/([^/]+)/.*" "$1" $page.RelPermalink) }}{{ $.Scratch.Set "urlPart2" (replace (replaceRE "^/([^/]+)/([^/]+)/.*" "$2" $page.RelPermalink) "/" "" ) }}{{ if not (eq ($.Scratch.Get "urlPart1") ($.Scratch.Get "urlPart2")) }}{{ if not (in (split "tags,categories,vitae,about" ",") ($.Scratch.Get "urlPart2")) }}{{ if not (in (split "tags,categories" ",") ($.Scratch.Get "urlPart1")) }}{{ if not (or (eq $page.Title "") (eq $page.RelPermalink "/")) }}
+    <entry>
+    	{{ `<title><!` | safeHTML }}[CDATA[{{ $page.Title }}]]></title>
+    	<url>{{ $page.RelPermalink }}</url>
+		{{ `<content type="text"><!` |safeHTML }}[CDATA[{{ $page.PlainWords }}]]></content>
+    </entry>{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}
+</search>

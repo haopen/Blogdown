@@ -1,0 +1,24 @@
+---
+title: 分位点与分位数 z
+date: 2013-06-25
+categories: ["6-统计学"]
+tags: ["6-分位数"]
+slug: quantile
+---
+
+
+
+<p>分位数在统计学是中一个比较简单和容易理解的概念，大部分初级的统计学教材中都会有相应的介绍。但实际在理解这个概念的时候，要注意连续情形下与分位数相关的几个概念之间的联系与区别。</p>
+<div class="section level1">
+<h1>离散情形</h1>
+<p>举一个例子，将 100 名同学的期末考试总分成绩所组成的向量 <span class="math inline">\(\mathbf{x}\)</span> 按从小到大的规则进行排序，生成一个新的顺序统计量 <span class="math inline">\(\mathbf{x}&#39;\)</span>，那么 <span class="math inline">\(\mathbf{x}\)</span> 的 <span class="math inline">\(1/4\)</span> 分位数指的是 <span class="math inline">\(\mathbf{x}^\prime\)</span> 第 25 号位上的那个数字，同理可知中位数以及 <span class="math inline">\(3/4\)</span> 分位数等。</p>
+</div>
+<div class="section level1">
+<h1>连续情形</h1>
+<p>以正态分布为例，<span class="math inline">\(1/4\)</span> 分位数指的是 <span class="math inline">\(\mathrm{Pr}(X\leqslant x)=1/4\)</span> 对应的 <span class="math inline">\(x\)</span> 值，类似的，标准正态分布中中位数对应的 <span class="math inline">\(x\)</span> 为 0。</p>
+<p>从上面的例子可以看出，分位点确定的基础是在离散情形下将样本数量标准化为 1，而在连续情形下则是将 x 坐标轴的可用长度标准化为 1(对于正态分布和 t 分布而言，原始长度为 <span class="math inline">\(-\infty\)</span> 到 <span class="math inline">\(+\infty\)</span> 之间的全部范围。</p>
+<blockquote>
+<p>在连续情形下，若考虑的置信系数是左单侧的，那么置信系数 <span class="math inline">\(\alpha\)</span> 对应的下 <span class="math inline">\(\alpha\)</span> 分位点的 <span class="math inline">\(x\)</span> 值与 <span class="math inline">\(\alpha\)</span> 分位数以及 <span class="math inline">\(\mathrm{Pr}(X\leqslant x)=\alpha\)</span> 中的 <span class="math inline">\(x\)</span> 实际上指向同一个 <span class="math inline">\(x\)</span> 值。</p>
+</blockquote>
+<p>这个值在大部分统计软件中对应的命令以 <code>q</code> 开头，比如 R 中的 <code>qnorm</code> 命令。</p>
+</div>

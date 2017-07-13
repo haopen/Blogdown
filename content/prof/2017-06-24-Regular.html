@@ -1,0 +1,38 @@
+---
+title: 正则
+date: 2017-06-24
+categories: ["6-经济 - 数学与动态"]
+tags: ["6-正则点", "6-临界点"]
+slug: regular
+---
+
+
+
+<div class="section level1">
+<h1>临界点、正则点、临界值、正则值</h1>
+<p><strong>出处</strong>：经济数学方法与模型, de la Fuente(2000), 朱保华 &amp; 钱晓明(2003), p150-151.</p>
+<p>在以后的讨论中，我们需要对函数的雅可比矩阵的秩作出假设，也就是对函数的导数作出假设。特别是，我们可以证明：若函数<span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}^m\)</span>在<span class="math inline">\(x\)</span>处可微，且导数矩阵<span class="math inline">\(\mathrm{D}f(x)\)</span>的秩为<span class="math inline">\(m\)</span>，则<span class="math inline">\(f\)</span>的局部行为就可以由<span class="math inline">\(f\)</span>的可微性决定。</p>
+<p>下面介绍一些在后面将用到的概念。令<span class="math inline">\(f:\mathbb{R}^n\supseteq X\to\mathbb{R}^m\)</span>（<span class="math inline">\(X\)</span>是开集）是可微函数<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>。若<span class="math inline">\(f\)</span>在<span class="math inline">\(x\in X\)</span>处的微分，即线性映射<span class="math inline">\(\mathrm{d}f_{x}\in L(\mathbb{R}^n,\mathbb{R}^m)\)</span>是满射，则称<span class="math inline">\(x\)</span>是<span class="math inline">\(f\)</span>的正则点（Regular Point）。若<span class="math inline">\(x\)</span>不是<span class="math inline">\(f\)</span>的正则点，即若<span class="math inline">\(\mathrm{d}f_{x}\)</span>不是满射，则称<span class="math inline">\(x\)</span>是<span class="math inline">\(f\)</span>的临界点（Critical Point）。若<span class="math inline">\(y\in\mathbb{R}^m\)</span>是某个临界点的像，则称<span class="math inline">\(y\)</span>是<span class="math inline">\(f\)</span>的临界值，否则称<span class="math inline">\(y\)</span>是<span class="math inline">\(f\)</span>的正则值。</p>
+<p>可以看到，<span class="math inline">\(\mathrm{d}f_x\)</span>是满射，即<span class="math inline">\(x\)</span>是<span class="math inline">\(f\)</span>的正则点的充要条件是导数<span class="math inline">\(\mathrm{D}f(x)\)</span>的秩为<span class="math inline">\(m\)</span>。因此，<span class="math inline">\(f:\mathbb{R}^n\supseteq X\to\mathbb{R}^m\)</span>的临界点的集合为：</p>
+<p><span class="math display">\[
+C_f=\left\{\,x\in X;\,\text{rank}\,[\mathrm{D}f(x)]&lt;m\,\right\}
+\]</span></p>
+<p><span class="math inline">\(f\)</span>的临界值的集合为<span class="math inline">\(f(C_f)\)</span>，正则值的集合为<span class="math inline">\(f(C_f)\)</span>的补集，即<span class="math inline">\(\mathbb{R}^m\sim f(C_f)\)</span>。可以看到：若<span class="math inline">\(y\)</span>不是<span class="math inline">\(X\)</span>中任意点的像，根据定义，正则值是那些不是临界值的点，则<span class="math inline">\(y\)</span>是<span class="math inline">\(f\)</span>的正则值，而<span class="math inline">\(y\)</span>是临界值的充要条件是<span class="math inline">\(f^{-1}(y)\)</span>至少包含一个临界点，这样<span class="math inline">\(f^{-1}(y)\)</span>就不可能是空集。</p>
+<p>这个定义将初等微积分中临界点的定义作了推广。若<span class="math inline">\(f\)</span>是多元实值函数，我们刚才给出的临界点的定义等价于条件“梯度<span class="math inline">\(\nabla f(x)\)</span>是零向量”，因为只有这种情形<span class="math inline">\(\nabla f(x)\)</span>不能生成<span class="math inline">\(\mathbb{R}\)</span>；若<span class="math inline">\(f\)</span>是一元函数，条件为<span class="math inline">\(f&#39;(x)=0\)</span>，同样看到：当<span class="math inline">\(f\)</span>是从<span class="math inline">\(\mathbb{R}^n\)</span>到<span class="math inline">\(\mathbb{R}^n\)</span>的函数时，<span class="math inline">\(\mathrm{D}f(x)\)</span>是方阵，若<span class="math inline">\(|\mathrm{D}f(x)|=0\)</span>，则<span class="math inline">\(x\)</span>是临界点。</p>
+</div>
+<div class="section level1">
+<h1>经济是正则的</h1>
+<p><strong>出处</strong>：经济学拓扑方法, 王则柯(2001), p305.</p>
+<p>设<span class="math inline">\(\pmb{p}\)</span>是经济<span class="math inline">\(\varepsilon\)</span>的一个均衡价格向量，即<span class="math inline">\(f(\pmb{p})=\pmb{0}\)</span>，那么当<span class="math inline">\(\mathrm{Rank}[\mathrm{d}f_{\pmb{p}}]=n-1\)</span>时，称均衡价格向量<span class="math inline">\(\pmb{p}\)</span>是正则的（Regular）。如果每个均衡价格向量都是正则的，就说该经济<span class="math inline">\(\varepsilon\)</span>是正则的<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>。</p>
+<p>换言之，如果<span class="math inline">\(f(\pmb{p})=\pmb{0}\)</span>时必有<span class="math inline">\(\mathrm{Rank}[\mathrm{d}f_{\pmb{p}}]=n-1\)</span>，就说经济<span class="math inline">\(\varepsilon\)</span>是正则的。</p>
+<p>作为一般经济均衡问题微分方法的初步结果，我们有如下定理<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>：</p>
+<p>均衡价格向量<span class="math inline">\(\pmb{p}\in\mathbb{S}_+^{n-1}\)</span>正则当且仅当在<span class="math inline">\((\pmb{p},\pmb{0})\)</span>，流形<span class="math inline">\(T\mathbb{S}_0^{n-1}\)</span>和流形<span class="math inline">\(\text{Graph}\,f\)</span>在流形<span class="math inline">\(T^{n-1}\)</span>中横截。</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>这里的<span class="math inline">\(\mathbb{R}^m\)</span>是一个多维的变量，但只要不是集合，就可以认为<span class="math inline">\(f\)</span>是函数？<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>这里的秩为<span class="math inline">\(n-1\)</span>为什么要有一个<code>-1</code>，感觉和下面的<span class="math inline">\(\pmb{p}\in\mathbb{S}_+^{n-1}\)</span>有关。<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>没有学过拓扑，看不懂。<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>

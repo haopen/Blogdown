@@ -1,0 +1,23 @@
+---
+title: 为什么断点回归不能用高阶多项式逼近 - 慧航 - 专栏
+author: 慧航
+date: 2014-08-27
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-计量", "6-RDD", "6-断点回归"]
+slug: caution-rdd
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://zhuanlan.zhihu.com/p/19835380" class="uri">https://zhuanlan.zhihu.com/p/19835380</a></p>
+<p>Gelman and Imbense 在NBER上的最新工作论文<a href="http://www.nber.org/papers/w20405">《Why High-order Polynomials Should not be Used in Regression Discontinuity Designs》</a>讨论了断点回归中使用高阶多项式的问题：</p>
+<blockquote>
+<p>It is common in regression discontinuity analysis to control for high order (third, fourth, or higher) polynomials of the forcing variable. We argue that estimators for causal effects based on such methods can be misleading, and we recommend researchers do not use them, and instead use estimators based on local linear or quadratic polynomials or other smooth functions.</p>
+</blockquote>
+<p>其理由是：</p>
+<ol style="list-style-type: decimal">
+<li>断点回归中多项式回归的结果可以看成是对 outcome 的一个加权平均，而这种权重仅仅取决与阈值与关键变量的值，因此这些权重可能有问题。</li>
+<li>使用多项式回归对多项式阶数选择十分敏感。</li>
+<li>使用多项式回归的统计推断表现很差。</li>
+</ol>
+<p>既然两位大神发话了，以后做 RDD 就要小心了。</p>

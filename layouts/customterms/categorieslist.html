@@ -1,0 +1,32 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+  {{ $section := replaceRE "^/([^/]+)/.*" "$1" .URL }}
+  {{ $sectionID := (index .Site.Params.sectionID $section) }}
+  {{ if .Content }}
+  {{ if .Params.show_title }}
+  {{ partial "article_meta.html" . }}
+  {{ end }}
+  <article class="article">
+    <div class="article-content{{ if not (eq .Section "en") }} cn{{ end }}">
+      {{ .Content }}
+    </div>
+  </article>
+  {{ else }}
+  <div class="archive">
+    <h1 class="article-title" style="text-align: center">分类</h1>
+    {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+	{{ if eq (substr $name 0 2) $sectionID }}
+    <article class="archive-item">
+      <a href='{{ (print "/categories/" $name) | relURL }}' class="archive-item-link">{{ if eq (substr $name 2) "sas"}} {{ "SAS"}} {{ else }}{{ title (replace (substr $name 2) "---" " - ") }}{{ end }}</a>
+      <span class="archive-item-date">({{ len $taxonomy }})</span>
+    </article>
+    {{ end }}
+	{{ end }}
+  </div>
+  {{ end }}
+
+
+</main>
+
+{{ partial "footer.html" . }}

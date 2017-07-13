@@ -1,0 +1,109 @@
+---
+title: 比较回归系数的四种方法
+date: 2017-06-27
+categories: ["6-经济 - 计量"]
+tags: ["6-回归系数", "6-suest", "6-bdiff"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: comparing-coefficients
+---
+
+
+<div id="TOC">
+<ul>
+<li><a><span class="toc-section-number">1</span> 总结</a></li>
+<li><a href="#suest-"><span class="toc-section-number">2</span> <code>suest</code> 和交乘</a><ul>
+<li><a href="#asad"><span class="toc-section-number">2.1</span> asad</a><ul>
+<li><a href="#afsdf"><span class="toc-section-number">2.1.1</span> afsdf</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#xtreg--suest"><span class="toc-section-number">3</span> <code>xtreg</code> 无法使用 <code>suest</code></a></li>
+<li><a href="#bdiff----by-"><span class="toc-section-number">4</span> <code>bdiff</code> - 自举法 by 连玉君</a></li>
+<li><a href="#z-"><span class="toc-section-number">5</span> Z 统计量</a></li>
+<li><a href="#-hausman-test---"><span class="toc-section-number">6</span> 不能用 Hausman test - 慧航</a></li>
+</ul>
+</div>
+
+<div class="section level1">
+<h1><span class="header-section-number">1</span> 总结</h1>
+<ul>
+<li>若干扰项相同，可以考虑用分组变量交乘项回归；</li>
+<li>若干扰项不相同但有关联，可以考虑用<code>suest</code> test<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>，但这个命令不支持<code>xtreg</code>；</li>
+<li>用自举法，<code>bdiff</code> by 连玉君；</li>
+<li>构造一个 Z 统计量：</li>
+</ul>
+<p><span class="math display">\[z=\frac{\hat{\beta}_m-\hat{\beta}_f}{\sqrt{s^2(\hat{\beta}_m)+s^2(\hat{\beta}_f)}}\]</span></p>
+<!-- more -->
+</div>
+<div id="suest-" class="section level1">
+<h1><span class="header-section-number">2</span> <code>suest</code> 和交乘</h1>
+<div id="asad" class="section level2">
+<h2><span class="header-section-number">2.1</span> asad</h2>
+<div id="afsdf" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> afsdf</h3>
+<p><strong>参考</strong>：<a href="http://bbs.pinggu.org/thread-2267159-1-1.html" class="uri">http://bbs.pinggu.org/thread-2267159-1-1.html</a></p>
+<p>Stata 里<code>suest</code>可以做 Chow test 检验</p>
+<p>Example 2: Do coefficients vary between groups? (“Chow test”)</p>
+<pre class="stata"><code>. webuse income
+. regress inc edu exp if male
+. estimates store Male
+
+. regress inc edu exp if !male
+. estimates store Female
+
+. suest Male Female
+. test [Male_mean = Female_mean] // 注意这里是 test</code></pre>
+<p>那如果我要检验两组的<code>edu</code>系数是否相同，是不是可以用命令<code>test [Male_mean]edu =[ Female_mean]edu</code></p>
+<p>另外，我在<a href="http://www.stata.com/support/faqs/statistics/computing-chow-statistic/" class="uri">http://www.stata.com/support/faqs/statistics/computing-chow-statistic/</a>这一网站看到，将<code>male</code>与其他所有解释变量交乘，检验交乘项的系数也可以得到<code>edu</code>系数在两组是否不同。我发现者两种方法的检验统计量不同，但 p 值大致相同。</p>
+<p>请问这两种方法有差异么？哪种更好？</p>
+<blockquote class="gray">
+<p><strong>连玉君</strong>：<code>SUest</code>假设两组的干扰项具有<code>不同</code>的分布，允许两组的干扰项相关；而采用交乘项的方式，估计时只有一条方程，所以相当于假设两个组的干扰项具有<code>相同</code>的分布。</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div id="xtreg--suest" class="section level1">
+<h1><span class="header-section-number">3</span> <code>xtreg</code> 无法使用 <code>suest</code></h1>
+<ul>
+<li><a href="http://bbs.pinggu.org/thread-2862014-1-1.html" class="uri">http://bbs.pinggu.org/thread-2862014-1-1.html</a></li>
+<li><a href="http://bbs.pinggu.org/thread-3927057-1-1.html" class="uri">http://bbs.pinggu.org/thread-3927057-1-1.html</a></li>
+</ul>
+<p>用面板数据进行分组回归（按中西东进行地区划分，分别作回归），如何对回归系数的差异的显著性进行检验？尝试用<code>suest</code>命令做，但是结果显示：</p>
+<pre class="stata"><code>.suest region1 region2 region3
+
+xtreg is not supported by suest</code></pre>
+<p>即<code>suest</code>不支持<code>xtreg</code>命令。</p>
+<blockquote class="gray">
+<p><strong>连玉君</strong>：如果估计的是固定效应模型，可以使用<code>reg y x i.id</code>替代<code>xtreg y x, fe</code>命令进行估计，然后就可以进一步使用<code>suest</code>命令执行检验了。</p>
+</blockquote>
+<p>另外还有命令<code>test</code>和<code>ttest</code>，可以<strong>进一步补充</strong>。</p>
+<ul>
+<li><a href="http://www.michaelnormanmitchell.com/stow/comparing-coefficients-across-groups-using-suest-and-test.html">Comparing coefficients across groups using suest and test</a></li>
+</ul>
+</div>
+<div id="bdiff----by-" class="section level1">
+<h1><span class="header-section-number">4</span> <code>bdiff</code> - 自举法 by 连玉君</h1>
+<p><a href="https://www.zhihu.com/question/23642050" class="uri">https://www.zhihu.com/question/23642050</a></p>
+</div>
+<div id="z-" class="section level1">
+<h1><span class="header-section-number">5</span> Z 统计量</h1>
+<p>见最上面的总结部分。</p>
+<ul>
+<li>Client Importance, Institutional Improvements, and Audit Quality in China: An Office and Individual Auditor Level Analysis, Chen &amp; Sun &amp; Wu(2010), TAR</li>
+<li>Statistical Methods for Comparing Regression Coefficients Between Models, Clogg &amp; Petkova &amp; Haritou(1995), American Journal of Sociology</li>
+</ul>
+</div>
+<div id="-hausman-test---" class="section level1">
+<h1><span class="header-section-number">6</span> 不能用 Hausman test - 慧航</h1>
+<p><a href="https://www.zhihu.com/question/23642050" class="uri">https://www.zhihu.com/question/23642050</a></p>
+<p>Hausman test 的应用场景：存在同一组系数的两个估计<code>b1</code>和<code>b2</code>，满足：在 H0 的条件下，<code>b1</code>和<code>b2</code>均一致，但是<code>b1</code>是最有效的在 H1 的条件下，<code>b1</code>是不一致的，但是<code>b2</code>是一致的，Hausman 证明了，在 H0 的条件下，<code>var(b2-b1)=var(b2)-var(b1)</code>故而可以构造统计量，<code>(b2-b1)(var(b2)-var(b1))^(-1)(b2-b1)~chi2</code>。</p>
+<p>比如，检验线性回归是不是有内生性：H0：不具有内生性 H1：具有内生性那么<code>b1</code>就是 ols 回归结果，<code>b2</code>就是 iv 的回归结果。同样，检验固定效应还是随机效应，<code>b1</code>是随机效应结果，<code>b2</code>是固定效应结果。但如果比较的是不是组回归的系数，显然不满足 Hausman test 的前提，所以绝对不能用 Hausman test。</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>参考 UCLA 上面的《<a href="https://stats.idre.ucla.edu/stata/code/comparing-regression-coefficients-across-groups-using-suest/">Comparing Regressioni Coefficients Across Groups using Suest</a>》。<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>

@@ -1,0 +1,47 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+  {{ $section := index .Site.Params.sectionID (substr (replaceRE "^/([^/]+)/([^/]+)/.*" "$2" .URL) 0 2) }}
+  {{ $taxonomy := replaceRE "^/([^/]+)/([^/]+)/.*" "$1" .URL }}
+  {{ if .Content }}
+  {{ if .Params.show_title }}
+  {{ partial "article_meta.html" . }}
+  {{ end }}
+  <article class="article">
+    <div class="article-content{{ if not (eq .Section "en") }} cn{{ end }}">
+      {{ .Content }}
+    </div>
+  </article>
+  {{ else }}
+  <div class="archive">
+    <!-- if 保证每个 section 的 list-index 页面不显示标题 -->
+    {{ if gt (len (string $section)) 0 }}
+    <h1 class="article-title" style="text-align: center;">
+	{{ if eq $section "en" }}
+	{{ if eq $taxonomy "tags"}}{{ "tags" }}{{ else }} {{ "categories" }}{{ end}}
+	{{ else }}
+	{{ if eq $taxonomy "tags"}}{{ "标签" }}{{ else }} {{ "分类" }}{{ end}}
+	{{ end }}
+	：{{if eq (substr .Title 2) "Sas"}}{{ "SAS" }}{{ else }}{{ substr .Title 2 }}{{ end }}<!-- 不清楚为什么这里的 .Title 是首字母大写的 -->
+	</h1>
+	{{ end }}
+    {{ range .Pages.GroupByDate "2006" }}
+    <h2 class="archive-title">{{ .Key }}</h2>
+    {{ range .Pages }}
+    <article class="archive-item">
+      <a href="{{ .RelPermalink }}" class="archive-item-link">{{ .Title }}</a>
+      <span class="archive-item-date">
+        {{ .Date.Format "2006/01/02" }}
+      </span>
+    </article>
+    {{ end }}
+    {{ end }}
+  </div>
+  {{ end }}
+  {{if and .Content (not .IsHome) }}
+  {{ partial "disqus.html" .}}
+  {{ end }}
+
+</main>
+
+{{ partial "footer.html" . }}

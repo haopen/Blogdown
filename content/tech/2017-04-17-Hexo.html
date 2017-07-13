@@ -1,0 +1,590 @@
+---
+title: 用 Hexo+Github 搭建博客平台
+date: 2017-04-17
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Github", "4-Hexo", "4-Markdown", "4-Mathjax", "4-LaTeX", "4-Pandoc"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: hexo
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#-hexo"><span class="toc-section-number">1</span> 为什么选择 Hexo</a><ul>
+<li><a><span class="toc-section-number">1.1</span> 优点</a></li>
+<li><a><span class="toc-section-number">1.2</span> (可能的)缺点</a></li>
+</ul></li>
+<li><a><span class="toc-section-number">2</span> 安装与配置</a><ul>
+<li><a><span class="toc-section-number">2.1</span> 步骤简介</a></li>
+<li><a><span class="toc-section-number">2.2</span> 搭建本地博客</a><ul>
+<li><a><span class="toc-section-number">2.2.1</span> 软件安装</a></li>
+<li><a><span class="toc-section-number">2.2.2</span> 博客平台搭建</a></li>
+</ul></li>
+<li><a href="#-next-"><span class="toc-section-number">2.3</span> 安装 NexT 主题</a></li>
+<li><a href="#-site-_config.yml"><span class="toc-section-number">2.4</span> 修改博客配置 site: _config.yml</a><ul>
+<li><a><span class="toc-section-number">2.4.1</span> 修改配置文件</a></li>
+<li><a><span class="toc-section-number">2.4.2</span> 添加一级页面</a></li>
+<li><a><span class="toc-section-number">2.4.3</span> 重要功能插件</a></li>
+</ul></li>
+<li><a href="#-next-_config.yml"><span class="toc-section-number">2.5</span> 修改主题配置 NexT: _config.yml</a></li>
+<li><a href="#-css"><span class="toc-section-number">2.6</span> 修改博客的 CSS</a><ul>
+<li><a><span class="toc-section-number">2.6.1</span> 模板调整记录</a></li>
+<li><a><span class="toc-section-number">2.6.2</span> 自定义样式文件调整记录</a></li>
+</ul></li>
+</ul></li>
+<li><a><span class="toc-section-number">3</span> 远程部署</a></li>
+<li><a><span class="toc-section-number">4</span> 应用问题</a></li>
+</ul>
+</div>
+
+<p>参考内容：<a href="http://qjzhixing.com/2015/08/26/" class="uri">http://qjzhixing.com/2015/08/26/</a></p>
+<blockquote>
+<p><strong>提醒</strong>：出现其他任何的问题，先删除博客目录下的<code>db.json</code>文件，然后清理再部署远程博客，操作时输入以下的命令</p>
+</blockquote>
+<pre class="bash"><code>hexo clean
+hexo d -g</code></pre>
+<div id="-hexo" class="section level1">
+<h1><span class="header-section-number">1</span> 为什么选择 Hexo</h1>
+<div class="section level2">
+<h2><span class="header-section-number">1.1</span> 优点</h2>
+<ul>
+<li><strong>速度</strong>：目前<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>还不清楚 Hexo 在文章数量较多时的速度如何，但可以肯定 Hexo 的速度虽然比 Jekyll 要快得多（虽然与 Hugo 相比还是有较大差距）；</li>
+<li><strong>实时刷新</strong>：通过命令<code>hexo -s</code>启动服务，接下来对内容文件进行任何更新都可以直接在浏览器中直接刷新看到更新后的结果；</li>
+<li><strong>站内搜索</strong>：在 NexT 主题可以轻松实现内建的搜索功能；</li>
+<li><strong>Mathjax</strong>：可以通过<code>hexo-renderer-pandoc</code>实现 Markdown 和 Mathjax 的良好兼容（不清楚 Hugo 中如何使用 Pandoc）；</li>
+</ul>
+<!-- more -->
+<p>值得一提的是，Hexo 默认的 Markdown 渲染插件<code>hexo-renderer-marked</code>功能较弱，与 Mathjax 的兼容也不太好<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>，虽然<a href="http://shomy.top/2016/10/22/hexo-markdown-mathjax/"><code>hexo-renderer-kramed</code></a>在<code>hexo-renderer-marked</code>的基础上完善了对 Mathjax 的支持，但在功能方面与<code>hexo-renderer-markdown-it</code>相比还是太弱，可惜<code>hexo-renderer-markdown-it</code>与 Mathjax 的兼容性也不太好，并且这个插件非常复杂，通过 Hack 方式改进对 Markdown 的支持也没有好的方案可以借鉴。</p>
+<p>总的来讲，Pandoc 的效果是最好的<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>，唯一的缺点是需要单独安装 Pandoc，但考虑到只是将转换好的静态文件发布到 Github，这一缺点也基本上可以忽视。</p>
+</div>
+<div class="section level2">
+<h2><span class="header-section-number">1.2</span> (可能的)缺点</h2>
+<ul>
+<li>没有直接的方法将<code>_post</code>下的源文件按类别存放到不同的子目录中，但是 Hugo 可以；</li>
+<li>内建的内容汇总文件<code>db.json</code>将来可能会非常大，同步到 Github 可能会比较慢，博客内建的搜索功能也可能会变得非常慢；</li>
+<li><code>hexo-renderer-pandoc</code>不支持 emoji 表情插件，但<code>hexo-renderer-markdown-it</code>中的子插件<code>markdown-it-emoji</code>支持文本字符类型的表情；</li>
+</ul>
+</div>
+</div>
+<div class="section level1">
+<h1><span class="header-section-number">2</span> 安装与配置</h1>
+<div class="section level2">
+<h2><span class="header-section-number">2.1</span> 步骤简介</h2>
+<ol style="list-style-type: decimal">
+<li>搭建<strong>本地</strong>博客：在电脑上安装<strong>Git</strong>、<strong>Node.js</strong>和<strong>Pandoc</strong>，利用简单的命令安装好<strong>Hexo</strong>；</li>
+<li>安装并配置<strong>NexT</strong>主题：<a href="http://notes.iissnan.com/2015/something-about-next/">演示</a>、<a href="http://theme-next.iissnan.com/getting-started.html">使用文档</a>、<a href="https://github.com/iissnan/hexo-theme-next">主题文档</a>；</li>
+<li>部署克隆版分站点；</li>
+<li>部署<strong>远程</strong>博客；注册一个Github账号，然后在上面创建一个Repository，简单配置一下，博客的基本框架就建立好了；</li>
+</ol>
+</div>
+<div class="section level2">
+<h2><span class="header-section-number">2.2</span> 搭建本地博客</h2>
+<div class="section level3">
+<h3><span class="header-section-number">2.2.1</span> 软件安装</h3>
+<ol style="list-style-type: decimal">
+<li>安装<a href="http://git-scm.com/">Git</a>：安装过程一路默认即可，安装好后，单击右键就会多出两个Git的按钮；</li>
+<li>安装<a href="https://nodejs.org/">Node.js</a>：可以一路默认，需要的话也可以更改一下安装的路径；</li>
+<li><p>安装 Hexo：<a href="http://wiki.jikexueyuan.com/project/hexo-document/">中文文档</a>、<a href="https://hexo.io/docs/">英文文档</a>；Hexo 的安装需要借助 Node.js 的<code>npm</code>命令，可以理解为 Hexo 是 Node.js 的模块。操作的方式是在任意的位置单击鼠标右键，选择<code>Git bash</code>命令，在里面输入：</p>
+<pre><code>npm install -g hexo-cli</code></pre></li>
+</ol>
+<p>卸载的话，将上面命令中的<code>install</code>替换成<code>uninstall</code>即可执行卸载。</p>
+</div>
+<div class="section level3">
+<h3><span class="header-section-number">2.2.2</span> 博客平台搭建</h3>
+<ol style="list-style-type: decimal">
+<li>创建 Hexo 文件夹</li>
+</ol>
+<p><code>Hexo</code>文件夹就是博客的文件夹，用于存放全部相关文件（但只有静态生成的文件必需上传到远程 Repository）。</p>
+<ul>
+<li>第一步先在某个盘符下新建一个文件夹，重命名（英文字母），假设是在<code>D</code>盘下建立了一个名叫<code>Hexo</code>的文件夹，那么路径就是<code>D:\hexo</code> （后续的操作大多在这个文件夹里进行）；</li>
+<li>第二步进入Hexo文件夹单击右键，依旧选择<code>Git bash</code>这一命令，输入以下命令，博客所需要的文件都已经自动建立好了，这比jekyll操作简单多了：</li>
+</ul>
+<pre><code>hexo init</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>安装依赖包</li>
+</ol>
+<pre><code>npm install</code></pre>
+<p>为保证下一环节远程部署成功，还需要执行如下命令：</p>
+<pre><code>npm install hexo-deployer-git --save</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>预览本地博客</li>
+</ol>
+<p>一系列的安装命令之后，本地博客就算搭建好了，输入如下的命令，然后在浏览器地址栏中输入<a href="http://localhost:4000"><code>http://localhost:4000</code></a>或者<a href="http://127.0.0.1:4000"><code>http://127.0.0.1:4000</code></a>就可以查看本地博客。</p>
+<pre><code>hexo g
+hexo s</code></pre>
+<p>上面的命令中，<code>hexo g</code>用于生成静态文件，<code>hexo s</code>用于创建 Web 服务器，这两条命令可以合并写为一条：</p>
+<pre><code>hexo s -g</code></pre>
+</div>
+</div>
+<div id="-next-" class="section level2">
+<h2><span class="header-section-number">2.3</span> 安装 NexT 主题</h2>
+<ol style="list-style-type: decimal">
+<li>推荐先备份<code>_config.yml</code>文件；</li>
+<li>进入到<code>hexo</code>的目录，启动<code>Git bash</code>，输入以下面的命令 Clone 主题：</li>
+</ol>
+<pre><code>$ cd your-hexo-site
+$ git clone https://github.com/iissnan/hexo-theme-next themes/next</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>在<code>_config.yml</code>中修改<code>theme</code>取值为<code>next</code>；</li>
+<li>在<code>\hexo\themes\next\_config.yml</code>中修改与主题相关的设置；</li>
+</ol>
+</div>
+<div id="-site-_config.yml" class="section level2">
+<h2><span class="header-section-number">2.4</span> 修改博客配置 site: _config.yml</h2>
+<div class="section level3">
+<h3><span class="header-section-number">2.4.1</span> 修改配置文件</h3>
+<ol style="list-style-type: decimal">
+<li>修改<code>Site</code>段相关内容，包括<code>title, author, language</code>等，其中<code>language</code>取值为<code>zh-Hans</code>；</li>
+<li>参考 2.3 修改<code>theme</code>取值为<code>NexT</code>；</li>
+<li>修改<code>deploy</code>段内容为：</li>
+</ol>
+<pre><code>deploy:
+  type: git
+  repository: https://github.com/peng-howard/lives.git
+  branch: master</code></pre>
+<p>其中 repository 为<code>lives</code>，本人的主页面<code>https://peng-howard.github.io/</code>是用 Jekyll 生成的（直接在 GitHub 上修改<code>index.html</code>似乎不起作用），因此这里将<code>lives</code>相关内容作为主页面的一个分页面站点存在。如果是部署到 GitHub Pages 的主页面，则使用如下命令：</p>
+<pre><code>  repository: https://github.com/peng-howard/peng-howard.github.com.git</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>设定本人的社交信息及友情链接等：</li>
+</ol>
+<pre><code>social:
+  GitHub: https://github.com/your-user-name
+  Twitter: https://twitter.com/your-user-name
+  微博: http://weibo.com/your-user-name
+  豆瓣: http://douban.com/people/your-user-name
+  知乎: http://www.zhihu.com/people/your-user-name
+
+social_icons:
+  enable: true
+  # Icon Mappings.
+  # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
+  GitHub: github
+  Twitter: twitter
+  Weibo: weibo
+  微博: weibo
+
+# 友情链接
+# Blog rolls
+links_title: 友情链接
+#links_layout: block
+#links_layout: inline
+links:
+  MacTalk: http://macshuo.com/
+  Title: http://example.com/</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>设定每页文章显示篇数</li>
+</ol>
+<p>第一步：安装相关插件（<del><strong>不必安装</strong></del>：在安装完相关依赖包以后不再安装也是正常的，已经验证）</p>
+<pre><code>npm install --save hexo-generator-index
+npm install --save hexo-generator-archive
+npm install --save hexo-generator-tag</code></pre>
+<p>第二步：安装完插件后，在站点配置文件中，添加如下内容</p>
+<pre><code># index 为首页的每页数量
+# archive 是存档页每页数量
+# tag 不知道在哪里起作用
+
+index_generator:
+  per_page: 10
+archive_generator:
+  per_page: 50
+  yearly: true
+  monthly: true
+tag_generator:
+  per_page: 15
+
+# 下面的 Pagination 是分类中，每个分类的目录页面中单页的文章数量
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 50
+pagination_dir: page</code></pre>
+<p><code>index, archive</code>及<code>tag</code>开头分表代表主页，归档页面和标签页面。其中<code>per_page</code>字段是希望设定的显示篇数。</p>
+<ol start="6" style="list-style-type: decimal">
+<li>修改<code>new_post_name</code>取值为<code>:year-:month-:day-:title.md # File name of new posts</code>，这样生成的文件名称不包含年月日部分。</li>
+</ol>
+</div>
+<div class="section level3">
+<h3><span class="header-section-number">2.4.2</span> 添加一级页面</h3>
+<ol style="list-style-type: decimal">
+<li>生成 RSS 文件<code>atom.xml</code>，首先执行如下命令安装插件：</li>
+</ol>
+<pre><code>npm install hexo-generator-feed --save</code></pre>
+<p>然后在主配置文件中添加如下内容：</p>
+<pre><code>feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>添加标签（tags）页面，首先执行如下命令：</li>
+</ol>
+<pre><code>$ cd your-hexo-site
+$ hexo new page tags</code></pre>
+<p><strong>注意</strong>：(1) 其中第一条命令可以不执行，改为先进入 blog 文件所在文件夹，再右键调出<code>Git</code>命令行，然后直接执行第二条命令；(2) <code>hexo new page</code>是建立一个新的文件夹，并在其中加入一个<code>index.md</code>文件，相当于新建一个分站点，而<code>hexo new &quot;...&quot;</code>是建立一篇新的文章。</p>
+<p>生成相关文件后，到<code>source/tags</code>目录下修改<code>index.md</code>文件为如下内容：</p>
+<pre><code>---
+title: 标签
+date: 2014-12-22 12:39:04
+type: &quot;tags&quot;
+comments: false
+---</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>添加分类页面：</li>
+</ol>
+<pre><code>$ hexo new page categories</code></pre>
+<p>然后修改相关文件为如下内容：</p>
+<pre><code>---
+title: 分类
+date: 2014-12-22 12:39:04
+type: &quot;categories&quot;
+comments: false
+---</code></pre>
+</div>
+<div class="section level3">
+<h3><span class="header-section-number">2.4.3</span> 重要功能插件</h3>
+<ol style="list-style-type: decimal">
+<li>站内搜索</li>
+</ol>
+<p>在主目录中执行如下命令：</p>
+<pre><code>$ npm install hexo-generator-searchdb --save</code></pre>
+<p>在主配置文件中添加如下内容：</p>
+<pre><code>search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000</code></pre>
+<p>在主题配置文件修改如下内容：</p>
+<pre><code>local_search:
+  enable: true</code></pre>
+<p>在实际使用中，站内搜索要输入两个以上的字才会有搜索结果，并且可能会搜索不到内容。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>为各级标题添加编号</li>
+</ol>
+<p>根据<a href="http://www.tuicool.com/articles/7BnIVnI" class="uri">http://www.tuicool.com/articles/7BnIVnI</a>，Hexo 的 NexT 主题在右侧的导航栏中可以自动给各级标题添加编号，这利用了 Hexo 3 的一个最新功能，但是正文中却无法使用，因此这里用命令</p>
+<pre><code>cnpm install hexo-heading-index --save</code></pre>
+<p>安装<code>hexo-heading-index</code>命令，之后在主站点的<code>_config.yml</code>中添加如下内容：</p>
+<pre><code>heading_index:
+  enable: true
+  index_styles: &quot;{1} {1} {1} {1} {1} {1}&quot;
+  connector: &quot;.&quot;
+  global_prefix: &quot;&quot;
+  global_suffix: &quot; &quot;</code></pre>
+<p>之后设定 NexT 主题配置文件<code>_config.yml</code>中的</p>
+<pre><code>toc:
+  enable: true
+
+  # Automatically add list number to toc.
+  number: false</code></pre>
+<p><code>number</code>取值为<code>false</code>，这样在启动正文各级标题编号的同时，关闭右侧导航栏中的重复编号。</p>
+<p>需要注意的是，Hexo 的正文标题虽然用了<code>h1</code>标记，但来自于头文件中的<code>title</code>项。</p>
+<p>正文中建议仍然以<code>#</code>开始第一级标题，否则标题的编号可能会出现意想不到的错误，比如<code>{1}</code>对应的一级标题实际上会是<code>0</code>，如果改成<code>{0}</code>，又会在一级编号前出现一个<code>-</code>。</p>
+<p>另外这个包的<code>index_styles</code>中，一级的编号设定是必需的，其它级是可选的，希望将来一级可以选择为空。</p>
+<ol start="3" style="list-style-type: decimal">
+<li><code>hexo-renderer-pandoc</code>的 Markdown 渲染</li>
+</ol>
+<p>Hexo 首先用配置文件<code>config.yml</code>和安装的 Markdown 渲染插件对应的 Markdown 解释器对<code>.md</code>文件进行处理，之后 Mathjax 或者其它在线 LaTeX 解释器再根据 Markdown 生成的结果解释其中的公式内容。考虑到 Hexo 自带的<code>hexo-renderer-marked</code>，基于该插件的 LaTeX 修正版<code>hexo-renderer-kramed</code>功能较弱，另一个解释器<code>hexo-renderer-marked-it</code>虽然功能很强，但是和 LaTeX 的兼容不太好，在参考<a href="http://shomy.top/2016/10/22/hexo-markdown-mathjax/" class="uri">http://shomy.top/2016/10/22/hexo-markdown-mathjax/</a>之后，最终决定使用<code>hexo-renderer-pandoc</code>作为<code>.md</code>文件的解释器。</p>
+<ul>
+<li>到 <a href="http://pandoc.org/installing.html">Pandoc 官方站点</a> 下载并安装 Pandoc<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>；</li>
+<li>卸载默认的 Markdown 解释器并安装<code>hexo-renderer-pandoc</code>：</li>
+</ul>
+<pre><code>cnpm uninstall hexo-renderer-marked --save
+cnpm install hexo-renderer-pandoc --save</code></pre>
+<ul>
+<li>根据<a href="https://github.com/wzpan/hexo-renderer-pandoc" class="uri">https://github.com/wzpan/hexo-renderer-pandoc</a>的提示，在站点的配置文件中，将 Markdown 部分的内容替换为<code>hexo-renderer-pandoc</code>的默认配置：</li>
+</ul>
+<pre><code>pandoc:
+  filters:
+  extra:
+  meta:
+  mathEngine:</code></pre>
+<ul>
+<li>考虑到没有空格的多行在一起组成一个段落时，CJK 类文本处理与英文不一样（后者之间将换行转换成一个空格），需要开启 Pandoc 的<code>east_asian_line_breaks</code>扩展，具体方法是修改<code>hexo-renderer-pandoc</code>的<code>index.js</code>，将其中的</li>
+</ul>
+<pre><code>var args = [ &#39;-f&#39;, &#39;markdown&#39;, &#39;-t&#39;, &#39;html&#39;, math, &#39;--smart&#39;]</code></pre>
+<p>替换成<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<pre><code>var args = [ &#39;-f&#39;, &#39;markdown+east_asian_line_breaks&#39;, &#39;-t&#39;, &#39;html&#39;, math, &#39;--smart&#39;]</code></pre>
+<p>最后，重新启动 Git 命令行，再重新启动 Hexo 服务就可以正常工作。</p>
+<ol start="4" style="list-style-type: decimal">
+<li><del>Markdown 编译器的设定</del>（<strong>不再使用</strong>）</li>
+</ol>
+<p>本部分除<code>fix-cjk</code>外，marked 配置部分不再使用，改用 markdown-it 进行解释，详细参考下面第 5 点。最新进展：markdown-it 与 Mathjax 的兼容性也不太好，改为使用 pandoc 进行 md 的解释，并且 pandoc 中提供了 cjk space 问题的修正，因此 fix-cjk 也不再使用，具体配置见上面第 3 点。</p>
+<blockquote>
+<p><strong>问题</strong><a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a>：下面的设置保证 Markdown 中连着的两行不会被解释成为<code>&lt;br/&gt;</code>，但是换行变成了<code>空格</code>？（来自<a href="https://wwssllabcd.github.io/blog/2014/12/22/how-to-install-hexo/" class="uri">https://wwssllabcd.github.io/blog/2014/12/22/how-to-install-hexo/</a>）</p>
+</blockquote>
+<p>由於新版的<code>Hexo</code>使用<code>hexo-renderer-marked</code>來控制<code>Markdown</code>，而所以还要再调整一下，在站点配置文件中，添加如下内容：</p>
+<pre><code># fix_cjk_spacing: false  # false 时停用 cjk 换行 - 空格 修正
+# https://github.com/hexojs/hexo-renderer-marked
+# breaks 遇到 CJK 字符时，会将换行符转成一个空格
+# https://github.com/lotabout/hexo-filter-fix-cjk-spacing/issues/1
+#          提供的方案可以部分修正这个问题，但要更新 npm 包到最新
+marked:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: false
+  smartLists: true
+  smartypants: false
+  modifyAnchors: &#39;&#39;
+  autolink: false</code></pre>
+<p>确保其中<code>breaks</code>是为<code>false</code>，此时<code>fix_cjk_spacing</code>才会处于工作状态；另外还可以设定<code>fix_cjk_spacing: false</code>以禁用这一修正功能（特别是纯英文的 blog）。</p>
+<p>但需要注意的是，<code>fix_cjk_spacing</code>可能会出现如下的错误：</p>
+<pre><code>$ npm install hexo-filter-fix-cjk-spacing --save
+hexo-site@0.0.0 D:\GitHub\stylus
+-- hexo-filter-fix-cjk-spacing@0.0.3
+
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@^1.0.0 (node_modules\chokidar\node_modules\fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.1.1: wanted {&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;} (current: {&quot;os&quot;:&quot;win32&quot;,&quot;arch&quot;:&quot;x64&quot;})</code></pre>
+<p>根据 <a href="https://github.com/npm/npm/issues/14042" class="uri">https://github.com/npm/npm/issues/14042</a> 提供的信息，对<code>npm</code>降级或者将<code>npm</code>升级到最新版本可以解决这个问题，这里选择升级<code>npm</code>。由于国内升级<code>npm</code>可能无法成功，因此根据<a href="https://npm.taobao.org/" class="uri">https://npm.taobao.org/</a>的说明，安装命令<code>cnpm</code>：</p>
+<pre><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code></pre>
+<p>之后用淘宝的镜像更新<code>npm</code>（当然，还可以更新<code>cnpm</code>本身，这个命令与<code>npm</code>实质上是相同的，只是镜像在淘宝）：</p>
+<pre><code>cnpm install -g npm</code></pre>
+<p>安装<code>fix_cjk_spacing</code>也可以：</p>
+<pre><code>cnpm install hexo-filter-fix-cjk-spacing --save</code></pre>
+<p>之后运行<code>hexo</code>相关命令就不会再出错。</p>
+<ol start="5" style="list-style-type: decimal">
+<li><del>Markdonw-it、脚注、表情设置</del>（<strong>不再使用</strong>）</li>
+</ol>
+<p>Hexo 的文章内容默认是不支持 emoji 表情的，作为一个有逼格的码农，怎么少得了丰富的表情语言，下面的内容介绍怎么支持 emoji。</p>
+<p>Hexo 默认的 markdown 编译插件是<a href="https://github.com/hexojs/hexo-renderer-marked">hexo-renderer-marked</a>，看了一下相关文档，好像没办法支持 emoji，还好在 Hexo 的<a href="https://hexo.io/plugins/">plugins</a>页，我们找到了另外一个 markdown 插件<a href="https://github.com/celsomiranda/hexo-renderer-markdown-it">hexo-renderer-markdown-it</a>，而且号称速度比默认的还要快，最主要的是，在<a href="https://github.com/markdown-it/markdown-it">markdown-it</a>的文档里面，我们发现它可以通过 plugins 的方式支持<a href="https://github.com/markdown-it/markdown-it-emoji">emoji</a>。</p>
+<p>下面我们就来替换 markdown 插件，首先进入博客的主目录（stylus）</p>
+<pre class="bash"><code>cnpm un hexo-renderer-marked --save
+cnpm i hexo-renderer-markdown-it --save</code></pre>
+<p>不过此时的 hexo-renderer-markdown-it 还是用不了 emoji 的，我们需要加上 emoji 的 plugin</p>
+<pre class="bash"><code>$ cd node_modules/hexo-renderer-markdown-it/
+$ cnpm install markdown-it-emoji --save</code></pre>
+<p>然后编辑 Hexo 的配置文件<code>_config.yml</code></p>
+<pre><code># fix_cjk_spacing: false  # false 时停用 cjk 换行 - 空格 修正
+# https://github.com/hexojs/hexo-renderer-marked
+# breaks 遇到 CJK 字符时，会将换行符转成一个空格
+# https://github.com/lotabout/hexo-filter-fix-cjk-spacing/issues/1 提供的方案可以修正这个问题，但要更新 npm 到最新
+# MD-it 对 html 中的内容不起作用，但是 cjk-fix 会起作用
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: false
+    linkify: true
+    typographer: false
+    quotes: &#39;“”‘’&#39;
+  plugins:
+    - markdown-it-footnote
+    - markdown-it-sup
+    - markdown-it-sub
+    - markdown-it-abbr
+    - markdown-it-emoji
+  anchors:
+    level: 1
+    collisionSuffix: &#39;v&#39;
+    permalink: false
+    permalinkClass: header-anchor
+    permalinkSymbol: ¶</code></pre>
+<ul>
+<li>与 Hexo 默认的 Markdown 引擎相比，这个引擎要严格一些：默认的引擎可以解释 html 中的 md 部分，但这个引擎在遇到 html 中的 md 时，会跳过去。</li>
+<li>注意上面的<code>xhtmlOut</code>用于确保Markdown转换结果符合xhtml的规范；<code>typographer</code>为<code>true</code>用于确保<code>”“</code>以及<code>’‘</code>会自动被纠正为<code>“”</code>和<code>‘’</code>。</li>
+<li>MD-it 对 html 中的内容不起作用，但是 cjk-fix 会起作用，为了使用<code>&lt;pre class=&quot;center&quot;&gt;</code>及<code>&lt;pre class=&quot;white&quot;&gt;</code>，在<code>lives</code>中禁用了<code>fix_cjk</code>功能。</li>
+<li>关键就是在 plugins 里加上<code>- markdown-it-emoji</code>，其他的配置说明可以参见<a href="https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki/Advanced-Configuration">wiki</a>。</li>
+<li>重启Hexo服务，即可生效，这里输入<code>:smile: :smirk: :relieved:</code>就可以显示表情符号，当然直接输入表情也是可以的，具体参考<a href="https://github.com/markdown-it/markdown-it-emoji" class="uri">https://github.com/markdown-it/markdown-it-emoji</a>。</li>
+<li>表情的安装参考上面的命令，而脚注确定不需要再安装任何包，下面是脚注的例子：</li>
+</ul>
+<pre><code>Here is a footnote reference,[^1] and another.[^longnote]
+ 
+[^1]: Here is the footnote.
+ 
+[^longnote]: Here&#39;s one with multiple blocks.
+ 
+    Subsequent paragraphs are indented to show that they
+belong to the previous footnote.</code></pre>
+<p>这个例子中，“Subsequent…”也是脚注的一部分，因此脚注的结束符号将在“footnote.”之后。</p>
+<p>下面是一个 inline 的例子：</p>
+<pre><code>Here is an inline note.^[Inlines notes are easier to write, since
+you don&#39;t have to pick an identifier and move down to type the
+note.]</code></pre>
+</div>
+</div>
+<div id="-next-_config.yml" class="section level2">
+<h2><span class="header-section-number">2.5</span> 修改主题配置 NexT: _config.yml</h2>
+<ol style="list-style-type: decimal">
+<li>设定<code>mathjax</code>取值为<code>true</code>，打开 LaTeX 公式支持；</li>
+<li>设定<code>use_motion</code>取值为<code>false</code>，关闭页面加载时的动画效果，配置文件中提到<code>5.0.0 及更低版本中，侧栏在 use motion: false 下不会展示</code>，这一说法没有具体印证；</li>
+<li>设定<code>scrollpercent</code>取值为<code>true</code>，这样在滚动页面时，右下角会出现当前页面所在位置的百分比；</li>
+<li>制作头像图片，保存为<code>source/images/avatar.png</code>，设定主题配置文件中<code>avatar</code>取值为<code>/images/avatar.png</code>；</li>
+<li>设定<code>display</code>取值为<code>hide</code>，这样右侧边栏在页面加载时默认关闭，只能通过手工方式加载；</li>
+<li>设定<code>since</code>取值为<code>2005</code>；</li>
+<li>到<a href="https://disqus.com/admin/" class="uri">https://disqus.com/admin/</a>生成一个 shortname，并加入到主题配置文件中。现有网页上说的在右上角设置中生成的方法打不开；</li>
+<li>删除<code>themes\next\layout\_macro\post.swig</code>中的<code>&amp;raquo;</code>，只保留“阅读全文”这四个字；</li>
+</ol>
+</div>
+<div id="-css" class="section level2">
+<h2><span class="header-section-number">2.6</span> 修改博客的 CSS</h2>
+<div class="section level3">
+<h3><span class="header-section-number">2.6.1</span> 模板调整记录</h3>
+<ol style="list-style-type: decimal">
+<li>修改<code>theme/next/source/css/_variables/custom.styl</code>文件，添加如下内容：</li>
+</ol>
+<pre><code>// 修改成你期望的宽度
+$content-desktop = 700px
+
+// 当视窗超过 1600px 后的宽度
+$content-desktop-large = 960px</code></pre>
+<p>实际上本人在<code>theme/next/surce/css</code>中增加了一个<code>haopeng.styl</code>，并将其<code>import</code>到<code>main.styl</code>，用于添加自定义的具体样式内容，工作原理与<code>custom.styl</code>文件非常接近。</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>在<code>next/source/css/_variables/base.styl</code>中，将<code>$head-bg</code>设定为<code>transparent</code>。</p></li>
+<li><p>修改了页脚模板文件中的文字内容（<code>\themes\next\layout\_partials\footer.swig</code>）；</p></li>
+<li><p><code>themes\next\languages</code>中有对应的语言，注意关键词的名称是英文，可以在语言文件中修改或添加关键字，在主题配置文件中修改关键字对应的图标，<a href="http://fontawesome.io/icons/" class="uri">http://fontawesome.io/icons/</a>列出了全部可用的图标，考虑到最近一次修改的模板中不再使用图标，这一条的作用就暂时不再重要。</p></li>
+<li><p>修改<code>next/layout/_macro/post-collapse.swig</code> 27 行的 date 的格式，添加年份，这样分类和归档页的标题中就包含年份，同时调整分类和标题页中的 css 的缩进。</p></li>
+<li><p>在<code>next/layout/_macro/post.swig</code>中，将<code>post-footer</code>中的tag处的<code>#</code>改成图标效果：</p></li>
+</ol>
+<pre><code>&lt;i class=&quot;fa fa-fw fa-tag&quot;&gt;&lt;/i&gt;</code></pre>
+</div>
+<div class="section level3">
+<h3><span class="header-section-number">2.6.2</span> 自定义样式文件调整记录</h3>
+<p>其它要修改的内容都在<code>haopeng.styl</code>中，需要注意的是：(1) 一些CSS属性可能无法被覆盖，此时在指令后面加<code>!important</code>强制覆盖；(2) 一部分下划线是通过<code>background-color</code>实现的，另一些是通过<code>border-bottom</code>实现的，因此需要根据实际情况做修改；(3) 主页与正文中的文章标题样式名称不相同，要分别修改；(4) 文章标题的文字大小只能通过<code>!important</code>修改；(5) 存档目录页中的文章标题与时间在水平方向没对齐，这与修改了文章标题的文字大小有关，很难调整，最后是通过调整如下内容才做到的：</p>
+<pre><code>/* 存档页中文章标题与时间对齐 */
+.post-title-link span {
+    display: block;
+}</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>分类页中文章数量用了浮动体样式；</p></li>
+<li><p>将背景图片放置到<code>themes/next/source/images</code>中，然后在自定义文件中加入如下内容：</p></li>
+</ol>
+<pre><code>body { background: url(/images/bg.png) repeat; }</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>博客的页脚使用了 Galdeano 字体，原始的方法是通过 NexT 主题配置文件<code>_config.yaml</code>下的 global 字段修改字体，这种方法会在线调用 Google 的远程字体。但这种方法有两个问题，一是放两种字体需要通过语法实现：<code>family: font1|font2</code>，这种语法对应到<code>fonts.googleapis.com</code>的查询字符串时，通过<code>|</code>指定两种字体（如果字体名称有空格，用<code>+</code>），但这种做法会导致正文、标题加载时将这两个字体组成的名称当成一个字体名称，这不是我们正常情形需要的，如果我们只指定一种字体，我们也可能不希望 NexT 自动把相关字体做全局修改。第二个问题是这样需要在线加载字体，即使通过&lt;fonts.useso.com&gt;加载可以提高速度，也未必是我们想要的做法，谁知道将来 360 会不会停止这一服务。</li>
+</ol>
+<p>这里推荐的做法是生成本地字体并加载：</p>
+<ul>
+<li>从<a href="https://gist.github.com/dotJoel/7326331" class="uri">https://gist.github.com/dotJoel/7326331</a>找到<code>Galdeano</code>字体 ttf 文件的下载地址并下载该文件；</li>
+<li>到<a href="https://www.fontsquirrel.com/tools/webfont-generator" class="uri">https://www.fontsquirrel.com/tools/webfont-generator</a>，上传下载的字体并生成不同浏览器需要的字体文件；</li>
+<li>将字体文件放到<code>themes\next\source\lib\font-Galdeano</code>之中，由于这里将<code>lives</code>。当成站点下的子目录，因此这些文件实际上是放在<code>\lives\themes\next\source\lib\font-Galdeano</code>里面（根据实际情况自己放置）。</li>
+</ul>
+<p>需要说明的是，上面的 css 内容没有选择用<a href="https://segmentfault.com/q/1010000005679305" class="uri">https://segmentfault.com/q/1010000005679305</a>中介绍的用<code>https://fonts.googleapis.com/css?family=Galdeano</code>里面的内容，这种方法只包含了<code>woff2</code>文件，IE 下无法看到字体效果。而是主要选择用<a href="http://smartgrid.ac.cn/63.html" class="uri">http://smartgrid.ac.cn/63.html</a>提供的方法，根据下面的代码结合<a href="https://www.fontsquirrel.com/tools/webfont-generator" class="uri">https://www.fontsquirrel.com/tools/webfont-generator</a>中提供的 css 文件：</p>
+<pre><code>@font-face {
+font-family:&#39;Tangerine-b&#39;;
+    src: url(&#39;./font/Tangerine_Bold.eot&#39;);
+    src: url(&#39;./font/Tangerine_Bold.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+         url(&#39;./font/Tangerine_Bold.woff&#39;) format(&#39;woff&#39;),
+         url(&#39;./font/Tangerine_Bold.ttf&#39;) format(&#39;truetype&#39;),
+         url(&#39;./font/Tangerine_Bold.svg#tangerinebold&#39;) format(&#39;svg&#39;);
+}</code></pre>
+<p>修改后，在<code>haopeng.styl</code>中添加如下代码：</p>
+<pre><code>/* latin */
+@font-face {
+  font-family: &#39;Galdeano&#39;;
+  font-style: normal;
+  font-weight: 400;
+  src: url(&#39;/lives/lib/font-Galdeano/galdeano-webfont.woff2&#39;) format(&#39;woff2&#39;),
+       url(&#39;/lives/lib/font-Galdeano/galdeano-webfont.woff&#39;) format(&#39;woff&#39;);
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}</code></pre>
+<p>原因是生成的文件中没有<code>eot, svg</code>类文件。</p>
+<ol start="5" style="list-style-type: decimal">
+<li>在线的思源宋体加载</li>
+</ol>
+<p>在 2017.5 时，参考谢益辉的博客，将博客的主字体换成思源宋体，这个过程除了在<code>haopeng.styl</code>中添加样式的支持外，还需要：</p>
+<ul>
+<li>在<code>next/layout/_partials/head.swig</code>添加从谢站点上下载的<code>load-typekit.js</code>文件，</li>
+</ul>
+<pre><code>&lt;script async src=&quot;/stylus/js/load-typekit.js&quot;&gt;&lt;/script&gt;</code></pre>
+<blockquote>
+<p><strong>说明</strong>：不使用注册 Adobe 的 Typekit 服务时提供的代码的原因是上面的脚本不仅能够实时加载思源宋体，还可以在加载之前先判断客户端是否已经安装思源宋体。Adobe 使用的 ID 需要在 VPN 下到 Adobe Typekit 注册，邮箱是<code>haopeng.yn@gmail.com|1A</code>，用 Chrome 提供的翻墙功能注册后无法得到字体服务。</p>
+</blockquote>
+<ul>
+<li>将<code>load-typekit.js</code>复制到合适的位置，将其中的<code>kitid</code>改成这里的<code>oqz0fck</code>，这个来自注册时候提供的信息。</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Pandoc 生成的脚注编号中，<code>sup</code>在<code>a</code>之中，虽然修改<code>a</code>的<code>display</code>为<code>inline-flex</code>或<code>inine-grid</code>可以移动<code>a</code>的下划线，但会导致<code>hover</code>背景颜色失效，因此暂时不修改编号的链接效果，这与谢益辉的博客中<code>sup</code>和<code>a</code>的顺序刚好相反。（<a href="https://github.com/jgm/pandoc/issues/2583" class="uri">https://github.com/jgm/pandoc/issues/2583</a>）</p></li>
+<li><p>其它 CSS 内容的修改非常多，所以这里不再一一解释。</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1><span class="header-section-number">3</span> 远程部署</h1>
+<ol style="list-style-type: decimal">
+<li>在 GitHub 上先新建一个 Repository（Public，不需要修改任何设置），然后在站点文件夹中用</li>
+</ol>
+<pre><code>hexo d</code></pre>
+<p>上传相关文件到远程。上传完成后，再到 GitHub 的 Repository 的设置中修改<code>GitHub Pages</code>中的<code>Source</code>为<code>master branch</code>，这样就可以成功启动博客。在这个过程中可能会调出一个登陆 GitHub 的窗口，输入用户名和密码即可。</p>
+<p>由于之前已经配置过 SSH，因此上面不涉及这个过程。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>配置 SSH（新机器可能需要）</li>
+</ol>
+<p>检查是否已经有 SSH Key，打开 Git Bash，输入</p>
+<pre><code>cd ~/.ssh</code></pre>
+<p>如果没有这个目录，则生成一个新的 SSH，输入</p>
+<pre><code>ssh-keygen -t rsa -C &quot;your e-mail&quot;</code></pre>
+<p>其中，your e-mail 是注册 Github 时用到的邮箱。然后接下来几步都直接按回车键，最后生成相关内容文件。</p>
+<p>复制公钥内容到 Github 账户信息中</p>
+<p>打开<code>~/.ssh/id_rsa.pub</code>文件，复制里面的内容；</p>
+<p>打开 Github 官网，登陆后进入到个人设置(点击头像 -&gt; <code>setting</code>)，点击右侧的<code>SSH Keys</code>，点击<code>Add SSH key</code>；填写<code>title</code>之后，将之前复制的内容粘贴到<code>Key</code>框中，最后点击<code>Add key</code>即可。</p>
+<p>测试 SSH 是否配置成功，输入</p>
+<pre><code>ssh -T git@github.com</code></pre>
+<p>如果显示以下，则说明 SSH 配置成功。</p>
+<pre><code>Hi username! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>克隆子栏目</li>
+</ol>
+<p>直接复制文件夹，新建 Repository 就可以。记得修改 CSS 中背景图片的位置，修改主题配置中站点的目录，修改主配置中的相关信息，修改模板等。</p>
+<p>一个特殊的问题是，在<code>node_modules</code>发现了以<code>stylus</code>为名称的子文件夹，这说明最初生成 Hexo 站点子目录<code>stylus</code>时，写入了一些特殊信息，但直接复制这个文件夹似乎没有给另一个子站点<code>lives</code>造成不良影响。</p>
+</div>
+<div class="section level1">
+<h1><span class="header-section-number">4</span> 应用问题</h1>
+<ol style="list-style-type: decimal">
+<li>不要用<code>NexT</code>官方文档中的居中对齐样式，要居中自己直接用 HTML 实际就好；</li>
+<li>通过各种方法添加虾米音乐的外链播放都不成功，感觉是被禁止了；</li>
+<li>多个标签用<code>[...,...]</code>；</li>
+<li><code>Hexo</code>的四个主要命令：</li>
+</ol>
+<pre><code>hexo g = hexo generate  #生成
+hexo s = hexo server  #启动本地预览
+hexo d = hexo deploy  #远程部署
+hexo n &quot;文章标题&quot; = hexo new &quot;文章标题&quot;  #新建一篇博文</code></pre>
+<p>其中前三个命令经常组合用：</p>
+<pre><code>hexo s -g
+hexo d -g</code></pre>
+<p>奇怪的是在部署到远程时，出现过失效的现象，建议直接删除<code>_public</code>文件夹，再重新生成页面，最后再部署，即生成和部署分开进行。更保险的做法是<code>hexo clean</code>之后，再重新生成文件并部署。</p>
+<ol start="5" style="list-style-type: decimal">
+<li><p>将来新安装机器时，怎么做到用现有的文件进行覆盖安装还没有想通（一个可能的问题是基础平台、博客平台、主题都会有更新，当然在安装完 Git 和 Node.js 之后，其它内容可能都在站点子目录中，可以尝试直接覆盖这部分内容），不同机器内容的同步也没有好的方法。</p></li>
+<li><p>Mathjax 支持带编号的公式</p></li>
+</ol>
+<p>在原有的<code>themes\next\layout\_third-party.mathjax.swig</code>中添加如下内容：</p>
+<pre class="javascript"><code>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+MathJax.Hub.Config({
+    TeX: {equationNumbers: {autoNumber: [&quot;AMS&quot;], useLabelIds: true}},
+    &quot;HTML-CSS&quot;: {linebreaks: {automatic: true}},
+    SVG: {linebreaks: {automatic: true}}
+});
+&lt;/script&gt;</code></pre>
+<p>之后可以像 LaTeX 一样添加<code>\label{}</code>以及<code>\eqref{}, \ref{}</code>。</p>
+<ol start="7" style="list-style-type: decimal">
+<li><del>Mathjax 与 Markdown 的冲突</del>（<strong>用 Pandoc 后，不再存在</strong>）</li>
+</ol>
+<p><strong>原文地址</strong>：<a href="http://blog.csdn.net/emptyset110/article/details/50123231" class="uri">http://blog.csdn.net/emptyset110/article/details/50123231</a></p>
+<p>Hexo 先用<code>marked.js</code>渲染，然后再交给 MathJax 渲染。在<code>marked.js</code>渲染的时候下划线<code>_</code>是被 escape 掉并且换成了<code>&lt;em&gt;</code>标签，即斜体字，另外 LaTeX 中的<code>\\</code>也会被转义成一个<code>\</code>，这样会导致 MathJax 渲染时不认为它是一个换行符了。</p>
+<p>修改<code>marked.js</code>源码的方式来避开这些问题</p>
+<ul>
+<li>针对下划线的问题，取消<code>_</code>作为斜体转义，因为<code>marked.js</code>中<code>*</code>也是斜体的意思，所以取消掉<code>_</code>的转义并不影响我们使用markdown，只要我们习惯用<code>*</code>作为斜体字标记就行了。</li>
+<li>针对<code>marked.js</code>与Mathjax对于个别字符二次转义的问题，我们只要不让<code>marked.js</code>去转义<code>\\,\{,\}</code>在MathJax中有特殊用途的字符就行了。</li>
+</ul>
+<p>具体修改方式，用编辑器打开<code>marked.js</code>（在<code>./node_modules/marked/lib/</code>中）</p>
+<pre><code>escape: /^\\([\\`*{}\[\]()# +\-.!_&gt;])/,1
+em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,1</code></pre>
+<p>替换成：</p>
+<pre><code>escape: /^\\([`*\[\]()# +\-.!_&gt;])/,1
+em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>2017.5.28<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>可以通过 Hack <code>mark.js</code>的方式做一些简单的优化，参考本文中相关内容或者<a href="http://shomy.top/2016/10/22/hexo-markdown-mathjax/" class="uri">http://shomy.top/2016/10/22/hexo-markdown-mathjax/</a>。<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Pandoc 生成的脚注编号中, <code>sup</code>在<code>a</code>之中，虽然修改<code>a</code>的<code>display</code>为<code>inline-flex</code>或<code>inine-grid</code>可以移动<code>a</code>的下划线位置，但会导致<code>hover</code>背景颜色失效，因此暂时不修改编号的链接效果，<a href="https://github.com/jgm/pandoc/issues/2583" class="uri">https://github.com/jgm/pandoc/issues/2583</a>的讨论表明这个问题还没有正式的解决方案。<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>RStudio 的 Pandoc 只在 RStudio 中使用。<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>这里替换的思路来自<a href="https://github.com/wzpan/hexo-renderer-pandoc" class="uri">https://github.com/wzpan/hexo-renderer-pandoc</a>。<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>用 Pandoc 进行解释，这个问题已经得到解决。<a href="#fnref6">↩</a></p></li>
+</ol>
+</div>

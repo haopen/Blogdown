@@ -1,0 +1,17 @@
+---
+title: 面板 logit 的固定效应怎么做？ - 慧航 - 问答
+author: 慧航
+date: 2014-01-30
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎问答", "6-计量", "6-logit", "6-面板数据", "6-固定效应", "6-随机效应", "6-组间", "6-组内"]
+slug: panel-logit
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://www.zhihu.com/question/22481031" class="uri">https://www.zhihu.com/question/22481031</a></p>
+<blockquote>
+<p>对于面板 logit，如果每一个 obs 在所有的时间都是 1 或者都是 0，那么固定效应是不是无效的？</p>
+</blockquote>
+<p>是的！几乎任何时候做固定效应都不允许出现<del><code>跨时间不变的变量</code></del>。要么会被减掉（比如 fixed effect Logit model），要么会导致识别问题。</p>
+<p>关键点在于，跨时间不变的变量只能使用组间（between group）信息去估计，而加入了 fixed effect 之后，只有组内（within group）信息可以用。所以 random effect 是可以的，因为既使用了组内信息，又使用了组间信息。</p>

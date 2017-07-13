@@ -1,0 +1,23 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+
+<div class="archive">
+	<h1 class="article-title" style="text-align: center;">标签</h1>
+	<p style="text-align: center; margin-top: .3em">目前共计 {{ len .Data.Terms }} 个标签</p>
+	<section class="wrapper tags">
+		<div class="page-tags" id="tags">
+			{{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+			<span class="tags">
+				<a href="/tags/{{ $name | urlize }}" rel="{{ len $taxonomy }}">{{ if eq (substr $name 2) "sas" }}{{ "SAS" }}{{ else }}{{ title (substr $name 2) }}{{ end }}({{ len $taxonomy }})</a>
+			</span>
+			{{ end }}
+		</div>
+	</section>
+
+</div>
+
+</main>
+
+<script src="{{ .Site.BaseURL }}js/tags.js"></script>
+{{ partial "footer.html" . }}

@@ -1,0 +1,14 @@
+---
+title: 经济学家数据可视化指南 - 慧航 - 专栏
+author: 慧航
+date: 2014-04-24
+categories: ["6-经济 - 杂"]
+tags: ["6-慧航", "6-知乎专栏", "6-可视化"]
+slug: eco-visual
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19735479>
+
+可视化的数据展示方案比用文字来描述数据效率更高。但是如何更好的用图形展示数据呢？JEP 中 Jonathan A. Schwabish 给了我们一些指导。
+
+[Dropbox - An Economist’s Guide to Visualizing Data.pdf](https://www.dropbox.com/s/pveihb6qndp6b52/An%20Economist%E2%80%99s%20Guide%20to%20Visualizing%20Data.pdf)

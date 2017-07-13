@@ -1,0 +1,34 @@
+---
+title: “四万亿”财政刺激的政策评价 - 慧航 - 专栏
+author: 慧航
+date: 2014-09-23
+categories: ["6-经济 - 微观计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记", "6-应用微观计量", "6-政策评价"]
+slug: treatment-effects-estimation-Economic-Stimulus-Plan-of-China
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://zhuanlan.zhihu.com/p/19855025" class="uri">https://zhuanlan.zhihu.com/p/19855025</a></p>
+<p>2008年金融危机之后，中国政府在年底推出了“四万亿”财政刺激政策以刺激经济，实现经济“软着陆”。然而这一政策的效果却存在很大的争议。</p>
+<p>清华大学 Min Ouyang 与阿肯色大学的 Yulei Peng 在 Journal of Econometrics 发表的文章：<a href="http://crm.sem.tsinghua.edu.cn/UploadFiles/File/201403/20140320153953174.pdf">The Treatment Effects Estimation: A Case Study of the 2008 Economic Stimulus Plan of China</a> 通过计算“反事实 (counterfactuals)”的经济指标，对这一政策的实际效果作出了评价：</p>
+<blockquote>
+<p>In 2008, the Chinese government put forth an economic stimulus package of 586 billion USD to minimize the impact of the global financial crisis. This is considered as one of the most important macroeconomic policy interventions in the past decade. This paper employs this policy intervention as a case study to address the challenge of evaluating the treatment effects under time-varying latent factors. In particular, we return to the framework of Hsiao, Ching, and Wan (2012), relax their linear conditional mean assumption, and extend it to a semi-parametric setting. The asymptotic distribution properties of the average treatment effect estimator is derived and studied. Both the linear model and the semi-parametric model are applied to study the treatment effect of the 2008 stimulus package on China’s macroeconomy. The estimation results show the stimulus package had raised the annual real GDP growth in China by about 3.2%, but only temporarily. These results are robust to linear setting, semiparametric setting, and various control group selections. The temporary boost in macroeconomic outcome is also evident in the estimation of other economic indicators such as real investment, real consumption, real export, and real import.</p>
+</blockquote>
+<p>政策评价的一个难点在于，在没有这个政策的情况下结果是观察不到的。比如在这里，我们只能看到在有了四万亿刺激之后的经济增长情况（反事实，counterfactuals），但是我们永远看不到如果没有这个刺激计划，经济增长情况是怎样的。</p>
+<p>对于这一问题，计量经济学已经发展出很多方法来解决这一问题。常见的有自然实验的方法，比如 DID、RD 等方法，以及一些结构模型的方法。然而这里还有一个难点在于，这些方法大都需要控制组与处理组都有大量的观测，而在这个应用情景中，只有中国推出了四万亿刺激，因而这些方法很难适用。</p>
+<p>这篇文章扩展了<code>Hsiao, Ching and Wan (2012)</code>的方法，通过估计控制组与处理组的相关性来预测处理组的反事实的结果，从而计算政策的处理效应。这篇文章通过放松 HCW 方法的线性设定，使用半参数的方法估计 HCW 的反事实模型，从而对 2008 年的四万亿政策作出评价。</p>
+<p>HCW 的具体方法这里不再赘述，通过假设因子模型的形式，HCW 得到了如下式：</p>
+<p><span class="math display">\[y_{1t}=\delta_1+\delta&#39;Y_t+\epsilon_{1t}\]</span></p>
+<p>其中<span class="math inline">\(y_{1t}\)</span>为收到处理的个体（中国）的 outcome（比如 GDP），<span class="math inline">\(Y_t\)</span>为其他国家的 outcome。这样就可以通过估计政策发生之前的这个式子得到<span class="math inline">\(\delta\)</span>的系数，然后预测政策执行之后的<span class="math inline">\(y_{1t}\)</span>，即反事实的 outcome，从而得到 treatment effects。</p>
+<p>在实际计算的过程中，<span class="math inline">\(Y_t\)</span>中的国家选择必须要满足两个条件，即这些国家的 outcome 必须和中国的 outcome 相关，而且这些国家的结果必须对想对于处理组的处理（四万亿计划）是外生的。</p>
+<p>作者通过计算与中国的贸易量占这个国家 GDP 的比重来挑选进入<span class="math inline">\(Y_t\)</span>的国家，最终选出斯洛文尼亚、法国和爱沙尼亚三个国家作为控制组。其估计结果如下：</p>
+<div class="figure">
+<img src="/images/Eco/MicroEconometrica/huihang/EconomicStimulusPlanofChina.jpg" />
+
+</div>
+<p>可以看到，财政刺激政策在一开始的确刺激了经济，特别是在 2009 年第三季度左右，提高了 5.4% 左右的 GDP，但是这一政策的效果在随后迅速降低，在 2010 年第四季度之后甚至变成了负值。从这一点看，四万亿的财政刺激政策只是临时对经济有刺激作用，并无长期影响。</p>
+<p>在 JoE 上发中国问题的文章的确罕见，所以我想这篇文章的理论意义大于实际意义。关键在与对控制组的选择是一个非常 tricky 的工作，既要求控制组对处理组有预测能力，还要求处理组的政策变动对控制组的结果几乎没有影响，能满足这两个要求的国家应该很少。但是不管怎样，这样做至少得到了一个看上去非常符合直觉的答案。</p>
+<blockquote class="gray">
+<p><strong>罗金峰</strong>：这里有一个对四万亿较肯定的观点：<a href="http://research.stlouisfed.org/wp/2014/2014-007.pdf" class="uri">http://research.stlouisfed.org/wp/2014/2014-007.pdf</a>。</p>
+</blockquote>

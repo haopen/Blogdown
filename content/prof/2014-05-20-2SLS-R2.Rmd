@@ -1,0 +1,49 @@
+---
+title: "R-squared<0 in 2SLS-IV estimation? - 慧航 - 专栏"
+author: 慧航
+date: 2014-05-20
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-计量", "R2", "6-2SLS"]
+slug: 2sls-r2
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19756603>
+
+今天一个漂亮的小妹妹来问我问题，Stata 里面做工具变量估计，结果不汇报 R2 的值。我一听也十分诧异，从来没遇到这种情况。当然本着学术的纯洁目的仔细研究了一下这个问题（真的不是为了学妹！），发现 Stata 官网上有对这个问题的描述：[Stata | FAQ: Negative and missing R-squared for 2SLS/IV](http://www.stata.com/support/faqs/statistics/two-stage-least-squares/)
+
+说的抽象一点，因为我们之前做 OLS 的时候，是一个正交投影，所以不会出现这个问题。但是当我们做 2SLS 的时候，是一个非正交的投影。既然是非正交的投影，投影的时候就会有角度。当这个角度比较小的时候，就会出现预测的`y_hat`跟实际的`y`夹角大于`90`度，就会出现这种情况。
+
+具体从计算的角度来看，我们做 2SLS 实际上做了两步。假设内生变量是`x1,x2`,外生变量是`z1,z2,z3,z4`。我们要估计
+
+```stata
+y on x1 x2 z3 z4
+```
+
+但是我们实际上先回归了
+
+```stata
+reg x1 on z1 z2 z3 z4 => x1_hat
+reg x2 on z1 z2 z3 z4 => x2_hat
+```
+
+然后回归：
+
+```stata
+reg y on x1_hat x2_hat z3 z4 => y_hat
+```
+
+如果计算残差的时候是用这个`y_hat`的，那么不会出现`R2<0`的问题。但是我们计算残差的时候实际上是用
+
+```stata
+y-b1*x1-b2*x2-b3*z3-b4*z4
+```
+
+而非
+
+```stata
+y-b1_hat*x1-b2_hat*x2-b3*z3-b4*z4
+```
+
+所以计算的`u`的 variance 肯定更大，就会出现`R2<0`的问题。
+
+那么这个问题怎么解决呢？实际上这根本不是个问题。因为本来 IV 就要求不是个最优的 predictor，所以忽略这个问题吧！

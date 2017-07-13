@@ -1,0 +1,136 @@
+---
+title: "在 RStudio 中使用 GitHub"
+author: "彭浩"
+date: "2017-07-14"
+categories: ["4-计算机---软件应用"]
+tags: ["4-GitHub", "4-RStudio"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: github-in-rstudio
+---
+
+# 基本知识{#basic-knowledge}
+
+Git 共有三个级别的 config 文件，分别是 system、global 和 local。在当前环境中，分别对应 `%GitPath%\mingw64\etc\gitconfig` 文件、`$home\.gitconfig` 文件和 `%RepoPath%\.git\config` 文件。其中 `%GitPath%` 为 Git 的安装路径，`%RepoPath%` 为某仓库的本地路径。所以 system 配置整个系统只有一个，global 配置每个账户只有一个，而 local 配置和 git 仓库的数目相同，并且只有在仓库目录才能看到该配置。
+
+## 查看配置{#configuration-list}
+
+参考资料：<http://www.jianshu.com/p/0ad3d88c51f4>
+
+由于之前已经成功安装 Git 并登陆到过 GitHub，因此查看当前配置时，最后两行会显示用户名及用户密码。
+
+```bash
+$ git config --list
+......
+user.name=xxxxxx
+user.email=xxxxxx@xxxx.com
+```
+
+这里的 `user.name` 和 `user.email` 就是 Author 信息。此时，上面提到的三个级别都配置了 user 信息。当 `git commit` 时，Author 信息依次读取 local、global 和 system 的配置，如果找到则不再继续读取。其他配置的读取顺序也是如此。
+
+GitHub 支持 https 和 ssh 协议连接。下面以较为安全的 ssh 方式作为示例进行说明。
+
+# 生成、配置密钥{#gen-set-keys}
+
+## 生成密钥{#gen-keys}
+
+1. 由于之前已经生成过密钥并成功登陆过 GitHub，这里暂时不考虑多账号切换登陆的做法，因此直接 `cd ~/.ssh` 切换到 SSH 所在目录，将其中的 `id_rsa` 和 `id_rsa.pub` 备份好后删除掉。
+2. 输入 `git config --global user.name "haopen"` 和 `git config --global user.email haopeng.yn@gmail.com` 切换到新的账号，还可以用 `git config --global user.name` 和 `git config --global user.email` 看账号是否添加成功。
+
+```bash
+$ git config --global user.name "haopen"
+$ git config --global user.email haopeng.yn@gmail.com
+
+$ git config --global user.name
+haopen
+$ git config --global user.email
+haopeng.yn@gmail.com
+
+$ git config --list
+......
+user.name=haopen
+user.email=haopeng.yn@gmail.com
+```
+3. 接下来输入 `ssh-keygen -t rsa -C "haopeng.yn@gmail.com"` 生成新的密钥。根据[这篇博文](http://www.cnblogs.com/qcwblog/p/5709720.html)的例子，在下面生成密钥文件时一路回车，不指定任何文件名称，直接使用系统默认的名称，到最后一步时密钥生成成功！
+
+```txt
+$ ssh-keygen -t rsa -C "haopeng.yn@gmail.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/haopeng/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /c/Users/haopeng/.ssh/id_rsa.
+Your public key has been saved in /c/Users/haopeng/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:ZH9aXjek6jUT7DWIe7SBrlFGuy50SjseMTtg5HSZLJw haopeng.yn@gmail.com
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|      . o o      |
+|       Eo= .   . |
+|      +oo.. = +  |
+|       +So.*oB.+.|
+|      . .oB**.=.o|
+|        o===.B   |
+|         =B o o  |
+|        .ooo     |
++----[SHA256]-----+
+```
+
+## 配置密钥{#set-keys}
+
+复制前一步中生成的 `id_rsa.pub` 中的内容，之后登陆到 GitHub，在右上角的头像上点击 `Settings - SSH and GPG keys`，点击右边的 `New SSH Key`，然后将复制好的内容粘贴进去，标题自己随意取一个，比如 `haopen's key`，这样就完成了远程端的配置。
+
+## 测试连接{#test-connection}
+
+**问题**：在 Git Bash Shell 中输入如下命令后连接**失败**！
+
+```bash
+ssh -T git@github.com
+```
+
+> Warning: Permanently added the RSA host key for IP address '192.30.255.112' to the list of known hosts.
+> Permission denied (publickey).
+
+在网上查阅资料后，感觉有类似经历的人的解决方法似乎都与自己面临的情况不完全吻合，无意中看到 `~/.ssh` 目录中有一个名称为 `known_hosts` 的文件，尝试将其删除后再重新进行了前面的第 1 步和第 2 步，这次再测试时就**成功**了。
+
+```txt
+$ ssh -T git@github.com
+The authenticity of host 'github.com (192.30.255.113)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.255.113' (RSA) to the list of known hosts.
+Hi haopen! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+# 在 RStudio 中使用 GitHub
+
+到 GitHub 的网站上新添加了一个代码仓库（包含 `readme.md`），然后打开 RStudio，`File - New Project - Version Control - Git`，输入 `Repository URL`（要输入的内容可以在 GitHub 代码仓库右方点 `Clone or download` 找到），其中 `Project directory name` 用于设定项目所在文件夹的名称，`Create project as subdirectory of` 用于指定该文件夹所属的父目录，此外勾选 `Open in new session`，接下来 RStudio 会将该仓库中的内容 Pull 到本地。
+
+![创建一个 Git Repository](/images/Tech/GitHub/Create-Git-Repository.png)
+
+成功之后显示如下内容：
+
+```txt
+C:/Program Files/.../git.exe clone --progress git@github.com:haopen/Blogdown.git Blogdown
+```
+
+尝试添加文件并保存到，点击右边 Git 面板中的 `Commit`（直接在 Git 面板中某个文件上点右键，选择 `ignore` 可以指定应忽略跳过的文件），可以在打开的窗口中勾选需要 Commit 的文件，之后在右半边窗口中填写简单的描述文字，之后可以点击下方的 `Commit`。
+
+![提交一个 Commit](/images/Tech/GitHub/RStudio-Commit.png)
+
+**问题**：Commit 完成之后，刚开始右上角并没有 `Pull` 向上箭头，并且尝试提交时会出现 `unable to access... The requested URL returned error: 403` 类的错误，根据[这个讨论](https://stackoverflow.com/questions/7438313/pushing-to-git-returning-error-code-403-fatal-http-request-failed)，在本地目录中找到隐藏的 `.git/config`，将其中的
+
+```txt
+url = https://haopen@github.com/derekerdmann/lunch_call.git
+```
+
+修改成
+
+```
+url = ssh://git@github.com/haopen/testGit.git
+```
+
+之后再次提交成功，并且上图右上角出现 `Pull` 向上箭头。当然，**更好的做法**是在点 `Clone or download` 时，直接点击 `Use SSH`，然后复制 `git@github.com:haopen/testGit.git` 即可。

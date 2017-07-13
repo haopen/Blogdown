@@ -1,0 +1,18 @@
+---
+title: 中国劳动市场的匹配与失业 - 慧航 - 专栏
+author: 慧航
+date: 2015-01-06
+categories: ["6-经济 - 微观计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记", "6-应用微观计量", "6-匹配", "6-劳动力市场"]
+slug: labour-shortage
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19851711>
+
+原文：[VoX](http://voxeu.org/article/china-s-unemployment-and-labour-shortage)，[Labor market matching and unemployment in urban China](http://www.sciencedirect.com/science/article/pii/S1043951X12001174)
+
+> In the traditional labor supply–demand approach, unemployment usually results from a lack of labor demand or excess of labor supply. However, in urban China, unemployment coexists with a conflicting phenomenon, shortage of workers in firms. In this study, we employ a novel approach to tackle this issue, search and matching theory, the empirical study of which has not drawn much attention in China. Our multiple model consisted of job-worker matching, job creation and destruction, rural–urban immigration and on-the-job search, and unemployment changes in China. We used non-linear estimation and the three-stage least squares analysis in this study. We found that matching efficiency declined greatly during the 1996–2008 period. The econometric model and simulation results indicated four key factors that led to changes in China's unemployment level: matching efficiency, job destruction, productivity growth, and job-search services. Finally, by using our econometric model, we identified the reasons for the shifts in the Beveridge curve.
+
+为什么在中国有大量的失业，但是同时存在着劳动力短缺？这篇文章从匹配的角度解释这一问题。文章估计了中国的匹配函数（matching function），发现从 1996–2008 年，匹配效率一直在降低。
+
+匹配和搜寻问题也算是 labor 和 macro 一直以来的热点，最近这段时间在中国问题上使用这一套方法的越来越多，而且我个人认为这个问题也很重要。之前想过一个关于这个东西的 idea，但是卡在一个地方一直没能继续。感兴趣的可以看一下这篇文章，看看是不是可以继续走下去。

@@ -1,0 +1,110 @@
+---
+title: 2015 Kuznets Prize获奖论文：生育行为的质量-数量权衡 - 慧航 - 专栏
+date: 2014-12-23
+categories: ["6-经济 - 微观计量"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记"]
+slug: child-quantity-quality
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19912835>，数据地址：<http://www.cpc.unc.edu/projects/china>
+
+前几天，邮箱里突然多出了这么一封邮件：
+
+> **From**:
+> **Date**: December 9, 2014 at 3:37:31 AM EST
+> **To**:
+> **Cc**: Journal of Population Economics <Popecon@iza.org>
+> **Subject**: Could you please share: 2015 Kuznets Prize
+> 
+> Dear Colleague,
+> 
+> We are very pleased to inform you that [Dr. Haoming Liu](http://www.fas.nus.edu.sg/ecs/people/profile/ecsliuhm.html) (National University of Singapore) was recently selected as the 2015 [Kuznets Prize](http://pop.merit.unu.edu/jpop/) winner. His paper entitled “The quality–quantity trade-off: evidence from the relaxation of China’s one-child policy” [(free download)](https://link.springer.com/article/10.1007/s00148-013-0478-4%20) was chosen as the best article published in the [Journal of Population Economics](http://pop.merit.unu.edu/jpop/) in 2014. With its [2013 Impact Factor](http://www.popecon.org/?page=1020) reaching 1.470, the Journal of Population Economics is a leading journal in the field, publishing original theoretical and applied > research in all areas of the economics of population, household and human resources.
+> 
+> The paper uses the exogenous variation in fertility introduced by China’s family planning policies to identify the impact of child quantity on child quality. The study finds that the number of children has a significant negative effect on child height, which provides support for the quality–quantity trade-off theory. The instrumental quantile regression approach shows that the impact varies considerably across the height distribution, particularly for boys. However, the trade-off is much weaker if quality is measured by > educational attainments, suggesting that the measurement of child quality is also crucial in testing the quality–quantity trade-off theory.
+> 
+> Originally awarded every three years, the Kuznets Prize became an annual award in 2014. Papers are judged by the Editors of the Journal of Population Economics. The award ceremony > will be held during the ASSA Annual Meeting in Boston, January 4, 2015.
+> 
+> We hope that you will join us in sharing this exciting news with your colleagues.
+> 
+> Best Regards,
+> 
+> Klaus F. Zimmermann Junsen Zhang
+> 
+> Editor-in-Chief Editor
+> 
+> Journal of Population Economics
+> 
+> Follow us: [IZA Newsroom](http://newsroom.iza.org/en/) | [IZA World of Labor](https://wol.iza.org/)
+
+这个题目其实也是比较老的题目了。所谓的 quality-quantity trade-off，也就是在孩子的数量和质量之间作出取舍。因为现实中家庭的经济能力都是有限的，那么多生孩子意味着每个小孩得到的照顾、资源就会少，可能未来发展也不会太好。比如如果我有一百万给小孩的培养费用和一个孩子，我直接送他出国读最好的大学；但是如果我有两个孩子，我就不得不考虑我是不是要留着一点给小儿子花。所以我到底是生一个孩子送他去哥伦比亚还是生两个孩子送他们去香港？这就是所谓的 trade-off。
+
+<!-- more -->
+
+已经有很多的文献在 Becker 的理论的基础上做了实证贡献。那么这篇文章有什么贡献呢？或者说，获奖论文总有其长处，为啥这篇获奖了？
+
+在这个问题的实证上，作者指出了两个严重的问题。首先是，家庭对于高质量孩子的偏好是观察不到的，而这种偏好自然会带来更少的孩子和对孩子人力资本的更多投资。所以观察到的孩子数量与质量的负向关系很可能是由于这种偏好引起的。
+
+另外一点就是，在发达国家，父母的收入水平只对儿童教育等有有限的影响。
+
+所以这篇文章在中国这样一个发展中国家，利用计划生育政策和之后读生子女政策的放松作为自然实验，就很好的解决了以上两个问题。
+
+中国的计划生育开始于 1971 年，提出了所谓“晚婚晚育，少生优生”的口号。而到了 1980 年代，国家开始强制实施计划生育政策。
+
+然而计划生育政策到了 1984 年，在许多地区，特别是农村地区有所放松。最常见的形式是，如果第一胎是女孩，那么允许生第二胎。
+
+说到这里，想想有点后怕，如果没有这个政策，我可能不会来到这个世界。我有个姐姐，82 年的。后来我妈妈又怀了一个，有一天我妈妈突然想起来，万一生了二胎，人民教师的工作都可能保不住了！所以果断去打了胎。直到后来，有了这个允许生二胎的政策，我才出生下来。万一那个时候我妈妈脑子没转过来，或者没有这个政策。
+
+扯远了。此外还有很多少数民族地区允许生二胎，但是如果只生一胎的话会被奖励。
+
+文章的数据来自 CHNS1993 年的调查。这个数据也是公开数据，我们可以好好学习一下数据的整理与 clean。文章使用了身高以及受教育情况度量孩子的质量。
+
+下面这一段内容我觉着是这篇文章最出彩的地方。但是由于篇幅，我就不详细叙述了。本文使用了工具变量的估计，即用计划生育政策及政策的放松作为孩子数量的工具变量。但是政策这个工具变量是不是一个 valid IV? 对于这方面的论述，这篇文章几乎做到了极致。
+
+关于工具变量的 validity，这里有很多的问题。比如，计划生育政策会不会影响孩子的性别选择？是不是对孩子数量偏好更高的社区更容易成为改革放松的对象？以及，Imbens and Angrist 等人论述了 IV 估计只估计了群体的一部分人的效应，那么文章使用的工具变量究竟是怎样影响孩子数目的？比如说，如果允许生第二个孩子的政策只影响第二个孩子出生的概率，那么 IV 估计实际上应该是一个 LATE 的估计。
+
+关于这些问题，文章做了非常详细的论述。这里限于篇幅，只贴出 2SLS 第一阶段的回归结果：
+
+![](/images/Eco/MicroEconometrica/huihang/childQuantityChildQuality/1.jpg)
+
+可以看到，放松的独生子女政策显著的增加了孩子的数量。下面是样本中男孩的身高的密度函数：
+
+![](/images/Eco/MicroEconometrica/huihang/childQuantityChildQuality/2.jpg)
+
+可以发现，一个孩子的家庭的孩子显著高于两个或者多个孩子家庭的孩子身高。
+
+接下来，作者使用工具变量的方法估计了感兴趣的系数。有意思的是，因为作者估计的方程：
+
+$$Y_i=\beta_0+\alpha D_i+X^\prime_i\beta_1+\epsilon_i$$
+
+其中的 D 是孩子的数目，因此潜在的假设是每多出生一个孩子，对质量的影响都是一样的。然而如果边际影响不一样的时候，根据 Mogstad and Wiswall(2010)，估计出来的系数就是一个加权平均，作者同时讨论了这个权重。
+
+以上表格是 OLS 和工具变量的回归结果，不过多解释了，的确存在着数量-质量的 tradeoff。
+
+后面作者还做了分位数回归工具变量的估计，结果不再赘述。
+
+我第一眼看到题目的时候，觉着这个题目的研究都已经做了好多了，为什么还能获奖？看完文章之后，的确从数据到理论到实证策略到敏感性分析，堪称典范，非常值得认真学习！
+
+<blockquote class="gray">
+**Ruby Z**：精彩！不过有一个问题，孩子的数量是不是应该做泊松回归或者负二项回归？
+
+<blockquote class="white">
+**慧航**：那就很难做工具变量了吧。
+
+</blockquote>
+
+**Ruby Z**：可是这样简单的用线性回归解释生育数量真的严谨嘛？总感觉很奇怪。
+
+<blockquote class="white">
+**慧航**：仔细看他的论文，第一阶段回归只要有线性关系就好，第二阶段，他论文里面讨论了这个问题。
+</blockquote>
+
+</blockquote>
+
+<blockquote class="gray">
+**李楠**：请问，为什么要用身高作为”孩子质量“的变量呢？是因为身高一定程度上反映了身体素质吗？可是身高不是遗传决定的么？那么在 社科研究领域，是否普遍性的拿“身高”作为 quality 的 variable？
+
+<blockquote class="white">
+**慧航**：所以文章里面也控制了父母身高。以身高作为 quality 的指标比较普遍，此外还有教育的投入。身高的决定除了遗传因素还有后天环境的因素，比如营养和运动，而营养是父母可以控制的。
+
+</blockquote>
+</blockquote>

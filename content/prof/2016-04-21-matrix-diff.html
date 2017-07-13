@@ -1,0 +1,83 @@
+---
+title: 矩阵求导 z
+date: 2016-04-21
+categories: ["6-经济 - 数学与动态"]
+tags: ["6-矩阵", "6-导数"]
+slug: matrix-diff
+---
+
+
+
+<p>矩阵求导好像读书的时候都没学过，因为讲矩阵的课程上不讲求导，讲求导的课又不提矩阵。如果从事机器学习方面的工作，那就一定会遇到矩阵求导的东西。<a href="http://en.wikipedia.org/wiki/Matrix_calculus">维基百科</a>上， 根据<span class="math inline">\(y,\pmb{y},Y\)</span>与<span class="math inline">\(x,\pmb{x},X\)</span>的不同类型（实值，向量，矩阵），给出了具体的求导公式，以及一堆相关的公式，查起来都费劲。</p>
+<!-- more -->
+<p><em>矩阵求导</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">类型</th>
+<th align="left">单值</th>
+<th>向量</th>
+<th align="left">矩阵</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">单值</td>
+<td align="left"><span class="math inline">\(\partial y/\partial x\)</span></td>
+<td><span class="math inline">\(\partial y/\partial x\)</span></td>
+<td align="left"><span class="math inline">\(\partial \pmb{y}/\partial Y\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">向量</td>
+<td align="left"><span class="math inline">\(\partial y/\partial \pmb{x}\)</span></td>
+<td><span class="math inline">\(\partial \pmb{y}/\partial \pmb{x}\)</span></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">矩阵</td>
+<td align="left"><span class="math inline">\(\partial y/\partial X\)</span></td>
+<td></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>其实在实际的机器学习工作中，最常用到的就是实值函数<span class="math inline">\(y\)</span>对向量<span class="math inline">\(\pmb{x}\)</span>的求导，定义如下（其实就是<span class="math inline">\(y\)</span>对向量<span class="math inline">\(\pmb{x}\)</span>的每一个元素求导）：</p>
+<p><span class="math display">\[
+\frac{\partial y}{\partial \pmb{x}}=
+\begin{bmatrix}
+    \dfrac{\partial y}{\partial  x_1}\\
+    \dfrac{\partial y}{\partial  x_2}\\
+    \vdots\\
+    \dfrac{\partial y}{\partial  x_n}
+\end{bmatrix}
+\]</span></p>
+<p>实值函数<span class="math inline">\(y\)</span>对矩阵<span class="math inline">\(X\)</span>求导也类似：</p>
+<p><span class="math display">\[
+\frac{\partial y}{\partial X}=
+\begin{bmatrix}
+          \dfrac{\partial y}{\partial   x_{11}} &amp; \dfrac{\partial y}{\partial   x_{12}}&amp; \cdots &amp;\dfrac{\partial y}{\partial   x_{1n}}\\  
+          \dfrac{\partial y}{\partial   x_{21}} &amp; \dfrac{\partial y}{\partial   x_{22}}&amp;\cdots &amp;\dfrac{\partial y}{\partial   x_{2n}}\\  
+          \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\  
+          \dfrac{\partial y}{\partial   x_{n1}} &amp; \dfrac{\partial y}{\partial   x_{n2}}&amp;\cdots &amp;\dfrac{\partial y}{\partial   x_{nn}}\\  
+\end{bmatrix}
+\]</span></p>
+<p>因为有监督的机器学习的一般套路是给定输入<span class="math inline">\(\pmb{x}\)</span>，选择一个模型<span class="math inline">\(f\)</span>作为决策函数，由<span class="math inline">\(f(\pmb{x})\)</span>预测出<span class="math inline">\(\hat{y}\)</span>。而要得到<span class="math inline">\(f\)</span>的参数<span class="math inline">\(\theta\)</span>，需要定义一个 loss 函数来定义当前的预测值<span class="math inline">\(\hat{y}\)</span>和实际值<span class="math inline">\(y\)</span>之间的接近程度，模型学习的过程就是求使得 loss 函数<span class="math inline">\(L(f(\pmb{x}),y)\)</span>最小的参数<span class="math inline">\(\theta\)</span>。这是一个最优化的问题，实际应用中都是用和梯度相关的最优化方法，如梯度下降，共轭梯度，拟牛顿法等等。为方便推倒有以下公式：</p>
+<p><span class="math display">\[
+\frac{\partial \beta^T\pmb{x}}{\partial \pmb{x}}  =\beta, \quad\frac{\partial \pmb{x}^T\pmb{x}}{\partial \pmb{x}}  =2\pmb{x}, \quad\frac{\partial \pmb{x}^T A\pmb{x}}{\partial \pmb{x}}  =(\mathbf{A}+\mathbf{A}^T)\pmb{x}
+\]</span></p>
+<p>其实只要掌握上面的公式，就能搞定很多问题了。</p>
+<p>为了方便推导，下面列出一些机器学习中常用的求导公式，其中 andrew ng 那一套用矩阵迹的方法还是挺不错的，矩阵的迹也是实值的，而一个实数的迹等于其本身，实际工作中可以将 loss 函数转化成迹，然后再求导，可能会简化推导的步骤。</p>
+<p><span class="math display">\[\text{tr}(a)=a\]</span> <span class="math display">\[\text{tr}(AB)=\text{tr}(BA)\]</span> <span class="math display">\[\text{tr}(ABC)=\text{tr}(CAB)=\text{tr}(BCA)\]</span> <span class="math display">\[\frac{\partial{\text{tr}(AB)}}{A}=B^T\]</span> <span class="math display">\[\text{tr}(A)=\text{tr}(A^T)\]</span> <span class="math display">\[\frac{\partial{\text{tr}(ABA^TC)}}{A}=CAB+C^TAB^T\]</span></p>
+<p>以上只是一些最基本的公式，能够解决一些问题，主要是减少大家对矩阵求导的恐惧感。关于矩阵方面的更多信息可以参考上面的 <a href="http://en.wikipedia.org/wiki/Matrix_calculus">wiki</a> 链接以及《Matrix cookbook》。</p>
+<div class="section level1">
+<h1>参考资料</h1>
+<blockquote>
+<p><strong>未完成工作</strong>：1, 3, 4 中的内容还有待进一步整理，事实上整理完成 1 中的内容就完全足够，但第 4 项中关于 Notation 的总结也不错。</p>
+</blockquote>
+<ol style="list-style-type: decimal">
+<li><a href="https://en.wikipedia.org/wiki/Matrix_calculus" class="uri">https://en.wikipedia.org/wiki/Matrix_calculus</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_8eac0b290101fsqb.html" class="uri">http://blog.sina.com.cn/s/blog_8eac0b290101fsqb.html</a></li>
+<li><a href="http://www.voidcn.com/blog/liuuze5/article/p-5037874.html" class="uri">http://www.voidcn.com/blog/liuuze5/article/p-5037874.html</a></li>
+<li><a href="http://blog.csdn.net/u012045426/article/details/52343676" class="uri">http://blog.csdn.net/u012045426/article/details/52343676</a></li>
+</ol>
+</div>

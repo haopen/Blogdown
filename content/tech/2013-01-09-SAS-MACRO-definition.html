@@ -1,0 +1,64 @@
+---
+title: SAS 定义宏的三种用法 z
+date: 2013-01-09
+categories: ["4-SAS"]
+tags: ["4-SAS", "4-Macro", "4-宏"]
+slug: 2013-01-09-sas-macro-definition
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="http://www.cda.cn/view/18718.html" class="uri">http://www.cda.cn/view/18718.html</a></p>
+<p>SAS 中定义宏变量方法主要有三种。</p>
+<!-- more -->
+<div id="let-" class="section level1">
+<h1><code>%LET</code> 定义</h1>
+<p>这是最常用的方法。语法过程为：</p>
+<pre><code>%let 宏变量名=值;</code></pre>
+<p>调用宏变量：</p>
+<pre><code>&amp;宏变量名</code></pre>
+<ol style="list-style-type: decimal">
+<li>以分号作为宏变量定义的结束。</li>
+<li>在定义时候不要加引号，系统会把引号当作宏变量的值之一。</li>
+<li>宏变量的作用域分为<code>全局</code>与<code>局部</code>。
+<ul>
+<li>一种在程序（这里一般是指一个宏程序）外定义，则在整个 SAS 任何地方都可以被调用。</li>
+<li>另外一种则是在程序内部，则作用在该程序出现宏变量后面，在程序外则不可以被调用，否则会出错。（如果一个程序内部定义有宏变量变成全局变量，则需要使用<code>%global</code>）</li>
+</ul></li>
+<li>当宏变量一个表达式，使用(感觉有错)：</li>
+</ol>
+<pre><code>%str()
+%let print=%str(proc print; run;);</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>如果宏变量是数值计算表达式，则需要根据数值类型使用二个不同的宏变量：</li>
+</ol>
+<pre><code>%eval_r()   用于计算整数例如：            %eval_r(1+2)
+%sysevalf() 用于计算浮点数或者空值，例如：%eval_r(1.0+2.3)</code></pre>
+</div>
+<div id="data--call-symput" class="section level1">
+<h1><code>data</code> 步中定义 <code>call symput()</code></h1>
+<p>这个方法只允许在<code>data</code>步中，这个一定需要注意。</p>
+<p>语法过程：</p>
+<pre><code>call symput(&quot;宏变量名&quot;,值);</code></pre>
+<p>在 DATA 过程中，宏变量可以包括常值、变量值。或者函数赋予宏变量。</p>
+</div>
+<div id="sql-" class="section level1">
+<h1>SQL 过程中定义</h1>
+<p>在使用 SQL 过程中定义宏变量,语法过程为：</p>
+<pre class="sql"><code>SELECT 宏值
+    INTO :宏变量名
+    SEPARATED BY &#39;分隔符号&#39;</code></pre>
+<p>使用一个案例过程说明，以后我们再详细介绍其中的一个技巧：</p>
+<pre class="sas"><code>data test;
+    input var @@;
+    datalines;
+    1 2 3 4 5
+    ;
+run;
+
+proc sql noprint ;
+    select var into :macro_var
+    separated by &#39; &#39;
+    from test;
+quit;</code></pre>
+</div>

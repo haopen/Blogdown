@@ -1,0 +1,65 @@
+---
+title: 结构模型中约束最优化的使用——纪念 Che-Lin Su - 慧航 - 专栏
+author: 慧航
+date: 2015-11-15
+categories: ["6-经济 - 数学与动态"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记", "6-最估化", "6-结构模型", "6-贝尔曼方程"]
+slug: che-lin-su
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://zhuanlan.zhihu.com/p/20146048" class="uri">https://zhuanlan.zhihu.com/p/20146048</a></p>
+<div class="figure">
+<img src="/images/Eco/ChelinSu.png" />
+
+</div>
+<p>这篇文章是之前在 <a href="http://www.zhihu.com/question/33950280/answer/57579092">Che-lin Su 在经济学上有哪些突出的研究成果？ - 慧航的回答</a>里面承诺过的。在这里我将介绍一下已逝的经济学家 Che-Lin Su 最重要的一篇文章，<a href="http://onlinelibrary.wiley.com/doi/10.3982/ECTA7925/abstract">《Constrained optimization approaches to estimation of structural models》</a>。 这篇文章很短，正文只有 16 页，然而任何优秀的论文都不是以页数论英雄的。</p>
+<p>在计算结构式模型的估计（structural estimation）的时候，计算的复杂度通常很大，而这种难度经常是由于各种不动点迭代（fixed-point iteration）造成的。典型的例子比如：</p>
+<ol style="list-style-type: decimal">
+<li>动态规划中求解 policy function</li>
+<li>求解一个 game 的 Nash equilibrium</li>
+<li>求解一个一般均衡</li>
+<li>BLP 中通过市场份额倒推产品特征的效用</li>
+</ol>
+<p>在这些例子里面都涉及到不动点的迭代。然而，考虑到当我们估计这个模型的时候，为了计算极大似然、广义矩估计，我们必须给定一个参数，做一次不动点迭代，然后计算目标函数值，再给定新的参数，再做不动点迭代，然后计算目标函数值。这个过程不停重复，最终最优化算法会收敛到最优点。</p>
+<p>然而这个过程是<code>非常非常耗费时间</code>的：本身不动点迭代就是非常耗费时间的，更何况外面还套着一层最优化的迭代。因而这种结构模型一般运算时间都非常的长。</p>
+<p>怎么办呢？Che-Lin Su 想出了一个办法：根本不需要进行不动点迭代，把他看成是一个最优化的约束就好了。而约束最优化是运筹学里面早就很成熟的方法。</p>
+<p>数学上的描述就是，给定参数<span class="math inline">\(\theta\)</span>、内生变量<span class="math inline">\(\sigma\)</span>，而给定参数，模型可以通过一阶条件、贝尔曼方程、市场均衡条件等计算出内生变量。假设这两个变量之间存在如下关系：</p>
+<p><span class="math display">\[h(\theta,\sigma)=0\]</span></p>
+<p>进而，我们观察到的数据为<span class="math inline">\(X=\{x,d\}\)</span>，其中<span class="math inline">\(x\)</span>为外生变量，<span class="math inline">\(d\)</span>为内生变量。</p>
+<p>在此之前的做法一般为不动点的迭代，即 NFXP（nested fixed-point）方法，即给定参数<span class="math inline">\(\theta\)</span>，求解<span class="math inline">\(\hat{\sigma}\)</span>，然后计算极大似然函数：</p>
+<p><span class="math display">\[\hat{\theta}=\arg\max_{\theta} \frac{1}{M}L(\theta,\hat{\sigma}(\theta);X)\]</span></p>
+<p>注意这里<span class="math inline">\(\hat{\sigma}\)</span>涉及到不动点迭代，再加上外面的最优化的迭代，迭代套迭代。</p>
+<p>而 Che-Lin Su 提出，实际上没必要这么麻烦，只要把不动点迭代的部分作为最优化的约束就好了：</p>
+<span class="math display">\[\begin{equation}
+\left\{
+\begin{aligned}
+&amp; \max_{(\theta,\sigma)}\; \frac{1}{M}L(\theta,\sigma;X)\\
+&amp; \begin{aligned}
+s.t.\;\; &amp; h(\theta, \sigma)=0
+\end{aligned}
+\end{aligned}
+\right.
+\end{equation}\]</span>
+<p>这样，虽然最优化的维数增加了，然而节省了不动点迭代的时间。而 Su 证明了，以上的两种方法都是<code>等价</code>的。</p>
+<p>在这篇文章中，Su 还给出了一个 dynamic discrete choice 模型的例子。</p>
+<p>考虑一个公共汽车公司正在考虑要不要更新汽车引擎的决策问题。其决策是一个离散变量，<code>d=1</code>为更换，<code>d=0</code>为不更换。公司在某一期的效用函数为：</p>
+<p><span class="math display">\[u(x,d,\varepsilon;\theta_1,RC)=\nu(x,d;\theta_1,RC)+\varepsilon(d)\]</span></p>
+<p><span class="math display">\[
+\nu(x,d;\theta_1,RC)=\left\{
+\begin{aligned}
+-c(x;\theta_1),\;\text{if}\,d=0\\
+-RC-c(0;\theta_1),\;\text{if}\,d=1
+\end{aligned}
+\right.
+\]</span></p>
+<p>其中<span class="math inline">\(x\)</span>为里程数，<span class="math inline">\(RC\)</span>为更换引擎的成本，<span class="math inline">\(c\)</span>为给定里程数汽车的运营成本，<span class="math inline">\(\theta\)</span>为参数。</p>
+<p>公司的决策并非静态的，实际上公司必须考虑其决策对未来的影响，或者说公司应该考虑是这一期换，还是下一期换？因而公司的决策是一个动态的最优化：</p>
+<p><span class="math display">\[\max_{d_t,d_{t+1},d_{t+2},\dotsc}\mathbb{E}\left[\sum^\infty_{\tau=t}\beta^{\tau-t}u(x_\tau,d_\tau,\varepsilon_\tau;\theta_1,RC)\right]\]</span></p>
+<p>而根据动态规划的方法，可以通过以上效用函数定义值函数（value function），进而得到贝尔曼方程（Bellman equation）：</p>
+<p><span class="math display">\[\mathrm{EV}(x,d)=\nu(x,d;\theta_1,RC)+\varepsilon(d)+\beta\int_{x^\prime}\mathrm{EV}(x^\prime)p_3(x^\prime+x,d;\theta_3)\,\mathrm{d}x^\prime\]</span></p>
+<p>这个贝尔曼方程是公司决策的核心，当更换引擎的<span class="math inline">\(\mathrm{EV}\)</span>大于不更换引擎的<span class="math inline">\(\mathrm{EV}\)</span>，公司就会选择更换引擎。</p>
+<p>而当我们看到数据，需要估计其中的参数时，逻辑是这样的：首先，给定一个参数的猜测，解出贝尔曼方程，得到公司的决策，再将这个预测的决策跟实际的决策比，如果足够接近，那么参数就对了，否则，按照一定规则，给出参数的新的猜测，继续比。</p>
+<p>然而，这里面每一次给出新的参数，都要重新计算一次贝尔曼方程，而传统上贝尔曼方程是通过 value function iteration 的方法得到的，本质上就是一个不动点的迭代，速度较慢。而使用 Su 的方法，以上的贝尔曼方程可以不用每次给定新参数就迭代计算，而是将其看成是最优化的一个约束。这样，虽然最优化的参数变多了，但是却节省了每一步不动点迭代的时间。</p>
+<p>最后，再次为这位年轻有为的经济学家哀悼。</p>

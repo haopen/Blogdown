@@ -1,0 +1,718 @@
+---
+title: 用 Hexo+Github 搭建博客平台
+date: 2017-04-17
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Github", "4-Hexo", "4-Markdown", "4-Mathjax", "4-LaTeX", "4-Pandoc"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: hexo
+---
+
+参考内容：<http://qjzhixing.com/2015/08/26/>
+
+> **提醒**：出现其他任何的问题，先删除博客目录下的`db.json`文件，然后清理再部署远程博客，操作时输入以下的命令
+```bash
+hexo clean
+hexo d -g
+```
+
+# 为什么选择 Hexo
+## 优点
+- **速度**：目前^[2017.5.28]还不清楚 Hexo 在文章数量较多时的速度如何，但可以肯定 Hexo 的速度虽然比 Jekyll 要快得多（虽然与 Hugo 相比还是有较大差距）；
+- **实时刷新**：通过命令`hexo -s`启动服务，接下来对内容文件进行任何更新都可以直接在浏览器中直接刷新看到更新后的结果；
+- **站内搜索**：在 NexT 主题可以轻松实现内建的搜索功能；
+- **Mathjax**：可以通过`hexo-renderer-pandoc`实现 Markdown 和 Mathjax 的良好兼容（不清楚 Hugo 中如何使用 Pandoc）；
+
+<!-- more -->
+
+值得一提的是，Hexo 默认的 Markdown 渲染插件`hexo-renderer-marked`功能较弱，与 Mathjax 的兼容也不太好^[可以通过 Hack `mark.js`的方式做一些简单的优化，参考本文中相关内容或者<http://shomy.top/2016/10/22/hexo-markdown-mathjax/>。]，虽然[`hexo-renderer-kramed`](http://shomy.top/2016/10/22/hexo-markdown-mathjax/)在`hexo-renderer-marked`的基础上完善了对 Mathjax 的支持，但在功能方面与`hexo-renderer-markdown-it`相比还是太弱，可惜`hexo-renderer-markdown-it`与 Mathjax 的兼容性也不太好，并且这个插件非常复杂，通过 Hack 方式改进对 Markdown 的支持也没有好的方案可以借鉴。
+
+总的来讲，Pandoc 的效果是最好的^[Pandoc 生成的脚注编号中, `sup`在`a`之中，虽然修改`a`的`display`为`inline-flex`或`inine-grid`可以移动`a`的下划线位置，但会导致`hover`背景颜色失效，因此暂时不修改编号的链接效果，<https://github.com/jgm/pandoc/issues/2583>的讨论表明这个问题还没有正式的解决方案。]，唯一的缺点是需要单独安装 Pandoc，但考虑到只是将转换好的静态文件发布到 Github，这一缺点也基本上可以忽视。
+
+## (可能的)缺点
+- 没有直接的方法将`_post`下的源文件按类别存放到不同的子目录中，但是 Hugo 可以；
+- 内建的内容汇总文件`db.json`将来可能会非常大，同步到 Github 可能会比较慢，博客内建的搜索功能也可能会变得非常慢；
+- `hexo-renderer-pandoc`不支持 emoji 表情插件，但`hexo-renderer-markdown-it`中的子插件`markdown-it-emoji`支持文本字符类型的表情；
+
+# 安装与配置
+
+## 步骤简介
+
+1. 搭建**本地**博客：在电脑上安装**Git**、**Node.js**和**Pandoc**，利用简单的命令安装好**Hexo**；
+2. 安装并配置**NexT**主题：[演示](http://notes.iissnan.com/2015/something-about-next/)、[使用文档](http://theme-next.iissnan.com/getting-started.html)、[主题文档](https://github.com/iissnan/hexo-theme-next)；
+3. 部署克隆版分站点；
+4. 部署**远程**博客；注册一个Github账号，然后在上面创建一个Repository，简单配置一下，博客的基本框架就建立好了；
+
+## 搭建本地博客
+
+### 软件安装
+
+1. 安装[Git](http://git-scm.com/)：安装过程一路默认即可，安装好后，单击右键就会多出两个Git的按钮；
+2. 安装[Node.js](https://nodejs.org/)：可以一路默认，需要的话也可以更改一下安装的路径；
+3. 安装 Hexo：[中文文档](http://wiki.jikexueyuan.com/project/hexo-document/)、[英文文档](https://hexo.io/docs/)；Hexo 的安装需要借助 Node.js 的`npm`命令，可以理解为 Hexo 是 Node.js 的模块。操作的方式是在任意的位置单击鼠标右键，选择`Git bash`命令，在里面输入：
+```
+npm install -g hexo-cli
+```
+
+卸载的话，将上面命令中的`install`替换成`uninstall`即可执行卸载。
+
+### 博客平台搭建
+
+1. 创建 Hexo 文件夹
+
+`Hexo`文件夹就是博客的文件夹，用于存放全部相关文件（但只有静态生成的文件必需上传到远程 Repository）。
+
+  - 第一步先在某个盘符下新建一个文件夹，重命名（英文字母），假设是在`D`盘下建立了一个名叫`Hexo`的文件夹，那么路径就是`D:\hexo` （后续的操作大多在这个文件夹里进行）；
+  - 第二步进入Hexo文件夹单击右键，依旧选择`Git bash`这一命令，输入以下命令，博客所需要的文件都已经自动建立好了，这比jekyll操作简单多了：
+
+```
+hexo init
+```
+
+2. 安装依赖包
+
+```
+npm install
+```
+
+为保证下一环节远程部署成功，还需要执行如下命令：
+
+```
+npm install hexo-deployer-git --save
+```
+
+3. 预览本地博客
+
+一系列的安装命令之后，本地博客就算搭建好了，输入如下的命令，然后在浏览器地址栏中输入[`http://localhost:4000`](http://localhost:4000)或者[`http://127.0.0.1:4000`](http://127.0.0.1:4000)就可以查看本地博客。
+
+```
+hexo g
+hexo s
+```
+
+上面的命令中，`hexo g`用于生成静态文件，`hexo s`用于创建 Web 服务器，这两条命令可以合并写为一条：
+```
+hexo s -g
+```
+
+## 安装 NexT 主题
+1. 推荐先备份`_config.yml`文件；
+2. 进入到`hexo`的目录，启动`Git bash`，输入以下面的命令 Clone 主题：
+
+```
+$ cd your-hexo-site
+$ git clone https://github.com/iissnan/hexo-theme-next themes/next
+```
+
+3. 在`_config.yml`中修改`theme`取值为`next`；
+4. 在`\hexo\themes\next\_config.yml`中修改与主题相关的设置；
+
+## 修改博客配置 site: _config.yml
+
+### 修改配置文件
+1. 修改`Site`段相关内容，包括`title, author, language`等，其中`language`取值为`zh-Hans`；
+2. 参考 2.3 修改`theme`取值为`NexT`；
+3. 修改`deploy`段内容为：
+
+```
+deploy:
+  type: git
+  repository: https://github.com/peng-howard/lives.git
+  branch: master
+```
+
+其中 repository 为`lives`，本人的主页面`https://peng-howard.github.io/`是用 Jekyll 生成的（直接在 GitHub 上修改`index.html`似乎不起作用），因此这里将`lives`相关内容作为主页面的一个分页面站点存在。如果是部署到 GitHub Pages 的主页面，则使用如下命令：
+
+```
+  repository: https://github.com/peng-howard/peng-howard.github.com.git
+```
+
+4. 设定本人的社交信息及友情链接等：
+
+```
+social:
+  GitHub: https://github.com/your-user-name
+  Twitter: https://twitter.com/your-user-name
+  微博: http://weibo.com/your-user-name
+  豆瓣: http://douban.com/people/your-user-name
+  知乎: http://www.zhihu.com/people/your-user-name
+
+social_icons:
+  enable: true
+  # Icon Mappings.
+  # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
+  GitHub: github
+  Twitter: twitter
+  Weibo: weibo
+  微博: weibo
+
+# 友情链接
+# Blog rolls
+links_title: 友情链接
+#links_layout: block
+#links_layout: inline
+links:
+  MacTalk: http://macshuo.com/
+  Title: http://example.com/
+```
+
+5. 设定每页文章显示篇数
+
+第一步：安装相关插件（~~**不必安装**~~：在安装完相关依赖包以后不再安装也是正常的，已经验证）
+
+```
+npm install --save hexo-generator-index
+npm install --save hexo-generator-archive
+npm install --save hexo-generator-tag
+```
+
+第二步：安装完插件后，在站点配置文件中，添加如下内容
+
+```
+# index 为首页的每页数量
+# archive 是存档页每页数量
+# tag 不知道在哪里起作用
+
+index_generator:
+  per_page: 10
+archive_generator:
+  per_page: 50
+  yearly: true
+  monthly: true
+tag_generator:
+  per_page: 15
+
+# 下面的 Pagination 是分类中，每个分类的目录页面中单页的文章数量
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 50
+pagination_dir: page
+```
+
+`index, archive`及`tag`开头分表代表主页，归档页面和标签页面。其中`per_page`字段是希望设定的显示篇数。
+
+6. 修改`new_post_name`取值为`:year-:month-:day-:title.md # File name of new posts`，这样生成的文件名称不包含年月日部分。
+
+### 添加一级页面
+1. 生成 RSS 文件`atom.xml`，首先执行如下命令安装插件：
+
+```
+npm install hexo-generator-feed --save
+```
+
+然后在主配置文件中添加如下内容：
+
+```
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+```
+
+2. 添加标签（tags）页面，首先执行如下命令：
+
+```
+$ cd your-hexo-site
+$ hexo new page tags
+```
+
+**注意**：(1) 其中第一条命令可以不执行，改为先进入 blog 文件所在文件夹，再右键调出`Git`命令行，然后直接执行第二条命令；(2) `hexo new page`是建立一个新的文件夹，并在其中加入一个`index.md`文件，相当于新建一个分站点，而`hexo new "..."`是建立一篇新的文章。
+
+生成相关文件后，到`source/tags`目录下修改`index.md`文件为如下内容：
+
+```
+---
+title: 标签
+date: 2014-12-22 12:39:04
+type: "tags"
+comments: false
+---
+```
+
+3. 添加分类页面：
+
+```
+$ hexo new page categories
+```
+
+然后修改相关文件为如下内容：
+
+```
+---
+title: 分类
+date: 2014-12-22 12:39:04
+type: "categories"
+comments: false
+---
+```
+
+### 重要功能插件
+1. 站内搜索
+
+在主目录中执行如下命令：
+
+```
+$ npm install hexo-generator-searchdb --save
+```
+
+在主配置文件中添加如下内容：
+
+```
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+```
+
+在主题配置文件修改如下内容：
+
+```
+local_search:
+  enable: true
+```
+
+在实际使用中，站内搜索要输入两个以上的字才会有搜索结果，并且可能会搜索不到内容。
+
+2. 为各级标题添加编号
+
+根据<http://www.tuicool.com/articles/7BnIVnI>，Hexo 的 NexT 主题在右侧的导航栏中可以自动给各级标题添加编号，这利用了 Hexo 3 的一个最新功能，但是正文中却无法使用，因此这里用命令
+
+```
+cnpm install hexo-heading-index --save
+```
+
+安装`hexo-heading-index`命令，之后在主站点的`_config.yml`中添加如下内容：
+
+```
+heading_index:
+  enable: true
+  index_styles: "{1} {1} {1} {1} {1} {1}"
+  connector: "."
+  global_prefix: ""
+  global_suffix: " "
+```
+
+之后设定 NexT 主题配置文件`_config.yml`中的
+
+```
+toc:
+  enable: true
+
+  # Automatically add list number to toc.
+  number: false
+```
+
+`number`取值为`false`，这样在启动正文各级标题编号的同时，关闭右侧导航栏中的重复编号。
+
+需要注意的是，Hexo 的正文标题虽然用了`h1`标记，但来自于头文件中的`title`项。
+
+正文中建议仍然以`#`开始第一级标题，否则标题的编号可能会出现意想不到的错误，比如`{1}`对应的一级标题实际上会是`0`，如果改成`{0}`，又会在一级编号前出现一个`-`。
+
+另外这个包的`index_styles`中，一级的编号设定是必需的，其它级是可选的，希望将来一级可以选择为空。
+
+3. `hexo-renderer-pandoc`的 Markdown 渲染
+
+Hexo 首先用配置文件`config.yml`和安装的 Markdown 渲染插件对应的 Markdown 解释器对`.md`文件进行处理，之后 Mathjax 或者其它在线 LaTeX 解释器再根据 Markdown 生成的结果解释其中的公式内容。考虑到 Hexo 自带的`hexo-renderer-marked`，基于该插件的 LaTeX 修正版`hexo-renderer-kramed`功能较弱，另一个解释器`hexo-renderer-marked-it`虽然功能很强，但是和 LaTeX 的兼容不太好，在参考<http://shomy.top/2016/10/22/hexo-markdown-mathjax/>之后，最终决定使用`hexo-renderer-pandoc`作为`.md`文件的解释器。
+
+- 到 [Pandoc 官方站点](http://pandoc.org/installing.html) 下载并安装 Pandoc^[RStudio 的 Pandoc 只在 RStudio 中使用。]；
+- 卸载默认的 Markdown 解释器并安装`hexo-renderer-pandoc`：
+
+```
+cnpm uninstall hexo-renderer-marked --save
+cnpm install hexo-renderer-pandoc --save
+```
+
+- 根据<https://github.com/wzpan/hexo-renderer-pandoc>的提示，在站点的配置文件中，将 Markdown 部分的内容替换为`hexo-renderer-pandoc`的默认配置：
+
+```
+pandoc:
+  filters:
+  extra:
+  meta:
+  mathEngine:
+```
+
+- 考虑到没有空格的多行在一起组成一个段落时，CJK 类文本处理与英文不一样（后者之间将换行转换成一个空格），需要开启 Pandoc 的`east_asian_line_breaks`扩展，具体方法是修改`hexo-renderer-pandoc`的`index.js`，将其中的
+
+```
+var args = [ '-f', 'markdown', '-t', 'html', math, '--smart']
+```
+
+替换成^[这里替换的思路来自<https://github.com/wzpan/hexo-renderer-pandoc>。]
+
+```
+var args = [ '-f', 'markdown+east_asian_line_breaks', '-t', 'html', math, '--smart']
+```
+
+最后，重新启动 Git 命令行，再重新启动 Hexo 服务就可以正常工作。
+
+4. ~~Markdown 编译器的设定~~（**不再使用**）
+
+本部分除`fix-cjk`外，marked 配置部分不再使用，改用 markdown-it 进行解释，详细参考下面第 5 点。最新进展：markdown-it 与 Mathjax 的兼容性也不太好，改为使用 pandoc 进行 md 的解释，并且 pandoc 中提供了 cjk space 问题的修正，因此 fix-cjk 也不再使用，具体配置见上面第 3 点。
+
+> **问题**^[用 Pandoc 进行解释，这个问题已经得到解决。]：下面的设置保证 Markdown 中连着的两行不会被解释成为`<br/>`，但是换行变成了`空格`？（来自<https://wwssllabcd.github.io/blog/2014/12/22/how-to-install-hexo/>）
+
+由於新版的`Hexo`使用`hexo-renderer-marked`來控制`Markdown`，而所以还要再调整一下，在站点配置文件中，添加如下内容：
+
+```
+# fix_cjk_spacing: false  # false 时停用 cjk 换行 - 空格 修正
+# https://github.com/hexojs/hexo-renderer-marked
+# breaks 遇到 CJK 字符时，会将换行符转成一个空格
+# https://github.com/lotabout/hexo-filter-fix-cjk-spacing/issues/1
+#          提供的方案可以部分修正这个问题，但要更新 npm 包到最新
+marked:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: false
+  smartLists: true
+  smartypants: false
+  modifyAnchors: ''
+  autolink: false
+```
+
+确保其中`breaks`是为`false`，此时`fix_cjk_spacing`才会处于工作状态；另外还可以设定`fix_cjk_spacing: false`以禁用这一修正功能（特别是纯英文的 blog）。
+
+但需要注意的是，`fix_cjk_spacing`可能会出现如下的错误：
+
+```
+$ npm install hexo-filter-fix-cjk-spacing --save
+hexo-site@0.0.0 D:\GitHub\stylus
+-- hexo-filter-fix-cjk-spacing@0.0.3
+
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@^1.0.0 (node_modules\chokidar\node_modules\fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.1.1: wanted {"os":"darwin","arch":"any"} (current: {"os":"win32","arch":"x64"})
+```
+
+根据 <https://github.com/npm/npm/issues/14042> 提供的信息，对`npm`降级或者将`npm`升级到最新版本可以解决这个问题，这里选择升级`npm`。由于国内升级`npm`可能无法成功，因此根据<https://npm.taobao.org/>的说明，安装命令`cnpm`：
+
+```
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+```
+
+之后用淘宝的镜像更新`npm`（当然，还可以更新`cnpm`本身，这个命令与`npm`实质上是相同的，只是镜像在淘宝）：
+
+```
+cnpm install -g npm
+```
+
+安装`fix_cjk_spacing`也可以：
+
+```
+cnpm install hexo-filter-fix-cjk-spacing --save
+```
+
+之后运行`hexo`相关命令就不会再出错。
+
+5. ~~Markdonw-it、脚注、表情设置~~（**不再使用**）
+
+Hexo 的文章内容默认是不支持 emoji 表情的，作为一个有逼格的码农，怎么少得了丰富的表情语言，下面的内容介绍怎么支持 emoji。
+
+Hexo 默认的 markdown 编译插件是[hexo-renderer-marked](https://github.com/hexojs/hexo-renderer-marked)，看了一下相关文档，好像没办法支持 emoji，还好在 Hexo 的[plugins](https://hexo.io/plugins/)页，我们找到了另外一个 markdown 插件[hexo-renderer-markdown-it](https://github.com/celsomiranda/hexo-renderer-markdown-it)，而且号称速度比默认的还要快，最主要的是，在[markdown-it](https://github.com/markdown-it/markdown-it)的文档里面，我们发现它可以通过 plugins 的方式支持[emoji](https://github.com/markdown-it/markdown-it-emoji)。
+
+下面我们就来替换 markdown 插件，首先进入博客的主目录（stylus）
+
+``` bash
+cnpm un hexo-renderer-marked --save
+cnpm i hexo-renderer-markdown-it --save
+```
+
+不过此时的 hexo-renderer-markdown-it 还是用不了 emoji 的，我们需要加上 emoji 的 plugin
+
+``` bash
+$ cd node_modules/hexo-renderer-markdown-it/
+$ cnpm install markdown-it-emoji --save
+```
+
+然后编辑 Hexo 的配置文件`_config.yml`
+
+```
+# fix_cjk_spacing: false  # false 时停用 cjk 换行 - 空格 修正
+# https://github.com/hexojs/hexo-renderer-marked
+# breaks 遇到 CJK 字符时，会将换行符转成一个空格
+# https://github.com/lotabout/hexo-filter-fix-cjk-spacing/issues/1 提供的方案可以修正这个问题，但要更新 npm 到最新
+# MD-it 对 html 中的内容不起作用，但是 cjk-fix 会起作用
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: false
+    linkify: true
+    typographer: false
+    quotes: '“”‘’'
+  plugins:
+    - markdown-it-footnote
+    - markdown-it-sup
+    - markdown-it-sub
+    - markdown-it-abbr
+    - markdown-it-emoji
+  anchors:
+    level: 1
+    collisionSuffix: 'v'
+    permalink: false
+    permalinkClass: header-anchor
+    permalinkSymbol: ¶
+```
+
+- 与 Hexo 默认的 Markdown 引擎相比，这个引擎要严格一些：默认的引擎可以解释 html 中的 md 部分，但这个引擎在遇到 html 中的 md 时，会跳过去。
+- 注意上面的`xhtmlOut`用于确保Markdown转换结果符合xhtml的规范；`typographer`为`true`用于确保`”“`以及`’‘`会自动被纠正为`“”`和`‘’`。
+- MD-it 对 html 中的内容不起作用，但是 cjk-fix 会起作用，为了使用`<pre class="center">`及`<pre class="white">`，在`lives`中禁用了`fix_cjk`功能。
+- 关键就是在 plugins 里加上`- markdown-it-emoji`，其他的配置说明可以参见[wiki](https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki/Advanced-Configuration)。
+- 重启Hexo服务，即可生效，这里输入`:smile: :smirk: :relieved:`就可以显示表情符号，当然直接输入表情也是可以的，具体参考<https://github.com/markdown-it/markdown-it-emoji>。
+- 表情的安装参考上面的命令，而脚注确定不需要再安装任何包，下面是脚注的例子：
+
+```
+Here is a footnote reference,[^1] and another.[^longnote]
+ 
+[^1]: Here is the footnote.
+ 
+[^longnote]: Here's one with multiple blocks.
+ 
+    Subsequent paragraphs are indented to show that they
+belong to the previous footnote.
+```
+
+这个例子中，“Subsequent...”也是脚注的一部分，因此脚注的结束符号将在“footnote.”之后。
+
+下面是一个 inline 的例子：
+
+```
+Here is an inline note.^[Inlines notes are easier to write, since
+you don't have to pick an identifier and move down to type the
+note.]
+```
+
+## 修改主题配置 NexT: _config.yml
+
+1. 设定`mathjax`取值为`true`，打开 LaTeX 公式支持；
+2. 设定`use_motion`取值为`false`，关闭页面加载时的动画效果，配置文件中提到`5.0.0 及更低版本中，侧栏在 use motion: false 下不会展示`，这一说法没有具体印证；
+3. 设定`scrollpercent`取值为`true`，这样在滚动页面时，右下角会出现当前页面所在位置的百分比；
+4. 制作头像图片，保存为`source/images/avatar.png`，设定主题配置文件中`avatar`取值为`/images/avatar.png`；
+5. 设定`display`取值为`hide`，这样右侧边栏在页面加载时默认关闭，只能通过手工方式加载；
+7. 设定`since`取值为`2005`；
+8. 到<https://disqus.com/admin/>生成一个 shortname，并加入到主题配置文件中。现有网页上说的在右上角设置中生成的方法打不开；
+9. 删除`themes\next\layout\_macro\post.swig`中的`&raquo;`，只保留“阅读全文”这四个字；
+
+## 修改博客的 CSS
+
+### 模板调整记录
+
+1. 修改`theme/next/source/css/_variables/custom.styl`文件，添加如下内容：
+
+```
+// 修改成你期望的宽度
+$content-desktop = 700px
+
+// 当视窗超过 1600px 后的宽度
+$content-desktop-large = 960px
+```
+
+实际上本人在`theme/next/surce/css`中增加了一个`haopeng.styl`，并将其`import`到`main.styl`，用于添加自定义的具体样式内容，工作原理与`custom.styl`文件非常接近。
+
+2. 在`next/source/css/_variables/base.styl`中，将`$head-bg`设定为`transparent`。
+
+3. 修改了页脚模板文件中的文字内容（`\themes\next\layout\_partials\footer.swig`）；
+
+4. `themes\next\languages`中有对应的语言，注意关键词的名称是英文，可以在语言文件中修改或添加关键字，在主题配置文件中修改关键字对应的图标，<http://fontawesome.io/icons/>列出了全部可用的图标，考虑到最近一次修改的模板中不再使用图标，这一条的作用就暂时不再重要。
+
+5. 修改`next/layout/_macro/post-collapse.swig` 27 行的 date 的格式，添加年份，这样分类和归档页的标题中就包含年份，同时调整分类和标题页中的 css 的缩进。
+
+6. 在`next/layout/_macro/post.swig`中，将`post-footer`中的tag处的`#`改成图标效果：
+
+```
+<i class="fa fa-fw fa-tag"></i>
+```
+
+### 自定义样式文件调整记录
+
+其它要修改的内容都在`haopeng.styl`中，需要注意的是：(1) 一些CSS属性可能无法被覆盖，此时在指令后面加` !important`强制覆盖；(2) 一部分下划线是通过`background-color`实现的，另一些是通过`border-bottom`实现的，因此需要根据实际情况做修改；(3) 主页与正文中的文章标题样式名称不相同，要分别修改；(4) 文章标题的文字大小只能通过` !important`修改；(5) 存档目录页中的文章标题与时间在水平方向没对齐，这与修改了文章标题的文字大小有关，很难调整，最后是通过调整如下内容才做到的：
+
+```
+/* 存档页中文章标题与时间对齐 */
+.post-title-link span {
+	display: block;
+}
+```
+
+2. 分类页中文章数量用了浮动体样式；
+
+3. 将背景图片放置到`themes/next/source/images`中，然后在自定义文件中加入如下内容：
+
+```
+body { background: url(/images/bg.png) repeat; }
+```
+
+4. 博客的页脚使用了 Galdeano 字体，原始的方法是通过 NexT 主题配置文件`_config.yaml`下的 global 字段修改字体，这种方法会在线调用 Google 的远程字体。但这种方法有两个问题，一是放两种字体需要通过语法实现：`family: font1|font2`，这种语法对应到`fonts.googleapis.com`的查询字符串时，通过`|`指定两种字体（如果字体名称有空格，用`+`），但这种做法会导致正文、标题加载时将这两个字体组成的名称当成一个字体名称，这不是我们正常情形需要的，如果我们只指定一种字体，我们也可能不希望 NexT 自动把相关字体做全局修改。第二个问题是这样需要在线加载字体，即使通过<fonts.useso.com>加载可以提高速度，也未必是我们想要的做法，谁知道将来 360 会不会停止这一服务。
+
+这里推荐的做法是生成本地字体并加载：
+
+- 从<https://gist.github.com/dotJoel/7326331>找到`Galdeano`字体 ttf 文件的下载地址并下载该文件；
+- 到<https://www.fontsquirrel.com/tools/webfont-generator>，上传下载的字体并生成不同浏览器需要的字体文件；
+- 将字体文件放到`themes\next\source\lib\font-Galdeano`之中，由于这里将`lives`。当成站点下的子目录，因此这些文件实际上是放在`\lives\themes\next\source\lib\font-Galdeano`里面（根据实际情况自己放置）。
+
+需要说明的是，上面的 css 内容没有选择用<https://segmentfault.com/q/1010000005679305>中介绍的用`https://fonts.googleapis.com/css?family=Galdeano`里面的内容，这种方法只包含了`woff2`文件，IE 下无法看到字体效果。而是主要选择用<http://smartgrid.ac.cn/63.html>提供的方法，根据下面的代码结合<https://www.fontsquirrel.com/tools/webfont-generator>中提供的 css 文件：
+
+```
+@font-face {
+font-family:'Tangerine-b';
+    src: url('./font/Tangerine_Bold.eot');
+    src: url('./font/Tangerine_Bold.eot?#iefix') format('embedded-opentype'),
+         url('./font/Tangerine_Bold.woff') format('woff'),
+         url('./font/Tangerine_Bold.ttf') format('truetype'),
+         url('./font/Tangerine_Bold.svg#tangerinebold') format('svg');
+}
+```
+
+修改后，在`haopeng.styl`中添加如下代码：
+
+```
+/* latin */
+@font-face {
+  font-family: 'Galdeano';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/lives/lib/font-Galdeano/galdeano-webfont.woff2') format('woff2'),
+       url('/lives/lib/font-Galdeano/galdeano-webfont.woff') format('woff');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+```
+
+原因是生成的文件中没有`eot, svg`类文件。
+
+5. 在线的思源宋体加载
+
+在 2017.5 时，参考谢益辉的博客，将博客的主字体换成思源宋体，这个过程除了在`haopeng.styl`中添加样式的支持外，还需要：
+
+- 在`next/layout/_partials/head.swig`添加从谢站点上下载的`load-typekit.js`文件，
+
+```
+<script async src="/stylus/js/load-typekit.js"></script>
+```
+
+> **说明**：不使用注册 Adobe 的 Typekit 服务时提供的代码的原因是上面的脚本不仅能够实时加载思源宋体，还可以在加载之前先判断客户端是否已经安装思源宋体。Adobe 使用的 ID 需要在 VPN 下到 Adobe Typekit 注册，邮箱是`haopeng.yn@gmail.com|1A`，用 Chrome 提供的翻墙功能注册后无法得到字体服务。
+
+- 将`load-typekit.js`复制到合适的位置，将其中的`kitid`改成这里的`oqz0fck`，这个来自注册时候提供的信息。
+
+6. Pandoc 生成的脚注编号中，`sup`在`a`之中，虽然修改`a`的`display`为`inline-flex`或`inine-grid`可以移动`a`的下划线，但会导致`hover`背景颜色失效，因此暂时不修改编号的链接效果，这与谢益辉的博客中`sup`和`a`的顺序刚好相反。（https://github.com/jgm/pandoc/issues/2583）
+
+7. 其它 CSS 内容的修改非常多，所以这里不再一一解释。
+
+# 远程部署
+
+1. 在 GitHub 上先新建一个 Repository（Public，不需要修改任何设置），然后在站点文件夹中用
+
+```
+hexo d
+```
+
+上传相关文件到远程。上传完成后，再到 GitHub 的 Repository 的设置中修改`GitHub Pages`中的`Source`为`master branch`，这样就可以成功启动博客。在这个过程中可能会调出一个登陆 GitHub 的窗口，输入用户名和密码即可。
+
+由于之前已经配置过 SSH，因此上面不涉及这个过程。
+
+2. 配置 SSH（新机器可能需要）
+
+检查是否已经有 SSH Key，打开 Git Bash，输入
+
+```
+cd ~/.ssh
+```
+
+如果没有这个目录，则生成一个新的 SSH，输入
+
+```
+ssh-keygen -t rsa -C "your e-mail"
+```
+
+其中，your e-mail 是注册 Github 时用到的邮箱。然后接下来几步都直接按回车键，最后生成相关内容文件。
+
+复制公钥内容到 Github 账户信息中
+
+打开`~/.ssh/id_rsa.pub`文件，复制里面的内容；
+
+打开 Github 官网，登陆后进入到个人设置(点击头像 -> `setting`)，点击右侧的`SSH Keys`，点击`Add SSH key`；填写`title`之后，将之前复制的内容粘贴到`Key`框中，最后点击`Add key`即可。
+
+测试 SSH 是否配置成功，输入
+
+```
+ssh -T git@github.com
+```
+
+如果显示以下，则说明 SSH 配置成功。
+
+    Hi username! You've successfully authenticated, but GitHub does not provide shell access.
+
+3. 克隆子栏目
+
+直接复制文件夹，新建 Repository 就可以。记得修改 CSS 中背景图片的位置，修改主题配置中站点的目录，修改主配置中的相关信息，修改模板等。
+
+一个特殊的问题是，在`node_modules`发现了以`stylus`为名称的子文件夹，这说明最初生成 Hexo 站点子目录`stylus`时，写入了一些特殊信息，但直接复制这个文件夹似乎没有给另一个子站点`lives`造成不良影响。
+
+# 应用问题
+
+1. 不要用`NexT`官方文档中的居中对齐样式，要居中自己直接用 HTML 实际就好；
+2. 通过各种方法添加虾米音乐的外链播放都不成功，感觉是被禁止了；
+3. 多个标签用`[...,...]`；
+4. `Hexo`的四个主要命令：
+
+```
+hexo g = hexo generate  #生成
+hexo s = hexo server  #启动本地预览
+hexo d = hexo deploy  #远程部署
+hexo n "文章标题" = hexo new "文章标题"  #新建一篇博文
+```
+
+其中前三个命令经常组合用：
+
+```
+hexo s -g
+hexo d -g
+```
+
+奇怪的是在部署到远程时，出现过失效的现象，建议直接删除`_public`文件夹，再重新生成页面，最后再部署，即生成和部署分开进行。更保险的做法是`hexo clean`之后，再重新生成文件并部署。
+
+5. 将来新安装机器时，怎么做到用现有的文件进行覆盖安装还没有想通（一个可能的问题是基础平台、博客平台、主题都会有更新，当然在安装完 Git 和 Node.js 之后，其它内容可能都在站点子目录中，可以尝试直接覆盖这部分内容），不同机器内容的同步也没有好的方法。
+
+6. Mathjax 支持带编号的公式
+
+在原有的`themes\next\layout\_third-party.mathjax.swig`中添加如下内容：
+
+```javascript
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	"HTML-CSS": {linebreaks: {automatic: true}},
+	SVG: {linebreaks: {automatic: true}}
+});
+</script>
+```
+
+之后可以像 LaTeX 一样添加`\label{}`以及`\eqref{}, \ref{}`。
+
+7. ~~Mathjax 与 Markdown 的冲突~~（**用 Pandoc 后，不再存在**）
+
+**原文地址**：http://blog.csdn.net/emptyset110/article/details/50123231
+
+Hexo 先用`marked.js`渲染，然后再交给 MathJax 渲染。在`marked.js`渲染的时候下划线`_`是被 escape 掉并且换成了`<em>`标签，即斜体字，另外 LaTeX 中的`\\`也会被转义成一个`\`，这样会导致 MathJax 渲染时不认为它是一个换行符了。
+
+修改`marked.js`源码的方式来避开这些问题 
+
+- 针对下划线的问题，取消`_`作为斜体转义，因为`marked.js`中`*`也是斜体的意思，所以取消掉`_`的转义并不影响我们使用markdown，只要我们习惯用`*`作为斜体字标记就行了。 
+- 针对`marked.js`与Mathjax对于个别字符二次转义的问题，我们只要不让`marked.js`去转义`\\,\{,\}`在MathJax中有特殊用途的字符就行了。 
+
+具体修改方式，用编辑器打开`marked.js`（在`./node_modules/marked/lib/`中）
+
+```
+escape: /^\\([\\`*{}\[\]()# +\-.!_>])/,1
+em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,1
+```
+
+替换成：
+
+	escape: /^\\([`*\[\]()# +\-.!_>])/,1
+	em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,

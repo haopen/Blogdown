@@ -1,0 +1,154 @@
+---
+title: 消失的长期投资：为什么没有更多的早期抗癌药物？（Innovation系列） - 慧航 - 专栏
+author: 慧航
+date: 2015-07-02
+categories: ["6-经济 - 产业"]
+tags: ["6-慧航", "6-知乎专栏", "6-文献笔记", "6-研发", "6-医药"]
+slug: underinvest-in-long-term-research
+---
+
+
+
+<p><strong>原文地址</strong>：<a href="https://zhuanlan.zhihu.com/p/20095600" class="uri">https://zhuanlan.zhihu.com/p/20095600</a></p>
+<div class="section level1">
+<h1>引言</h1>
+<p>许多技术创新，不仅仅能为企业带来丰厚的利润，也具有极高的社会价值。如何鼓励企业在社会价值高的项目上投资更多，对于政策制定者而言，是一个难题。</p>
+<p>时任哈佛商学院教授的 Jeremy Stein 提出<strong>市场短视理论</strong>，即在<code>自由市场中，企业会选择短期获利大但价值不高的项目进行投资。由于长期投资项目不能准确被市场估值，企业管理层为了避免潜在的股东财富损失，更加倾向于短期效益高，容易被市场估值的项目</code>。</p>
+<p>这种短视行为对于研发型企业意义深远。研发型企业，例如制药业，经常面临短期项目和长期项目的选择。长期项目的劣势对于制药业显而易见，从最开始的新药研发，到获得专利批准，再到临床实验结束，新药获得药监局审批上市，商品化滞后周期可以长达十年。过长的商品化周期意味着效益很难在短期内收回，投资项目也难以被估值。</p>
+<p>另外一个被忽略的难题是现行的专利制度。在现有的规定下，专利保护期限由申请日开始算起，固定为年限二十年。研发性企业通常在新产品上市前申请专利，如果专利保护成果有一定的商品化滞后期，那么实际的专利保护是少于二十年的。因此在这种由上市前起开始算固定年限的专利保护下，当商品化滞后期越长，实际专利保护年限越短，从而进一步降低了企业对长期项目研发的估值。</p>
+<p>在 American Economic Review 七月刊登的一篇论文<a href="https://www.aeaweb.org/articles?id=10.1257/aer.20131176">《Do firms underinvest in long-term research?Evidence from cancer clinical trials》</a>构造了一个理论模型<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>，估算了短视行为和专利制度对于制药业投资行为的影响。</p>
+<p>这篇文章以癌症药物研发为背景，实证检验了专利制度对于长期投资的消极作用。制药企业，在新药研发成功获得专利后，还需通过国家药监局规定的临床试验。癌症药物的临床试验通常使用总生存期为试验终点，及比较从药程开始到病人死亡之间的时间。由于所有药物都必须通过临床实验，临床实验的长度决定了药品实际专利保护的年限。相比早期抗癌或癌症预防药物，晚期癌症病人的总生存期短，因而新药研发的商品化滞后期短，较高的短期效益让制药公司偏重投资。</p>
+<p>作者收集了美国所有癌症药物的临床试验纪录和的投资金额，提供充足的证据，指出由于制药企业过多偏重于短期获利大的晚期癌症药物，我们没有在早期抗癌和癌症预防方面作出足够的药物研发。作者提出了三种政策弥补措施，1) 在临床实验中使用代理终点 (surrogate endpoint)，例如按肿瘤是否变小，而非总生存期作为试验终点。代理终点可以大幅缩短临床实验的时间，2) 政府补贴或者主导早期抗癌和癌症预防的研究项目，3)改革固定年限的专利制度。</p>
+</div>
+<div class="section level1">
+<h1>癌症药物背景</h1>
+<p>从<code>癌症药物市场</code>作为切入点有两点<strong>优势</strong>：</p>
+<p>药物可以按照恶性肿瘤产生的部位（例如，肺部）和癌症病程（例如，原位期，局部期和转移期）系统分类。美国癌症中心（US National Cancer Institute）管理的癌症存活率监控署（<a href="http://seer.cancer.gov/">Surveillance, Epidemiology, and End Results Program</a>）收录了这些药物的临床试验纪录。临床试验的次数可以显示制药业对于该药物所属的癌症－病程的投资力度。如果直接比较临床试验次数，转移期和复发性的癌症药物有更多的临床实验。</p>
+<p>投资周期则可以用药物对照的癌症五年生存率来测量。生存率越高，临床实验周期越长，投资时间越久。</p>
+<p>本文样本一共有 80 种癌症，再细分到病程，有 201 个癌症−病程。平均五年生存率为 37.7%。 1973−2011 年中，平均每种癌症—病程有将近 1000 个临床实验。平均每一种癌症－病程有 0.5 个药物被批准。见文章表一。</p>
+</div>
+<div id="-" class="section level1">
+<h1>理论模型 （不感兴趣请移步章节四）</h1>
+<p>本文使用的模型，刻画了<code>新药研发-专利获准-临床试验-新药过审上市</code>的全过程。</p>
+<ol style="list-style-type: decimal">
+<li>主要时间点:</li>
+</ol>
+<p><code>t_invent</code> = 研发成功，可以归为 0； <code>t_comm</code> ＝ 从研发成功开始到审批上市时间(commercialization)，也就是商品化滞后期；<code>t_patent</code> = 专利保护，通常在<code>t_invent</code>后不久。因为会在<code>t_invent</code>后马上开始临床实验，这时候申请专利，那么新药会被认为是已有技术（prior art)，而不会得到专利保护。但由于企业对药物的垄断期从是上市开始计算，所以实际的专利保护时间是<code>max(t_patent-1-t_comm,0)</code>。因此，滞后期越短，实际的专利保护时间就越长。相反，如果滞后期长于专利保护期，亦即临床试验在专利保护失效前仍未结束，那么实际专利保护为 0 年。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>风险管理：</li>
+</ol>
+<ul>
+<li><span class="math inline">\(p\in[0,1]\)</span>：临床实验结果显示有疗效，获得上市许可；</li>
+<li><span class="math inline">\(\gamma\in[0,1]\)</span>：每年不被淘汰的机率(试验药物可能被疗效更好的药物取代)；</li>
+<li><span class="math inline">\(1/(1+r)\)</span>：每年折现率；</li>
+<li><span class="math inline">\(\eta\in[0,1]\)</span>：年度企业短视率，对长期投资项目估值较低的一个折扣率；</li>
+</ul>
+<p>社会整体无长期或短期之分，因而社会折现系数为<span class="math inline">\(\delta=\gamma/(1+r)\)</span>。而对于企业折现系数为<span class="math inline">\(\delta=\eta\gamma/(1+r)\)</span>。</p>
+<ol start="3" style="list-style-type: decimal">
+<li>价值考量</li>
+</ol>
+<ul>
+<li><span class="math inline">\(c\)</span>：临床实验的支出，可视为总投资资金；</li>
+<li><span class="math inline">\(\pi\)</span>：每年的垄断利润；</li>
+<li><span class="math inline">\(v_{\mathrm{mono}}\)</span>：垄断价格下的社会价值；</li>
+<li><span class="math inline">\(v\)</span>：非垄断价格下的社会价值，应该大于等于<span class="math inline">\(v_{\mathrm{mono}}\)</span>；</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>实际垄断期和实际使用期（可以参考笔者总结的图一(a)）</li>
+</ol>
+<div class="figure">
+<img src="/images/Eco/Industry/huihang/underinvestLongTermResearch/1.jpg" />
+
+</div>
+<p>在<code>t_invent</code>，药物研发成功这一时刻，企业可以按如下函数来估测这个药物的实际垄断期(effective monopoly life)</p>
+<p><span class="math display">\[\mathrm{EML}=p\sum^{t_{\mathrm{patent}}-1}_{t_{\mathrm{comm}}}(\eta\delta)^t=p\frac{(\eta\delta)^{t_{\mathrm{comm}}}-(\eta\delta)^{t_{\mathrm{patent}}}}{1-\eta\delta}\]</span></p>
+<p>实际垄断期的参量为：能否获得批准上市，作为专利药开始销售后享有的<code>t_patent-1-t_comm</code>专利保护，企业短视程度，和折现系数。</p>
+<p>所以企业的回报为<span class="math inline">\(\mathrm{EML}*\pi\)</span>。</p>
+<p>而对于社会总体而言，垄断期结束后，该药物仍被使用，因而依然有社会价值。 所以相应的实际使用期(effective total life。)</p>
+<p><span class="math display">\[\mathrm{ETL}=p\sum^{\infty}_{t_{\mathrm{comm}}}(\delta)^t=p\frac{\delta^{t_{\mathrm{comm}}}}{1-\delta}\]</span></p>
+<p>和实际垄断期函数不同的是，药物使用期会药物使用期会持续到药物被淘汰时才结束。同时，社会没有短视行为，对短期和长期投资一视同仁。因此总体社会价值为<span class="math inline">\(\mathrm{ETL}*v\)</span>。</p>
+<p>什么情况下企业和市场的最优化投资决定不同? （preposition 1.1）</p>
+<p>当实际垄断期小于实际使用期（<span class="math inline">\(\mathrm{EML}&lt;\mathrm{ETL}\)</span>) 时，或者垄断利润小于社会价值(<span class="math inline">\(\pi&lt;v\)</span>)时，企业会因回报不足而放弃对社会福利高的项目的投资。</p>
+<p>因为企业得到的回报不够。要使得<span class="math inline">\(\mathrm{EML}*\pi=\mathrm{ETL}*v\)</span>，必需条件为：</p>
+<ol style="list-style-type: decimal">
+<li>垄断期和使用期同样长</li>
+<li><span class="math inline">\(\pi=v\)</span>，即垄断回报与社会价值等同。一个极端的例子是张悟本的《把吃出来的病吃回去》里的绿豆疗法，假设某制药公司考虑把绿豆汤作为癌症药物上交药监局审批上市，绿豆汤的垄断期和回报基本为零，因为大家都知道怎么煮绿豆汤，所以不会有制药公司来投资关于绿豆汤的临床实验。</li>
+</ol>
+<p>在<span class="math inline">\(\mathrm{EML}/\mathrm{ETL}\)</span>和<span class="math inline">\(\pi/v\)</span>这两个比值中，政策可调控的更多是<span class="math inline">\(\mathrm{EML}/\mathrm{ETL}\)</span>，即实际垄断期与实际使用期的比值。比值越高，企业享受的相对垄断期就越长，从而对其投资越有利。但我们可以推出相对垄断期和市场滞后期成反比（preposition 2）滞后期越长，企业投资越少，这和引言里的观察一致。</p>
+</div>
+<div class="section level1">
+<h1>实践检验结果</h1>
+<p>因为临床实验的量度为次数，作者用 quasi-maximum likelihood Poisson models 估测生存率对 RD 的影响。每 10% 生存率的增长，对应 8.7% RD 的减少，见下图。</p>
+<div class="figure">
+<img src="/images/Eco/Industry/huihang/underinvestLongTermResearch/2.jpg" />
+
+</div>
+<p>读到这里你也许会质疑，制药公司在开发新药之前，肯定会做相应的市场调查，来估测市场需求。市场需求越大的新药，制药公司肯定会优先考虑投资。如何来估算不同癌症药物的市场需求量呢？作者用不同癌症所导致的预期寿命缺失来调整病人对于药物的需求量，比如说，一个中年男性预期寿命是70岁，他有可能在45岁时由于晚期前列腺癌死亡，那么该病人的预期寿命缺失为25年。如果他也有可能于60岁死于晚期胃癌，晚期胃癌预期寿命缺失要比晚期前列腺癌要短，由此推出晚期前列腺癌药物的需求比较大。但即便在考虑了药物需求量后，癌症生存率对于RD还是有显著的负作用。(附录里有具体从生存率到滞后期的换算，有生物统计的相关知识。概括而言生存率越高，临床试验所需人数越多，时间也越长。）</p>
+</div>
+<div class="section level1">
+<h1>政策调整</h1>
+<p>作者提出了三种政策调整措施，1）在临床实验中使用代理终点 (surrogate endpoint)，例如肿瘤是否变小，而非总生存期作为试验终点。代理终点可以大幅缩短临床实验的时间，2）政府补贴或者主导早期抗癌和癌症预防的研究项目，3）改革固定年限的专利制度。虽然没有足够数据来证明，模型和已有的案例证明了这些政策的合理性。</p>
+<ol style="list-style-type: decimal">
+<li>代理终点。本文的模型告诉我们，缩短滞后期会使得相对垄断期增长，从而企业投资的可能性更大。使用代理终点是一个缩短滞后期的有效方法。如同模型所预测的，假设临床试验采用替代终点，癌症药物的研发周期就不再与存活率挂钩。目前美国药监局已经批准了一些替代终点，主要是治疗血癌的药物，如对于白血病药物 可以用癌症是否完全缓解（Complete Response, CR，及体表肿块完全消失，血象和骨髓象也基本恢复正常）作为替代终点。在这些药物中，存活率于 RD 力度没有显著影响。但是替代终点不是对于所有癌症药物都适用。</li>
+<li>另外一个方法是考虑政府补贴。实际上所有的癌症预防药物不是使用了替代终点，就是政府提供的资金。虽然一共也只有 6 个，其中之一是要跑去香港注射的HPV疫苗。。</li>
+<li>最为大胆的措施是专利制度改革，根据滞后期的长度调整专利保护期。这是很有研究价值的一项措施。现行制度下，所有专利的保护期都是二十年。如果专利保护期应该和该发明所带来的社会福利挂钩，那么癌症预防药物应该比晚期癌症药物享有更多的保护期。但事实恰好相反，癌症预防的临床实验比晚期癌症药物长，于是实际专利保护期要短得多。在最优化社会福利的假设下，癌症预防的专利保护期应该被延长。</li>
+</ol>
+<p>延长专利期有可能导致制药公司想要研发更多的药物。但公司还是会选择最有价值的药物，所以于社会而言有益无害。那么，价值低的药物同样享受了延长的专利期，会不会推后了更便宜的非专利药物的上市呢？事实上，延长越久，制药公司的支出越大，因而它们并不会因专利期延长而选择投资价值低的药物。</p>
+<p>可喜的是，FDA 已经有相关的法令，虽然具体规则值得商榷。 Hatch Waxman Act（在两位参议会议员 Hatch 和 Waxman 倡导下于 1984 年通过）就规定当药监局审批过长，制药企业可以申请延长专利。（但这个法令有意思的是，延长专利期的同时，也让非专利药更早的进入市场，从而缩短了一些药物的专利期。以前所有非专利药必须等到专利过期后开始研发，但现在只要有一个非专利药能够打赢官司，专利无效，那这个非专利药就有半年的垄断期。这样也避免了其他生产非专利药的公司不劳而获地享受第一个非专利药生产商打官司的成果。）一个更为简单粗暴的改革方式，是将专利生效期定在药物上市，如图一（b）。这样改革，完全消除了商品化滞后期对整体垄断期的影响。</p>
+</div>
+<div class="section level1">
+<h1>结言</h1>
+<p>本文指出由于专利制度和短视行为，制药企业过多投资于晚期癌症药物的研发。对于这种市场扭曲，用代理终点而非死亡终点可以缩短临床试验的长度，因而帮助早期癌症药物的研发。但对于专利制度改革，作者持保守态度，毕竟更加根本的问题是，专利制度是否还是最能鼓励企业投资的方式？</p>
+<p>中国目前专利制度与美国相似，因此本文对中国专利制度研究也有借鉴作用。另外一个值得研究的问题是进口癌症药物会不会也有相似的市场扭曲问题？希望有志于相关研究的学者阅读该文。</p>
+<p>还有笔者很明显对制药行业很陌生，有制药领域的朋友欢迎交流想法！</p>
+<blockquote class="gray">
+<p><strong>talich</strong>：国会众院刚刚通过了新 21st Century Cures Act（<a href="https://www.congress.gov/bill/114th-congress/house-bill/6" class="uri">https://www.congress.gov/bill/114th-congress/house-bill/6</a>），应该很快参议院会过。所谓的 breakthough medical device 不一定需要 clinical trial 了。对药上也有一些改变。</p>
+<blockquote class="white">
+<p><strong>nautilus sun</strong>：谢谢您指出这个议案，非常有帮助。不过议案里还有“The marketing exclusivity period is extended by six months for a drug approved for a new indication that is a rare disease or condition.”如果一些癌症算成 rare disease 的话，会变相延长专利期的吧？一种癌症药物的 new indication 有可能很多吗？</p>
+</blockquote>
+<p><strong>talich</strong>：抗癌药物用在其他癌症的情况很常见，这种把现有药用于其他病的情况叫 repositioning。不过很多癌症不一定能叫 rare disease。再不过，orphan disease act 让每个制药公司只要通过一个 rare disease 药，公司的所有药都能享受 7 年的 exclusive 保护。这个怎么用上去，我也不知道。</p>
+<p>反正各种条款很多，各种关系我也不好说清楚。可能是指生物合成的药物，以前被认为无法仿制。但是今年 FDA 通过了第一个生物合成仿制药，所以…… <a href="https://en.wikipedia.org/wiki/Biosimilar">Biosimilar</a></p>
+</blockquote>
+<blockquote class="gray">
+<p><strong>Klaith</strong>：代理终点是个非常棘手的问题，因为它未必能够真正代表疾病的转归。仅以糖尿病为例，一直以来，我们都将血糖或糖化血红蛋白作为临床研究的终点，然而文迪亚事件后，我们发现血糖、糖化血红蛋白虽然改善，但患者因主要心血管事件的发生率也许并不改善。所以代理终点的选择现在慎之又慎，同样需要大量的前瞻性临床研究和数据来支持。在这样的背景下，为了尽快发生终点事件，制药企业只能拖上晚期患者，既迅速，伦理学风险又小，最后的决策权又交给临床医生（off-label），何乐而不为？</p>
+<blockquote class="white">
+<p><strong>nautilus sun</strong>：原来 Avandia 是文迪亚。会不会有临床研究一部分使用代理终点，一部分使用“比较硬”的终点的情况？</p>
+</blockquote>
+<p><strong>talich</strong>：文迪亚的问题好像是它故意隐瞒了不利于自己的结果。这种慢性病的药，药厂还是喜欢的，因为一旦得病，终生服药，细水长流流的买卖。你可以同时观察几个终点，但只有一个是主要终点（primary endpoint），也只有这个主要终点，它的统计学意义是充分的。生物仿制药比化学仿制药监管复杂很多，因此门槛高很多。</p>
+<blockquote class="white">
+<p><strong>Klaith</strong>：文迪亚的根本问题是马里兰有位心内科医生，使用了一些非个体病例级别的大型临床研究数据，作了一个 meta 分析，结果得出一个增加心血管事件死亡率的结论。去年还是今年，GSK 自己的前瞻性研究结果出来了，摘掉了帽子，可惜整个类型已经废掉了。</p>
+</blockquote>
+<p><strong>talich</strong>：嗯，是去掉了。但是 GSK 被司法部告也是真的：In 2012, the U.S. Justice Department announced GlaxoSmithKline had agreed to plead guilty and pay a $3 billion fine, in part for withholding the results of two studies of the cardiovascular safety of Avandia between 2001 and 2007.</p>
+<blockquote class="white">
+<p><strong>Klaith</strong>：去掉用药限制，而仅处罚这一行为，也表明这两项研究的数据并未对文迪雅整体的获益-风险评估造成实质性影响。</p>
+</blockquote>
+<p><strong>talich</strong>：这两个之间没有逻辑关系。司法部在 12 年了结，一定是基于之前的事实：2001 到 2007 年；而 FDA 在 2013 年通过，是基于以后的随机比照结果。应该考虑的是，如果当初 GSK 没有隐瞒结果，Avandia 能否通过 FDA 的审批？后来药解限了，不等于公司以前的非法行为就不严重了。我强调的，是公司的操守问题，是这件事上的大问题。</p>
+<blockquote class="white">
+<p><strong>Klaith</strong>：文迪亚是 1999 年 FDA 批准上市的，2001 年到 2007 年的研究数据均为上市后研究数据，因此不会影响其 FDA 审批情况。GSK 在该案中存在确凿无误的程序错误，操守当然有问题，但这并不代表其产品文迪亚存在相应风险，而仅罚款不退市，足以说明瞒报的数据，尚不影响该产品的获益—风险评价。</p>
+</blockquote>
+<p><strong>talich</strong>：审批这个是我搞错了。我想我们没有本质矛盾。只是应该回到原点，重新沟通一下：</p>
+<p>我认为 Avandia 一事的最重要问题，「是它故意隐瞒了不利于自己的结果」。</p>
+<p>而你认为「文迪亚的根本问题是马里兰有位心内科医生，使用了一些非个体病例级别的大型临床研究数据，作了一个 meta 分析，结果得出一个增加心血管事件死亡率的结论。」</p>
+<p>我们之后的讨论都基本此，而我没看出来你说的这个为什么是根本问题。这个当然是 Avandia 销售过程中的重要传折点，但是作为整个事件，我指的重要问题，是它的 legacy，对后人的启示。</p>
+<p>你觉得在 NEJM 上的这篇文章的研究方法既然是个问题，那它的 legacy 具体是什么呢。</p>
+<p>我本人没读过这篇文章，如果说这篇文章本身是有问题的，那它应该被 Retract，如果它没问题，只是后来的研究证明了它的结论是错的，那我觉得 FDA 当时对 Avandia 的冷处理也很正常。因为这种情况其实在其他研究中也常出现。就好像最近的关于胆固醇和鸡蛋的事。</p>
+</blockquote>
+<blockquote class="gray">
+<p><strong>严凌霄</strong>：不是 health economics 专业的，可能问题有点小白。为什么总体社会价值一直是<span class="math inline">\(\mathrm{ETL}*v\)</span>而不考虑<span class="math inline">\(v_{\mathrm{mono}}\)</span>呢？</p>
+<blockquote class="white">
+<p><strong>nautilus sun</strong>：不会的，<span class="math inline">\(v\)</span>是 the social value of the product if it were priced by a social planner instead of a monopolist, and it is greater than v_mono if the product were priced by a monopolist.</p>
+</blockquote>
+</blockquote>
+<blockquote class="gray">
+<p><strong>Z Abigail</strong>：还有一个问题，美国医疗保险的 coverage 是以 treatment 为标准的（有病来治），即使是 Obamacare 也是这样，preventative 的东西长期以来投入很少，也有这方面的原因。癌症早期的症状相对不明显，要发现的话一般是有比较好的保险 coverage（很完善的体检）还有有这个意识的人。近年来保险公司有在医疗保险里包括 gym membership 什么的，也算是朝这方面努力吧？</p>
+<blockquote class="white">
+<p><strong>nautilus sun</strong>：是的，要让保险的 coverage 以身体情况为标杆，就会有依据过往病史来定价的情况出现。</p>
+</blockquote>
+</blockquote>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><strong>作者</strong>：芝加哥大学的 Eric Budish，麻省理工 Sloan 商学院的 Ben Roin，和麻省理工经济系的 Heidi Williams，题目为《公司在长期研究中投资不足吗？来自癌症临床试验的证据》，该论文获得了2015斯隆研究基金会奖。<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>

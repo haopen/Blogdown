@@ -1,0 +1,66 @@
+---
+title: Acemoglu 对《Capital in the 21st Century》的批判 - 慧航 - 专栏
+date: 2014-08-31
+categories: ["6-经济 - 制度"]
+tags: ["6-慧航", "6-知乎专栏", "6-制度"]
+slug: 21th-century-captial-acemoglu
+---
+
+**原文地址**：<https://zhuanlan.zhihu.com/p/19838920>
+
+原文：<http://economics.mit.edu/files/9834>
+
+毛咕噜还是耐不住寂寞，终于发声了：
+
+> Thomas Piketty's recent book, Capital in the Twenty First Century, follows in the tradition of the great classical economists, Malthus, Ricardo and Marx, in formulating “general laws” to diagnose and predict the dynamics of inequality. We argue that all of these general laws are unhelpful as a guide to understand the past or predict the future, because they ignore the central role of political and economic institutions in shaping the evolution of technology and the distribution of resources in a society. Using the economic and political histories of South Africa and Sweden, **we illustrate not only that the focus on the share of top incomes gives a misleading characterization of the key determinants of societal inequality, but also that inequality dynamics are closely linked to institutional factors and their endogenous evolution, much more than the forces emphasized in Piketty‘s book, such as the gap between the interest rate and the growth rate.**
+
+毛咕噜开骂了，还是从马尔萨斯到马克思一直骂到 Piketty。文章还列举了马克思的所谓“资本积累的一般法则”，承认了这些法则符合当时以及一段时间的观察，但是资本主义从其诞生就是一系列制度的产物，而马克思所谓的“一般法则”忽略了制度变迁的因素。
+
+而对与《21世纪》这本书，毛咕噜用模型和数据展示了`r>g`，即资本回报率大于经济增长率，跟不平等的关系并非 Piketty 所描述的那样。同时毛咕噜还举例说明，不平等更多的是个制度问题，而不是像马克思和 Piketty 那样是资本主义必然会导致的。
+
+大神毛咕噜的文章，就算你没读过《21世纪》原作，读读这篇文章也会很有启发。
+
+<blockquote class="gray">
+
+**badou**：不过为什么大家都讨论 Daron，而不是他的评论里说的有没有道理？我觉得挺有道理的：马尔萨斯，马克思和 Piketty 都是看到了他们所处时代的某一个暂时性的 trend，就以为是 general law。Malthus 和 Marx 已经被证明错了，Piketty 应该也会。第一，如果`r>g`导致资本积累越来越多，那么`r`会逐渐下降的；第二，`r>g`不代表 capitalists 的资本增长就会超过`g`，如果他们不消费，那是当然的，不过他们也要消费啊。Acemoglu也搜集了数据，发现最重要的还是 institution。不管怎么说，他还是在用逻辑和数据说话，这个是最重要的。
+
+<blockquote class="white">
+
+**慧航**：嗯，其实他的论点论据很多，都很有道理，所以推这篇文章我真的不知道该怎么写了哈哈。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+
+**牛尔**：当年虐那本《introduction to MEG》的时候感觉 DA 很神奇，对各种模型的评论和衍生都很精当，课后习题尤其棒，DA 的很多 PAPER 点子是不错的，但缺点在于无法顺着思路挖下去，follow 很难，难在数据可得性和思路。
+
+<blockquote class="white">
+
+**badou**：感觉他有一套整体思路：找到 institution 在 development 里的作用，特别是通过 technology 的影响。他 2000 年以后的 paper 都是沿着这个再走。不过好像确实是，每个 paper 之后比较难找到直接可以挖下去的东西。可能是因为他的文章都是走比较浅显易懂 intuitive 的路线。
+
+</blockquote>
+</blockquote>
+
+<blockquote class="gray">
+**badou**：在美国还好？胡扯。只是还好会邀请他做 econometrica 主编？只是还好会让他主持 NEBR Summer Institute 的 Growth 的 Session？他在宏观发展里面的声望还是很好的。
+
+笑死我了，你懂一点 dynamic programming 就一定要人家用？人家做 empirical 的 paper 也要没事弄个 dynamic programming？人家做 political economy 的 paper 就一定得篇篇用 dynamic programming？你怎么不去看看他做 directed technology 的 paper，篇篇都是 dynamic programming。只有初学者才老惦记着一点简单的工具，还以为多了不起。大牛们更在意的已经是 idea，甚至是研究方向了。
+
+我明白了，你就是自己做 applied fields 的人，妒忌 Daron，就说“美国”觉得他“还好”。你胡扯的是“美国”觉得他还好。你应该说，“我们某些做 applied field 的人觉得他‘还好’”。你承认吗？
+
+还有，D.A. 的那本书很浅显的好吗？Dynamic Programming 的技术就是第六第七章，而且都是基础。不知道你为什么觉得这本书的技术很高，他的 Paper 跟那本书相去甚远。难道是你因为看不懂这本书就以为大家都觉得这本书技术很高？
+
+</blockquote>
+
+<blockquote class="gray">
+**牛尔**：看看 IDEAS RANKING，搜搜他的文章，你就知道 DARON 有多牛叉。他对制度经济学的贡献很大，尤其是殖民地制度演变有非常精彩的研究，他觉得有资格去评论皮克提的观点。
+
+师兄说过：和 MIT 的教授交流，不要谈技术，讲思路就行，因为你懂的技术他都懂，你不懂的他也懂。Blanchard、nobuhiro（尤其敬仰，上了年纪还雄辩滔滔，又不失温文尔雅）这些人的技术都很好，只是慢慢都不愿意搞太复杂的模型，点子和思路才是最重要的，大概记得 Blanchard 说过这么一句：学习宏观经济学的技术花了 2 年时间，理解宏观经济学花了 10 多年，且历久更新。
+
+</blockquote>
+
+<blockquote class="gray">
+**Luo Patrick**：我还没看过 21 世纪资本论。我的心得是，如果一部专业作品引起了很大社会反响的话，这部作品应该主要在讲价值判断，价值判断看不看也不打紧。
+
+</blockquote>

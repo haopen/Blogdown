@@ -1,0 +1,17 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+
+<div class="archive">
+    <h2 class="archive-title">{{ .Title }}</h2>
+    {{ range $key, $value := .Data.Terms }}
+    <article class="archive-item">
+      <a href='{{ (print "/" $.Data.Plural "/" $key) | relURL }}' class="archive-item-link">{{ if eq (substr $key 2) "sas"}} {{ "SAS"}} {{ else }}{{ title (replace (substr $key 2) "---" " - ") }}{{ end }}</a>
+      <span class="archive-item-date">({{ len $value }})</span>
+    </article>
+    {{ end }}
+</div>
+
+</main>
+
+{{ partial "footer.html" . }}

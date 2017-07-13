@@ -1,0 +1,96 @@
+---
+title: 初级、中级、高级计量经济学内容都有哪些区分与衔接？ - 慧航 - 问答
+author: 慧航
+date: 2014-02-03
+categories: ["6-经济 - 计量"]
+tags: ["6-慧航", "6-知乎问答", "6-计量"]
+slug: econometrica
+---
+
+**原文地址**：<https://www.zhihu.com/question/21871314/answer/22137633>
+
+# 慧航
+
+<pre class="left">
+初级：regression, regression, regression
+中级：estimation, estimation, estimation
+高级：identification, identification,identification
+</pre>
+
+<!-- more -->
+
+------------
+
+其实不必要分什么初中高级了。计量经济学给人的第一印象是统计，跑跑 ols，搞搞检验，什么异方差啊、自相关啊、多重共线性啊之类的。其实这些东西现在来说并不重要。也已经有很多技术工具完美解决了。这个时候还在 regression 阶段。当你继续学，你会发现除了线性模型，除了 ols，还有好多其他模型，比如 binary choice 模型，面板数据模型，固定效应随机效应。一般到了这个层次会误以为这些模型的估计是最重要的，处在 estimation 阶段。
+
+当你真正学通了计量，你会发现，不管做应用还是做理论，不管微观计量还是宏观计量，identification 才是最重要的。牛逼的 paper 之所以牛逼是因为 identification  比较清楚。做应用的可以找到很好的例子，用相对简单的模型，甚至 ols 就可以说清楚因果关系，把因果关系识别出来。做理论计量的，你会发现很多模型 identification 证明清楚了，下面的工作也就简单了。这个过程也就是从学招式，到应用招式，到无招胜有招的转变吧。
+
+<blockquote class="gray">
+**Haitian Wei**：模型 identification 这个是说怎么定模型么？之前我都是把一堆可疑的模型都试一遍然后用效果最好的。这个本来的话应该是怎么搞啊。
+
+<blockquote class="white">
+**慧航**：简单的说就是你的模型有且仅有一个解。这个问题解释起来比较困难，主要是**因果**的识别和**参数**的识别。比如你做读硕士能不能增加工资，但是呢你做线性回归发现读硕士的工资高，可能是读硕士的人普遍能力比较强，但是能力又是你观察不到的。这里你就很难识别清楚究竟是能力提高了工资还是读硕士提高了。
+
+再比如当你做 SVAR 的时候，比如实际利率和汇率吧，这两个在同一期可能是交互影响的，那么究竟实际利率能多大程度上影响汇率，汇率能多大程度上影响利率，也是很难识别清楚的，因为你用 VAR 之后返回计算 SVAR 的系数会发现解不唯一，那么如何得到那个正确的唯一解？这就是所谓的识别。因为如果你想知道因果的话，考虑同期的效应才是真正的因果关系。
+
+大体明白了吗？不过你做 quant 的话不用管什么识别的，我们这些蛋疼的经济学家要严格识别因果关系才会搞这些东西。
+
+</blockquote>
+
+**Haitian Wei**：学位和能力这个是不是应该找个能力的工具变量，然后看看系数是不是显著什么的？大概晓得 identification 是啥了。因为我研究生学计量的，然后就停留在 estimation 上所以比较好奇 identification 是啥。
+
+<blockquote class="white">
+**慧航**：应该找教育的工具变量，跟教育相关但是跟能力无关。还有别的办法了，比如双胞胎。我最近想到了一个工具变量，不过话题太老旧了，不是很有写的动力。
+
+</blockquote>
+
+<blockquote class="white">
+**李锜**：正因为要探讨因果关系，所以经济才比金融有趣。
+
+</blockquote>
+
+</blockquote>
+
+# LCHEN
+
+1. 从**估计**方法上来讲：
+<pre class="left">
+初级：OLS, MLE
+中级：IV, GMM, RDD, DID, quantile regression...
+高级：Bayesian, MCMC, Empirical Likelihood, Simulation based estimators, semiparametric and nonparametric, semi-nonparametric...
+</pre>
+
+2. 从**检验**方法来讲：
+<pre class="left">
+初级：t value, p value, F statistics, R^2...
+中级:  Hausman test, over-identification test, structural break...
+高级：各种 optimal test, when a parameter presents only under the alternative, bootstrap, subsampling, exact test,
+</pre>
+
+3. 从**数据**类型来讲：
+<pre class="left">
+初级：cross section
+中级：time series, panel data, VAR, multiple equations, nonlinear models
+高级：unit root, co-integration (ECM), high dimensional panel data, high frequency, continuous time, spatial...
+</pre>
+
+4. 从**识别**(identification)问题来讲
+<pre class="left">
+初级：基本忽略
+中级：怎么找 instrument
+高级：semiparametric and nonparametric identification, partial identification, weak identification..
+</pre>
+
+5. 从**模型思想**方法来讲：
+<pre class="left">
+初级：reduced-form
+中级：reduced-form
+高级：structural (e.g., dynamic games, dynamic discrete choice, DSGE)...
+</pre>
+
+6. 从所需主要**数学工具**来讲：
+<pre class="left">
+初级：basic matrix algebra, mathematical statistics
+中级：Law of large numbers, central limit theorem, Slutsky's theorem...
+高级：Empirical processes, functional analysis...
+</pre>

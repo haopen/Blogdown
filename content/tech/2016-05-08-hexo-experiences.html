@@ -1,0 +1,168 @@
+---
+title: 使用 Hexo 与 NexT 搭建博客的避坑总结 z
+date: 2016-05-08
+categories: ["4-计算机 - 软件应用"]
+tags: ["4-Hexo", "4-NexT", "4-博客", "4-LaTeX", "4-Mathjax"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: hexo-experiences
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#hexo"><span class="toc-section-number">1</span> Hexo</a></li>
+<li><a href="#next"><span class="toc-section-number">2</span> NexT</a></li>
+<li><a href="#themes"><span class="toc-section-number">3</span> 主题编写</a></li>
+</ul>
+</div>
+
+<p><strong>原文地址</strong>：<a href="http://yangfch3.com/2016/05/08/hexo-experiences/" class="uri">http://yangfch3.com/2016/05/08/hexo-experiences/</a></p>
+<p>这个博客是使用 Hexo 与 NexT 搭建起来的，在搭建的过程中遇到了一些莫名其妙的问题，记录在此。对于官方文档已经有介绍的，在此不表。</p>
+<!-- more -->
+<div id="hexo" class="section level1">
+<h1><span class="header-section-number">1</span> Hexo</h1>
+<ol style="list-style-type: decimal">
+<li>Hexo 是有<a href="https://hexo.io/zh-cn/docs/">中文文档</a>的，当然更推荐看英文文档</li>
+<li>关于几个文件夹功能的释义
+<ul>
+<li><code>scaffolds</code>为模板文件夹，模板用于预先定义 new 出来的文章的 layout；</li>
+<li><code>source</code>内<code>_drafts</code>文件夹用于放置草稿，使用<code>hexo --draft</code>可查看所有草稿文章；草稿完稿后可以使用<code>publish</code>命令发布到<code>_post</code>文件夹内，等待<code>generate</code>。</li>
+</ul></li>
+<li>自定义的其他模板和 post 模板相同，new 出来的文章都将储存到<code>source/_posts</code>文件夹</li>
+<li>当你不想你的文章被发布，同时又不想删除文章，将文章的<code>Front-Matter</code>中的<code>layout:</code>设为<code>false</code></li>
+<li>文章的<code>Front-matter</code>采用 YAML 语法格式，多个标签与分类不是用逗号隔开，而是采用 YAML 中的<code>列表/并列</code>写法</li>
+<li>Hexo 支持更强大的<strong>quote</strong>块：可以添加引用作者、来源、链接等；在有这些需求的时候可以引用</li>
+</ol>
+<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}
+content
+{% endblockquote %}</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Hexo 支持更强大的 code 块：支持为 code 块添加标题和链接；当我们需要引用某个链接内的代码时可以使用，一般情况下使用 md 的代码块语法即可</li>
+</ol>
+<pre><code>{% codeblock [title] [lang:language] [url] [link text] %}
+code snippet
+{% endcodeblock %}</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>引入 gist 时，插入<code>fileName</code>似乎会失败，所以，引入 gist 时只需要使用<code>gist hash-id</code>即可</li>
+</ol>
+<pre><code>{% gist 5b3ee7efd535ab63cd56 %}</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>Hexo 支持更使用特定的语法，插入指定大小的图片，如下：</li>
+</ol>
+<pre><code>// 语法
+{% img [class names] /path/to/image [width] [height] [title text [alt text]] %}
+// 实例
+{% img full-image /hexo-experiences/PL01.jpg 180 180 hello %}
+// 生成的代码
+&lt;img src=&quot;/blog/hexo-experiences/PL01.jpg&quot; class=&quot;full-image&quot; width=&quot;180&quot; height=&quot;180&quot; title=&quot;hello&quot;&gt;</code></pre>
+<p>值的注意的几点：</p>
+<pre><code>- 路径名必须以`/`开始，否则会解析出错
+- 路径是相对于`conifg`内的`root`的，这一点挺坑，可以在`source/`下新建一个`uploads`文件夹用于专门放置这些图片资源</code></pre>
+<pre><code>{\% img hi /uploads/images/test.jpg 100 100 hello hello %}</code></pre>
+<pre><code>- 图片宽高只能使用数值，不能包含字符串，也不能是百分数
+- 最后一个字段可以为图片添加标题</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li>引入某个文件中的代码，使用<code>include_code</code></li>
+</ol>
+<pre><code>// 语法
+{% include_code [title] [lang:language] path/to/file %}
+// 实例
+{% include_code DOMUtil lang:javascript demo.js %}</code></pre>
+<p>值得注意的是：<code>code</code>代码所在的文件必须在<code>downloads/code/</code>目录下，否则无法获取</p>
+<ol start="11" style="list-style-type: decimal">
+<li>引用其他文章的路径，基本功能不大</li>
+</ol>
+<pre><code>// 语法
+{% post_path slug %}
+// 实例
+{% post_path OS-Brief-Intro %} // &gt;&gt; /blog/2016/05/03/OS-Brief-Intro/</code></pre>
+<ol start="12" style="list-style-type: decimal">
+<li>引用其他文章的链接，用处很大，但是有一个小坑</li>
+</ol>
+<pre><code>// 语法
+{% post_link slug [title] %}
+// 实例
+{% post_link OS-Brief-Intro 操作系统 %}</code></pre>
+<p>小坑：不能放在一段的段首，否则 md 文档或解析错误，出现莫名奇妙的 bug。</p>
+<ol start="13" style="list-style-type: decimal">
+<li>引用文章的资源：获取到的是文章对应<code>asset</code>目录下的资源</li>
+</ol>
+<pre><code>// 语法
+{% asset_path slug %}
+{% asset_img slug [title] %}
+{% asset_link slug [title] %}
+// 实例
+{% asset_path 01.png %}
+{% asset_img 01.png 图片 %}
+{% asset_link 01.png 图片 %}</code></pre>
+<ol start="14" style="list-style-type: decimal">
+<li><p>将<code>_config.yml</code>文件中的<code>post_asset_folder</code>选项设为<code>true</code>，便可在<code>new</code>一篇新文章的同时创建对应的资源文件夹。引用资源文件夹内的文件请使用<code>13</code>中使用的方法，可以防止首页展示时链接错误的问题。</p></li>
+<li><p>链接：<a href="https://hexo.io/zh-cn/docs/data-files.html">数据文件</a></p></li>
+<li><p><code>hexo generate --watch</code>可以监听文件变动，自动<code>generate</code></p></li>
+<li><p><code>hexo g -f</code>可以强制重新生成，防止一些更改后无法<code>generate</code>的清理</p></li>
+<li><p>自动提交脚本：<code>deploy.sh</code></p></li>
+</ol>
+<pre><code>hexo generate -f
+echo &quot;&gt;&gt;&gt;&gt;&gt;&gt;What is your commit message to blog-material repo?&quot;
+read COMMIT1
+git add --all
+git commit -m &quot;$COMMIT1&quot;
+echo &quot;commited&quot;
+git push
+echo &quot;pushed all to blog-material repo&quot;
+cd public
+echo &quot;&gt;&gt;&gt;&gt;&gt;&gt;What is your commit message to blog repo?&quot;
+read COMMIT2
+git add --all
+git commit -m &quot;$COMMIT2&quot;
+echo &quot;commited&quot;
+git push
+echo &quot;pushed all to blog repo&quot;
+cd ../</code></pre>
+<ol start="19" style="list-style-type: decimal">
+<li><p>实现 RSS 订阅：<a href="https://github.com/hexojs/hexo-generator-feed">hexojs/hexo-generator-feed</a></p></li>
+<li><p>Hexo 的<code>markdown</code>解析引擎不支持脚注，可以使用插件实现。</p></li>
+</ol>
+<blockquote>
+<p>但是笔者在使用了<code>LouisBarranqueiro/hexo-footnotes</code>之后发现<code>hexo server</code>命令无法使用了。（PH：本人是正常的）</p>
+</blockquote>
+<ol start="21" style="list-style-type: decimal">
+<li><p>更换默认的 md 渲染引擎（hexo-renderer-marked），改为 hexo-renderer-markdown-it，见<a href="http://yangfch3.com/2016/05/08/hexo-experiences/hexo-renderer-marked-it.txt">配置hexo-renderer-marked-it</a>。几大优点：</p>
+<p>支持脚注解析 支持上下标 支持<code>emoji</code> – 需要额外配置</p></li>
+</ol>
+</div>
+<div id="next" class="section level1">
+<h1><span class="header-section-number">2</span> NexT</h1>
+<ol style="list-style-type: decimal">
+<li><p>NexT 的一些菜单页（如：标签页、分类页、归档页）需要自己添加，方法见<a href="http://theme-next.iissnan.com/theme-settings.html">链接</a></p></li>
+<li><p>NexT 的<code>i18n</code>可以在<code>theme/next/language</code>下的<code>.yml</code>文件下自己定制</p></li>
+<li><p>NexT 支持文本居中的引用</p></li>
+</ol>
+<pre><code>{% centerquote %}blah blah blah{% endcenterquote %}
+{% cq %} blah blah blah {% endcq %}</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>NexT 中的图片可以自由地突破容器宽度的限制（扩大<code>26%</code>）</li>
+</ol>
+<pre><code>{% fullimage /image-url, alt, title %}
+{% fi /image-url, alt, title %}</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>在为文章创建 Tags 的时候，避免标签内出现<code>&amp;</code>，否则生成的<code>.xml</code>文件在浏览器端会解析错误，并且订阅功能也会出现故障。</li>
+</ol>
+</div>
+<div id="themes" class="section level1">
+<h1><span class="header-section-number">3</span> 主题编写</h1>
+<ol style="list-style-type: decimal">
+<li>Hexo 提供的<a href="https://hexo.io/zh-cn/docs/helpers.html">辅助函数</a>中截取一段长文字的前<code>n</code>个字符</li>
+</ol>
+<pre><code>// swig 的写法
+{% truncate(&#39;long string&#39;, {length: n}) %}
+// 实例
+{% truncate(post.description, {length:n}) %}</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>在 swig 中，胡子或胡子百分号内不能再使用胡子或胡子百分号</p></li>
+<li><p><a href="https://github.com/yangfch3/Dandelion">DIY 主题</a>，写法参考链接</p></li>
+</ol>
+</div>
