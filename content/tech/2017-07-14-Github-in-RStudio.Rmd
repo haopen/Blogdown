@@ -107,7 +107,7 @@ Hi haopen! You've successfully authenticated, but GitHub does not provide shell 
 
 # 在 RStudio 中使用 GitHub
 
-到 GitHub 的网站上新添加了一个代码仓库（包含 `readme.md`），然后打开 RStudio，`File - New Project - Version Control - Git`，输入 `Repository URL`（要输入的内容可以在 GitHub 代码仓库右方点 `Clone or download` 找到），其中 `Project directory name` 用于设定项目所在文件夹的名称，`Create project as subdirectory of` 用于指定该文件夹所属的父目录，此外勾选 `Open in new session`，接下来 RStudio 会将该仓库中的内容 Pull 到本地。
+到 GitHub 的网站上新添加一个代码仓库（包含 `readme.md`），然后打开 RStudio，`File - New Project - Version Control - Git`，输入 `Repository URL`（要输入的内容可以在 GitHub 代码仓库右方点 `Clone or download` 找到），其中 `Project directory name` 用于设定项目所在文件夹的名称，`Create project as subdirectory of` 用于指定该文件夹所属的父目录，此外勾选 `Open in new session`，接下来 RStudio 会将该仓库中的内容 Pull 到本地。
 
 ![创建一个 Git Repository](/images/Tech/GitHub/Create-Git-Repository.png)
 
@@ -134,3 +134,59 @@ url = ssh://git@github.com/haopen/testGit.git
 ```
 
 之后再次提交成功，并且上图右上角出现 `Pull` 向上箭头。当然，**更好的做法**是在点 `Clone or download` 时，直接点击 `Use SSH`，然后复制 `git@github.com:haopen/testGit.git` 即可。
+
+## 发布到 GitHub Pages
+
+1. 先到 GitHub 创建一个名称为 `haopen.github.io` 的代码仓库；
+2. 之后 Clone 到本地^[可以考虑使用直接使用 Git GUI Here 客户端，也可以考虑使用 RStudio 提供的界面，通常后者可能会更人性化一些。]：参考前面在 RStudio 中 Clone Repository 的步骤，也可以先进入到 `D:\GitHub`，再点击右键，选择 `Git GUI Here`，在打开的窗口中选择 `Clone Existing Repository`，参考下图填写内容即可：
+
+![](/images/Tech/GitHub/CloneExistingRepository.png)
+
+其中 `haopen-public` 是在 Hugo 中的 `.Rprofile` 中指定的内容发布目录，对应的绝对地址是 `D:\GitHub\haopen-public`。
+
+3. 做一个 Commit，之后再 Push，等 Push 完成就可以在 <https://haopen.github.io/> 观察到发布后的页面效果。
+
+## 连接 GitHub 可能遇到的问题
+
+**问题**：Push 的时候可能会遇到如下的错误：
+
+```txt
+Git push origin 
+ssh: Could not resolve hostname ssh.github.com: Name or service not known 
+fatal: Could not read from remote repository.
+```
+
+参考 <http://blog.csdn.net/qq_17335153/article/details/51701700> 的说明，打开 `~/.ssh`，在里面新建一个名称为 `config` 的文件，注意没有扩展名，在其中添加内容：
+
+```txt
+Host github.com
+User haopeng.yn@gmail.com
+Hostname ssh.github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa
+Port 443
+```
+
+但是通过 `ssh -T git@github.com` 测试仍然报错：
+
+```txt
+ssh: Could not resolve hostname github.com: Name or service not known
+fatal: The remote end hung up unexpectedly
+```
+
+参考 <http://blog.sina.com.cn/s/blog_a3fb1fe30102wieq.html> 先通过 `ping github.com` 获得 ip 地址 `192.30.255.113`，之后在 `/etc/hosts` 中添加如下内容^[修改 `C:\Windows\System32\drivers\etc\hosts` 这个文件时，经常提示有其它程序占用，因此转而修改 `C:\Program Files\Git\etc\hosts`，效果也是一样的。]：
+
+```
+192.30.255.113 github.com
+```
+
+再测试时就没有问题^[但连接速度真的很慢。]：
+
+```txt
+$ ssh -T git@github.com
+The authenticity of host '[ssh.github.com]:443 ([192.30.253.123]:443)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '[ssh.github.com]:443,[192.30.253.123]:443' (RSA) to the list of known hosts.
+Hi haopen! You've successfully authenticated, but GitHub does not provide shell access.
+```
