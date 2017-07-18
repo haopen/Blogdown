@@ -42,7 +42,18 @@
   }
   img_data_src();
 
-
 $(document).ready(function() {
-	$("#images-container").lightGallery(); 
+  $("#images-container").lightGallery(); 
+
+  var objNavLI = $(".nav-links > li"), i;
+  var strHref = location.href;
+  if (strHref.indexOf("github.io") > 0) {
+    if (strHref.indexOf("github.io/cn") > 0) {
+      for (i=0; i<objNavLI.length; i++) { objNavLI[i].firstChild.href = "#"; }
+	} else {
+	  if (!((strHref.indexOf("github.io/arts") > 0) || (strHref.indexOf("github.io/tech") > 0) || (strHref.indexOf("github.io/data") > 0) || (strHref.indexOf("github.io/prof") > 0))) {
+	    for (i=0; i<2; i++) { objNavLI[i].firstChild.href = "#"; }
+	  }
+	}
+  }
 });

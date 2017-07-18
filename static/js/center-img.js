@@ -20,4 +20,3 @@
     center_el(tagNames[i]);
   }
 })();
-

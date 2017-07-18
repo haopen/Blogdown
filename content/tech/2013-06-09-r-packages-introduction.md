@@ -1,5 +1,5 @@
 ---
-title: R的应用领域包介绍 z
+title: R 的应用领域包介绍 z
 date: 2013-06-09
 categories: ["4-R"]
 tags: ["4-R", "4-宏包", "4-package"]

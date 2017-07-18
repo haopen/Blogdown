@@ -22,8 +22,7 @@ Git 共有三个级别的 config 文件，分别是 system、global 和 local。
 由于之前已经成功安装 Git 并登陆到过 GitHub，因此查看当前配置时，最后两行会显示用户名及用户密码。
 
 ```bash
-$ git config --list
-......
+$ git config --list | grep user
 user.name=xxxxxx
 user.email=xxxxxx@xxxx.com
 ```
@@ -109,7 +108,11 @@ Hi haopen! You've successfully authenticated, but GitHub does not provide shell 
 
 到 GitHub 的网站上新添加一个代码仓库（包含 `readme.md`），然后打开 RStudio，`File - New Project - Version Control - Git`，输入 `Repository URL`（要输入的内容可以在 GitHub 代码仓库右方点 `Clone or download` 找到），其中 `Project directory name` 用于设定项目所在文件夹的名称，`Create project as subdirectory of` 用于指定该文件夹所属的父目录，此外勾选 `Open in new session`，接下来 RStudio 会将该仓库中的内容 Pull 到本地。
 
-![创建一个 Git Repository](/images/Tech/GitHub/Create-Git-Repository.png)
+![创建一个 Git Repository：Step 1](/images/Tech/GitHub/RStudio/NewProject-Git-RStudio.png)
+
+![创建一个 Git Repository：Step 2](/images/Tech/GitHub/RStudio/NewProject-Git-RStudio1.png)
+
+![创建一个 Git Repository：Step 3](/images/Tech/GitHub/RStudio/Create-Git-Repository.png)
 
 成功之后显示如下内容：
 
@@ -119,7 +122,7 @@ C:/Program Files/.../git.exe clone --progress git@github.com:haopen/Blogdown.git
 
 尝试添加文件并保存到，点击右边 Git 面板中的 `Commit`（直接在 Git 面板中某个文件上点右键，选择 `ignore` 可以指定应忽略跳过的文件），可以在打开的窗口中勾选需要 Commit 的文件，之后在右半边窗口中填写简单的描述文字，之后可以点击下方的 `Commit`。
 
-![提交一个 Commit](/images/Tech/GitHub/RStudio-Commit.png)
+![提交一个 Commit](/images/Tech/GitHub/RStudio/RStudio-Commit.png)
 
 **问题**：Commit 完成之后，刚开始右上角并没有 `Pull` 向上箭头，并且尝试提交时会出现 `unable to access... The requested URL returned error: 403` 类的错误，根据[这个讨论](https://stackoverflow.com/questions/7438313/pushing-to-git-returning-error-code-403-fatal-http-request-failed)，在本地目录中找到隐藏的 `.git/config`，将其中的
 
@@ -140,7 +143,10 @@ url = ssh://git@github.com/haopen/testGit.git
 1. 先到 GitHub 创建一个名称为 `haopen.github.io` 的代码仓库；
 2. 之后 Clone 到本地^[可以考虑使用直接使用 Git GUI Here 客户端，也可以考虑使用 RStudio 提供的界面，通常后者可能会更人性化一些。]：参考前面在 RStudio 中 Clone Repository 的步骤，也可以先进入到 `D:\GitHub`，再点击右键，选择 `Git GUI Here`，在打开的窗口中选择 `Clone Existing Repository`，参考下图填写内容即可：
 
-![](/images/Tech/GitHub/CloneExistingRepository.png)
+![Git 客户端](/images/Tech/GitHub/RStudio/CloneExistingRepository.png)
+
+![RStudio 中的 Git 客户端](/images/Tech/GitHub/RStudio/CloneExistingRepositoryRStudio.png)
+
 
 其中 `haopen-public` 是在 Hugo 中的 `.Rprofile` 中指定的内容发布目录，对应的绝对地址是 `D:\GitHub\haopen-public`。
 
@@ -190,3 +196,13 @@ Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '[ssh.github.com]:443,[192.30.253.123]:443' (RSA) to the list of known hosts.
 Hi haopen! You've successfully authenticated, but GitHub does not provide shell access.
 ```
+
+**技巧**：在 RStudio 第一次准备将本地大量文件 Commit 时，右侧 Git 面板中的 `Staged` 对应的 Checkbox 经常点不动，参考 <https://pages.github.com/> 后此时可以考虑从齿轮那里打开 RStudio 带的 Git shell，然后在里面输入^[要在这个自带的 Shell 窗口中粘贴内容，只能在窗口的标题栏点击右击，再选择“编辑”，之后选择“粘贴”。]：
+
+```bash
+git add --all
+~$git commit -m "Initial commit"
+~$git push -u origin master
+```
+
+这种命令行的方式此时可能会更加方便一些。
