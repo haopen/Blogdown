@@ -23,10 +23,6 @@ $$z=\frac{\hat{\beta}_m-\hat{\beta}_f}{\sqrt{s^2(\hat{\beta}_m)+s^2(\hat{\beta}_
 
 # `suest` 和交乘
 
-## asad
-
-### afsdf
-
 **参考**：<http://bbs.pinggu.org/thread-2267159-1-1.html>
 
 Stata 里`suest`可以做 Chow test 检验
