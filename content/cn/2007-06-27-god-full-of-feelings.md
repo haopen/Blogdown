@@ -4,6 +4,8 @@ date: 2007-06-27
 categories: ["2-music"]
 tags: 
 slug: god-full-of-feelings
+blackfriday:
+  extensions: ["hardLineBreak"]
 ---
 
 八年前某段日子，几乎天天听到这张专辑，当时就非常喜欢。可是那时根本听不懂粤语，所有对粤语的认识都来自 Beyond 和《射雕英雄传》。那时网络也没今天发达，大部分人甚至还没听过网络的概念，更不可能听说过 mp3 机是何物，所以对这张专辑的全部印象都只能以声乐的方式留在脑中，可是今天终于找到了。

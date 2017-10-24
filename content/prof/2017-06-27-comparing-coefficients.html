@@ -14,11 +14,7 @@ slug: comparing-coefficients
 <div id="TOC">
 <ul>
 <li><a><span class="toc-section-number">1</span> 总结</a></li>
-<li><a href="#suest-"><span class="toc-section-number">2</span> <code>suest</code> 和交乘</a><ul>
-<li><a href="#asad"><span class="toc-section-number">2.1</span> asad</a><ul>
-<li><a href="#afsdf"><span class="toc-section-number">2.1.1</span> afsdf</a></li>
-</ul></li>
-</ul></li>
+<li><a href="#suest-"><span class="toc-section-number">2</span> <code>suest</code> 和交乘</a></li>
 <li><a href="#xtreg--suest"><span class="toc-section-number">3</span> <code>xtreg</code> 无法使用 <code>suest</code></a></li>
 <li><a href="#bdiff----by-"><span class="toc-section-number">4</span> <code>bdiff</code> - 自举法 by 连玉君</a></li>
 <li><a href="#z-"><span class="toc-section-number">5</span> Z 统计量</a></li>
@@ -39,10 +35,6 @@ slug: comparing-coefficients
 </div>
 <div id="suest-" class="section level1">
 <h1><span class="header-section-number">2</span> <code>suest</code> 和交乘</h1>
-<div id="asad" class="section level2">
-<h2><span class="header-section-number">2.1</span> asad</h2>
-<div id="afsdf" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> afsdf</h3>
 <p><strong>参考</strong>：<a href="http://bbs.pinggu.org/thread-2267159-1-1.html" class="uri">http://bbs.pinggu.org/thread-2267159-1-1.html</a></p>
 <p>Stata 里<code>suest</code>可以做 Chow test 检验</p>
 <p>Example 2: Do coefficients vary between groups? (“Chow test”)</p>
@@ -61,8 +53,6 @@ slug: comparing-coefficients
 <blockquote class="gray">
 <p><strong>连玉君</strong>：<code>SUest</code>假设两组的干扰项具有<code>不同</code>的分布，允许两组的干扰项相关；而采用交乘项的方式，估计时只有一条方程，所以相当于假设两个组的干扰项具有<code>相同</code>的分布。</p>
 </blockquote>
-</div>
-</div>
 </div>
 <div id="xtreg--suest" class="section level1">
 <h1><span class="header-section-number">3</span> <code>xtreg</code> 无法使用 <code>suest</code></h1>

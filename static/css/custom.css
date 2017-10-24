@@ -42,8 +42,18 @@ b.search-keyword {
   padding: 2px;
 }
 
+tr th {
+  background: #F8F8F8;
+}
+table tr:nth-child(even){background: #F8F8F8;}
 
+p.tabCaption {
+  font-size: .9em;
+  text-align: center;
+  margin-bottom: -.2em;
+}
 p.imgCaption {
+  font-size: .9em;
   text-align: center;
   margin-top: -1em;
 }
@@ -61,7 +71,7 @@ div#TOC ul {
 }
 div#TOC a:link {
   border-bottom: initial;
-  box-shadow: initial;
+  box-shadow: none;
   color: #000000;
 }
 div#TOC a:hover {
@@ -264,6 +274,9 @@ pre .nohighlight {
 }
 .footnotes {
   font-size: .9em;
+}
+.footnotes ol li p {
+	margin: 0em;
 }
 
 @media (min-width: 600px) {

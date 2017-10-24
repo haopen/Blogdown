@@ -4,9 +4,11 @@ date: 2007-04-20
 categories: ["2-feelings"]
 tags: 
 slug: faring-spring
+blackfriday:
+  extensions: ["hardLineBreak"]
 ---
 
-清時已經過去半月　雨也漸漸下得少了  
+清時已經過去半月　雨也漸漸下得少了
 絲絲的傷感也隨著天氣的好轉慢慢逝去
 
 還記得曾經收到過的一條短信  

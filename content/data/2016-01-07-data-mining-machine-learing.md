@@ -1,9 +1,9 @@
 ---
 title: 数据挖掘与机器学习关系与区别 z
-date: 2017-06-17
-categories: ["5-数据科学"]
+date: 2016-01-07
+categories: ["5-数据科学 - 综合"]
 tags: ["5-数据挖掘", "5-机器学习"]
-slug: 
+slug: data-mining-machine-learing
 ---
 
 **原文地址**：<http://blog.csdn.net/phla_han/article/details/50476406>

@@ -1,0 +1,342 @@
+---
+title: 在社会科学研究中，研究者巧妙地运用过哪些「自然实验」？z
+date: 2015-08-13
+categories: ["6-经济 - 微观计量"]
+tags: ["6-自然实验", "6-政策评估"]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+slug: quasi-experiment
+---
+
+**原文地址**：<https://www.zhihu.com/question/30470194>
+
+# Zenan Wang {#zenan_wang}
+
+看到巧妙使用「自然实验」的经济学论文时，我往往会有两种反应：
+
+- 一种是，我去，这种事情还能从这个角度想！我从来没有这么想过，但是现在这样想，确实是研究这个问题的完美的自然实验。
+- 另一种是，逗呢，还能有这么合理的事情发生，这作者运气太好了，让他给发现了。
+
+虽然我是稍稍更佩服第一种论文，但是两种论文都非常难得，没有足够的积累，刻苦的钻研与阅读，运气再好也是写不出使用「自然实验」的论文的。
+
+我下面就两种论文分别举一个例吧。因为看的时间比较久了，而且不是我擅长的领域，我就简单介绍一下，如有错讹，请多指正。
+
+## Peter Koudijs(2014) The boats that did not sail {#peter_koudijs_______the_boats_that_did_not_sail}
+
+作者利用18世纪的一个自然实验分析了信息对股票短期价格的影响^[原文地址：<https://www.gsb.stanford.edu/sites/gsb/files/publication-pdf/peter_boats.pdf>。]。从经典经济学理论我们知道，股价应该是对公司的信息的反映，但是想做实证研究非常困难，因为现在是信息爆炸的时代，研究者很难从浩瀚的信息海洋中筛选出关键信息并追踪其来源与去向。（虽然，也有一些论文例如高频交易的记录研究过这个问题，但是总的来说是非常困难的。）
+
+作者巧妙利用了18世纪信息传播方式单一，缓慢，不稳定的特点，对这一重要问题做了研究。18世纪的时候，伦敦有股票交易所，阿姆斯特丹也有交易所。很多英国公司同时在伦敦和阿姆斯特丹挂牌交易。当时的通信主要是通过两国之间的定期的横穿海峡的邮船完成的，所以在那个时代背景下邮船就变成了公司信息的化身。邮船会带来关于英国公司的最新消息，并在交易所公开宣读。简单的分析可以发现，每次邮船到到港的时间都对应着阿姆斯特丹交易所英国公司股价的大幅变动。作者还进行了很多稳健性检验，证明信息是单向的从伦敦到阿姆斯特丹，反向并没有影响。他还证明了其他方式的信息交流对股价影响不大。
+
+因为海况难以预测，船的出发时间虽然很有规律，但是到港日期基本可以看成是是随机的，一般情况两国之间的航程是几天，但遇上坏天气有的船好几周都到不了。这时候最有意思的事就是，在没有船到达的日子里，阿姆斯特丹的股价也不是一成不变的，而是大致遵循着伦敦股价的趋势。因为作者已经论证过，其他的通讯方式对股价几乎没有影响，他认为在无船期间的股价变动主要来自邮船带来的个人信件（私人信息）。比方说，可能英国某公司的高管写信给荷兰的朋友提前告诉他下周公司可能会有人事变动等等，然后等到下周时该公司真的有了人事变动，但公开的信息还没有被邮船带过来，只有有私人信息的人在进行交易。所以通过对无船期的股价波动情况，作者成功地测算私人信息对股价的影响。
+
+## Richardson and Troost(2009) Quasi-Experimental Evidence from a Federal Reserve District Border {#richardson_and_troost_______quasi_experimental_evidence_from_a_federal_reserve_district_border}
+
+美联储有12个分区，每个分区都有相当的自治权，可以采用一些独立的政策（至少在1930是，现在我不清楚）。而这个分区也很奇怪，有很多州被腰斩，分到不同的美联储辖区。这篇文章作者研究的密西西比就是一个典型的例子^[原文地址：<http://www.jstor.org/stable/pdf/10.1086/649603.pdf>。]。密西西比州北部被分到了圣路易斯辖区，而南部被分到了亚特兰大辖区。
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/ZenanWang.jpg)
+
+在1930年美国金融危机时，亚特兰大辖区和圣路易斯辖区分别采取了不同的（几乎是两个极端的）货币政策。当时亚特兰大辖区奉行政策是，给资金紧缺的银行注资，所以采取了一系列措施给密西西比南部的银行提供贷款。而而圣路易斯辖区采取的是”real bill“政策，他们认为经济不景气的时期就应该减少货币供应，所以密西西比北部的银行几乎没有得到什么资金支持。对金融危机之后几年的经济数据分析，作者发现北部的各项指标与南部有明显差距，然而在危机前南北几乎是相似。作者通过研究这个自然实验得出结论，央行给困难的银行注资可以缓解金融危机。我说这个作者非常幸运，是因为密西西比的这个州非常理想，南北都没有特大城市，各方面指标在危机前都很相似，却偏偏被分到持有截然不同货币政策的两个辖区。另外，因为同属一个州，作者可以控制地方财政政策以及司法政策的影响，单独分理出货币政策来研究。
+
+**结语**：生活中不缺少「自然实验」，只是缺少发现「自然实验」的眼睛。
+
+<blockquote class="gray">
+**Terry Zhang**：密西西比州这个比方有点问题。由于整个州的经济是一体的，南部获得了资金，同时也获得了通货膨胀，而北部只获得了通货膨胀，明显吃亏了。由此判断，扩大银行注资是正确的，不太靠谱。
+
+顺便说明：我支持在经济危机情况下给银行注资，但是要有节制，而且要有退出机制，整个社会不能因此被银行绑架了。
+
+<blockquote class="white">
+**Zenan Wang**：具体的逻辑请看文章本身，我只是想介绍使用自然实验的想法，具体论证非常不严谨。
+
+美国整个经济体量很大，我觉得仅仅因为一个州的行为就造成通货膨胀不太现实。不过，我不做宏观，你觉得有问题可以先看一下原文。
+
+</blockquote>
+
+**Terry Zhang**：(1) 我没觉得你的文章本身有问题，只是觉得例子举得有待商榷。(2) 给银行注资可不是一个州的行为，其他州也有。(3) 即使没有造成通货膨胀，但两个“半州”并不是独立的经济体，被注资的半个州肯定会影响另半个州，这个无法比较注资的行为的优劣。
+
+</blockquote>
+
+# 李金源 (宏观经济学中的自然实验, 柏林墙倒塌) {#ljy__hgjjxzdzrsy__blqdd_}
+
+经济学，特别是宏观经济学研究者对「自然实验」运用颇多。上面回答中提到的几篇经济学论文，有些零散。如果想要深入了解自然实验，比较好的阅读材料是Nicola Fuchs-Schündeln 和 Tarek A. Hassan所著的Natural Experiments in Macroeconomics，《宏观经济学中的自然实验》，其中总结了大量运用自然实验的论文，并对自然实验的操作与方法论有详细介绍，自己读完之后获益颇多。
+
+目录如下(<https://pan.baidu.com/share/init?shareid=498960388&uk=405332923>, code: `7xid`)：
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/lijinyuan.png)
+
+我个人比较心水的自然实验的例子是对`柏林墙倒塌`的研究。柏林墙宛如设置自然实验的“天降之物”，将统一的国家和人民随机地分成了处理组和对照组。
+
+- 在2007年发表在AER上的论文中，哈佛大学的Alesina教授及其合作者考察了两德统一后前东西德居民在政治态度上存在的区别，发现东德居民更加相信政府应在社会保障事业中扮演重要的角色。
+- 在2009年的一篇论文中，普林斯顿大学的Redding教授利用两德的分裂和统一检验了城市经济学理论中的一个经典问题：禀赋和运气，哪个对于城市经济活动的繁荣更为重要？
+- 在2009年发表于Political Analysis的一篇政治学文章中，斯坦福大学的Hainmueller以及耶鲁大学的Kern通过自然实验方法，研究了西德电视节目是否会影响东德居民政治态度这一问题。在考察了民调数据之后，研究者发现能收看到西德节目的东德年轻人反而更加支持共产政权。
+- 在2013年发表于《经济学季刊》的一篇论文中，芝加哥商学院的Hassan教授和斯德哥尔摩大学的Burchardi教授，试图通过柏林墙的倒塌巧妙地识别出社会联系对于经济发展所起的作用。
+
+政见团队观察员王也曾著文引介——《柏林墙废墟上的经济学革命》，文中也概论了自然实验及其对经济学发展的影响。对自然实验有兴趣的可以一读。 顺便，强烈推荐政见[CNPolitics.org](http://cnpolitics.org/)。(@方可成)
+
+谢谢 @Krau Alan 提醒，@王也 此文已发知乎专栏，请移步阅读：[柏林墙废墟上的经济学革命 - 政见CNPolitics](https://zhuanlan.zhihu.com/cnpolitics/20110548 "链接不正确")
+
+# 鱼非鱼 (班级规模对学生学习效果的影响) {#yfy__bjgmdxsxxxgdyx_}
+
+在教育政策研究领域，一直有一个问题，就是班级规模对学生学习效果的影响。
+
+在美国，很多家长都从自身带孩子的经验出发，认为班级规模小教学质量一定会提高，所以一直有声音推进政府增加教育预算缩减公立中小学的班级规模。拿加州来说，自1996年以后，每年州政府会提供10亿美元的资金用于缩减加州中小学的平均规模。美国结果就是美国的中小学平均班级规模远小于其他工业化国家
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/yufeiyu.jpg)
+
+（Educational Testing Service, The International Assessment of Educational Progress, Learning Mathematics (1992). For Japan, U.S. Department of Education, Japanese Education Today (Washington, D.C.: 1987) (data provided by Japanese Ministry of Education, Science, and Culture).）
+
+但是如此大的投资，当然需要证据证明它确实有效，而且效果非常显著，因为毕竟同样的钱如果不花在缩减班级规模，增加师资、教室数量上，就可以用于：
+
+1. 增加课外活动，计算机机房，实验室，图书馆的资源；
+2. 增加教师工资，雇佣更优秀的教师。比如如果美国数学教学质量常为人诟病，如果将把班级规模缩减一半的资金用于将数学教师的薪水提高一倍，在美国可以雇到大学副教授级别的人
+
+所以很多缩减班级规模的投资项目，也都伴随着对其效果的研究。
+
+- 第一类研究直接不同班级规模的学校/地区的学生学业成绩。但这种方法的漏洞是显而易见的。一个学校、地区会选择减少班级规模，往往与家长、社区对孩子的教育的重视水平相关，所以导致学业水平上升的，未必就是班级规模的变化。事实上，在这类研究中，班级规模的不同也确实跟其他社会经济的因素相关。
+- 第二类研究采用随机分配实验，在一个学校内将学生随机分配到普通班级和小班，并跟踪不同班级学生的表现。著名的田纳西州的STAR项目就是如此。但这种随机实验仍然无法消除偏误。
+
+从学校的管理者来说，如果实验的结果说明缩减班级规模效果有限，就不会收到政府下一步的资金。所以在很多学校出现管理者并没有真正随机分配的情况，好的学生和老师被看似『随机』地分配到小班，也自然造成小班成绩更好。而另一些学校管理者则可能为了平等，将学习成绩较差的学生送到小班去。
+
+从学生和教师的角度来看，被分配到小班的人可能会潜意识里觉得自己被『选中』了，所以会格外努力表现。这被称为『Hawthorne效应』，也会导致小班的效应被高估。
+
+这些长期困扰美国教育政策学者的问题，被当时哈佛大学的教授Caroline Hoxby巧妙的用自然实验解决了。这篇文章名为The Effects of Class Size on Student Achievement: New Evidence from Population Variation，发表在经济学季刊上^[原文地址：<http://www.hernando.cl/educacion/Bibliografia/Insumos/Hoxby_QJE2000.pdf>。]。
+
+在这篇论文中，Hoxby使用的第一个Identification Strategy是每一年出生人口的自然变化导致的班级规模的变化。因为美国对儿童入学年龄有严格限制，但每个学校的教室数量是固定的，不同年份一个地区出生儿童数量的随机变化就会变成班级规模的变化。既然人口变化是自然实验，就不应该受到上述人为因素的影响。
+
+Hoxby的第二个Identification Strategy是因为美国很多州对于班级的规模上限和下限有硬性规定，当某一年某一学校的入学儿童数量超过一个阈值以后（比如26人，超过了25人的上限），当年班级的规模会出现突变（在这个例子中当入学人数从25人变为26人时，班级规模从25人突变为13人）。本身如果入学总人数跟学业成绩相关，其关系也应该是平滑的，但这一规则却导致班级规模的变化不与入学总人数直接相关，也就进一步完善了自然实验的可靠性。
+
+Hoxby分别使用了长面板数据和面板数据分离班级规模的影响。最后的结果，是班级规模对学生成绩的影响在统计上不显著。应该说，有了这篇论文以后，美国再讨论缩减班级规模的资金支持项目的话，应该要考虑一下其他选项了。
+
+# 狼宝宝 (心理学, 贫穷削弱认知功能) {#hbb__xlx__pqqrrzgn_}
+
+说一个心理学的研究吧！
+
+2013年，Science上发表了一篇挺震撼的文章，题目是贫穷削弱认知功能。
+
+关于贫穷与认知功能的关系，其实已经有大量的研究了。然而，可以说，那些研究基本上都是相关法，而这篇文章则是用实验的方法证明了贫穷与认知功能之间的因果关系。
+
+整个研究分为5个子研究，其中实验1-4都是实验室实验，这里就不展开说了。我们来重点看看第5个研究，是一个田野准实验研究。
+
+在前面4个实验中，研究者已经证明了贫穷的个体在面对经济困难的窘境的条件下，完成一些认知任务时会表现更差（e.g., 瑞文推理测验，认知控制测验）。那么，这样的发现是否能推广到实验室外呢？
+
+研究者考察了生活在印度的54个村庄里的464个农民。研究者采用了前后测的技术。可是这样一来，结果就可能受到日历效应（calendar effect）的干扰。为了克服这样的干扰变量，研究者结合当地的实际情况想出了一个很绝妙的点子——以当地种甘蔗的农民为被试进行研究。在收获甘蔗的前后可以看做是贫穷与富足的两种条件。果然，实验所得结果与在实验室中的结果是一样的。在贫穷的状态下，农民的认知表现要更差。
+
+这项研究无疑是一篇影响深远的研究。一是其“实验室+自然实验”的模式，保证了研究的内部效度与外部效度——证明了贫穷与认知功能之间的因果关系；二是研究者从非常新的角度思考了关于贫穷的问题。很多心理学研究总是考察我们有了什么，导致我们怎么样，而这项研究恰恰从反方向来看，我们没有什么，导致我们怎样。
+
+引申一点说，这里的贫穷并非仅仅是金钱是贫穷，其实包含很多方面，比如时间的贫穷（时间不够用）等等。
+
+具体详见[稀缺（穆来纳森、沙菲尔创作的行为经济学书籍）](https://baike.baidu.com/item/%E7%A8%80%E7%BC%BA/16161195)
+
+参考：Poverty Impedes Cognitive Function, Science, 341, 976 (2013); Anandi Mani et al. DOI: [10.1126/science.1238041](http://sci-hub.cc/10.1126/science.1238041)
+
+
+# 肥头喵 (Finance) {#btm__finance_}
+
+关于Finance这块，最近在读的几篇：
+
+1. 使用Finland男性服兵役中的IQ类数据追踪其后续投资行为：IQ, trading behavior, and performance, JFE, 2012, Ginblatt, Keloharju, Linnainmaa
+2. 使用Chile pension funds的投资者数据研究noise trader对其financial market影响：Price pressure from coordinated noise trading: Evidence from pension fund reallocations, 2014, Zhi Da, et al.
+
+感觉如果有这种大规模统一规范登记，拿到数据后是很好展开natural experiment方面的研究。想到了再补充。
+
+- **美国SEC**：
+
+1. SHO Pilot Program
+	- Kecsecs, et al., 2013, The Accounting Review, Are short sellers informed? Evidence from the bond market
+	- Alexander, Peterson, 2008, The effect of price tests on trader behavior and market quality: An analysis of Reg SHO
+2. Two-year Piolt Program that widen tick sizes for stocks of smaller firms. Approved May, 2015, begin by May 2016
+
+SEC在201５年公布的Pilot Test研究tick size对small company 关于transaction cost, price impact的影响。包含市值低于30亿美元，或每日均交易量低于1m，或每日交易量权重均价低于$2.00，整个pilot包含约1400只股票和400只其余股票构成的三个test组，具体的项目信息可以参照SEC提供的说明^[下载地址：<http://www.sec.gov/divisions/marketreg/tick-size-pilot-plan-final.pdf>。]，其相关数据将为研究市场微观结构提供了很好的自然实验。
+
+- **韩国**：Seongkyu Gilbert Park, 2015, The Power of Asking Questions: Resolving Financial Market Rumors throught Public Inquiries, working paper
+
+在韩国证券交易所，当市场中出现对上市公司的“rumor”时，公司需要向市场监管部门报告有关传闻的相关信息，予以确顶或是否认，并向市场公开。当出现inqury-disclosure事件时，通过研究事件对股票交易环境的影响，可以用于研究informed trader v.s. uninformed trader的投资行为及比例。这一独特的监管流程为研究市场微观结构和信息不对称问题提供了较好的自然实验数据，相关数据可以通过KOSCOM获得。
+
+- **台湾**：Xiaohui Gao, Tse-Chun Lin, 2014, Do Individual Investros Treat Trading as a Fun and Exciting Gambling Activity? Evidence from Repeated Natual Experiments, Review of Financial Studies, forthcoming
+
+# Owl of Minerva (1978年的中国改革开放, 中国留学生) {#owl_of_minerva______ndzgggkf__zglxs_}
+
+我要提的这篇文章是
+
+Borjas, George J., Kirk B. Doran, and Ying Shen. `Ethnic Complementarities after the Opening of China: How Chinese Graduate Students Affected the Productivity of Their Advisors`. No. w21096. National Bureau of Economic Research, 2015.
+
+论文一作是劳动经济学领域高产的研究者 George J. Borjas.
+这篇论文研究的内容是1978年的中国改革开放导致了涌入美国的中国留学生数量从0开始暴增，而这种自然的条件变化对美国大学教授的产出产生了一定的影响.
+
+为了更进一步的控制变量，作者选用了数学系导师的产出数据，因为这个专业在数十年中的招生数量是较为一致的。中国数学专业学生的涌入，会导致其他裔学生的减少。作者只需比较数学系导师在1978年前后的论文产出就能说明问题，即中国学生的到来刺激了美国导师的产出。
+
+另一方面，由于数学专业招生数量的恒定，而中国学生更倾向于找华裔导师，因此这种产出的增加在华裔导师上非常明显。而数据结果又证明，华裔导师的产出增加量，跟非华裔导师的产出减少量是一致的。更加验证了`归因的正确性，也一定层度上验证了老外对华裔的刻板印象：数学好/学霸`。
+
+# 匿名用户 (越战兵役) {#nmyh__hzby_}
+
+`@Zhi Li`提到了双胞胎。这是一个极佳的自然实验，因为它可以解释Nature(先天因素)和Nurture(后天因素)的关系。
+
+计量经济学里最好的自然实验就是越战兵役，没有之一。这有多个原因
+1. 越战中美国用抽签系统征兵几百万。因为抽签的随机性，这给了社会科学家很自然的control/treatment group。
+2. 越战被征兵者在参军时填了很详细的个人资料，包括身体素质，家庭背景，甚至智商。这些资料让社会科学家有很多可以随便玩的变量。
+3. 因为越战老兵可以通过各种政府项目得到经济补贴，政府可以通过经济补贴的申请表track(跟踪？)这些老兵的资料，比如婚姻状况，经济状况。这些可以让社会科学家不用多花研究经费取得follow up study。
+
+<blockquote class="gray">
+**云折夜**：是用参加越战的和没参加的对照吗？没参加的怎么统计资料？
+
+<blockquote class="white">
+**知乎用户**：用抽中的（实验组）和没抽中的（对照组）比较。抽中的也有部分未入伍甚至逃兵役的，但总体来说服役概率大大高于未抽中的。
+
+</blockquote>
+
+**王小非**：不能再赞同！中计和高计都会提
+
+</blockquote>
+
+# Reinhardt Jin (受教育年限对一生收入的影响) {#reinhardt_jin__djynwdyssrdyx_}
+
+研一学劳动经济学时听老师讲过一篇经典文章，经评论中 @Zenan Wang 指出是Angrist, J. D., & Krueger, A. B. (1991). Does Compulsory School Attendance Affect Schooling and Earnings?. Quarterly Journal of Economics, 106(4), 979-1014。研究的问题是受教育年限对一生收入的影响，使用数据（感谢 @容哲 补充）是美国1970和1980年人口统计数据的一部分变量，包括了所有州。数据：[MIT Economics : Angrist Data Archive](http://economics.mit.edu/faculty/angrist/data1/data/angkru1991)
+
+这个问题的难点在于不同教育水平的人可能具有不同的“内在能力”（intrinsic ability）。所以直接按照受教育年限分组来回归，得出的结果颇有争议。
+
+老师讲的这篇文章里利用的分组工具是出生月份。一般认为，人出生的月份和个人能力的关系可以忽略。但这（些）州的法律规定，学生未满17岁（貌似）前不得辍学离校。所以有辍学意愿的学生，如果出生的月份较晚，将不得不在学校多呆一年。这样一来，州法和出生月份就为劳动经济学家提供了一个自然实验：一组是高中肄业生，一组是高中毕业就进入社会工作的学生。通过一些整理和调整，就能得到近似满足如下实验条件的数据：
+
+实验对象：能力分布相似的两组青少年。\\
+分组标准：受教育年限——11年或12年。\\
+对比标的：两组青少年参加工作后X年的收入水平（X是多少忘了）。
+
+在这个研究中，研究者并未人为干涉实验对象的选择。影响其选择的主要因素被认为是州法律和出生月份。这就构成了所谓“自然实验”。而且这个“自然实验”代替了做这个研究本来需要的，有违科研伦理的人工实验。
+
+辍学与否的选择其实背后也会有家庭状况等原因，但这些原因原作者应该是解释了，似乎也不重要。原文的结论（感谢 @容哲 补充）是受教育年限越长收入越高。使用工具变量估计的结果和OLS估计的结果差不多。这种巧妙的研究方法令我印象深刻。
+
+# 其蔚先生 (白人退役老兵收入) {#jwxs__brtylbsr_}
+
+好像并没有很多为了社会科学研究而进行的社会实验，在我理解社会实验都是由于学者去寻找并赋予了意义。
+
+好像有一系列巨型的“社会实验”对我们有很大意义。例如在《为什么有的国家穷、有的国家富》一文中，奥尔森对比了三八线南北和柏林墙左右的制度是如何使地理条件相似的国家走向不同道路。这大概就对社会科学研究很重要。
+
+再举个有意思的例子，之前上计量课的时候，老师给我们看过一篇文章，由非常著名的Angrist于1990年发表——《Lifetime earnings and the Vietnam era draft lottery: evidence from social security administrative records》。文章想解决的问题是为何白人退役老兵收入比没当过兵的白人少15%，而这到底是否受到参军本身影响。解决该问题面临的主要难点是参军是具有自选择性的，即参军的人都具有一定特质。于是angrist寻找到了越战时期美国实行的一种draft lottery征兵制，即按照生日进行随机选择。这实际上就是一个社会实验，作者依靠这些数据得出了越战服役经历对白人而言相当于减少了两年工作经验的影响。
+
+后附参考文献：Angrist J D. Lifetime earnings and the Vietnam era draft lottery: evidence from social security administrative records[J]. The American Economic Review, 1990: 313-336.
+
+# 知乎用户 (中国供暖政策, 煤炭供暖带来污染对生命期望值的影响) {#zhyh__zggnzc__mtgndlwrdsmjwzdyx_}
+
+北大清华MIT共同成果，Pnas文章，利用中国供暖政策（淮河分界），研究煤炭供暖带来污染对生命期望值的影响。Evidence on the impact of sustained exposure to air pollution on life expectancy from China’s Huai River policy，还有一篇研究了世界杯对垒两国股市与足球比赛结果的关系。
+
+# Zhi Li (双胞胎) {#zhi_li__sbt_}
+
+双胞胎。因为双胞胎的生理基础类似，所以非常适合用计量经济学的固定效应模型。比如这篇NBER Working Paper From the Cradle to the Labor Market? The Effect of Birth Weight on Adult Outcomes，作者就是用双胞胎数据讨论了出生体重的短期和长期影响。
+
+# 匿名用户 (灾难对人的心理影响) {#nmyh__zndrdxlyx_}
+
+- 灾难对人的心理影响：(Cohn, Mehl, & Pennebaker, 2004)
+
+研究者下载并分析了1084名某个网路平台博客使用者在2001年9月11日前后2个月（即总时间跨度4个月）写的博客文字，呈现了他们随这个灾难而来的（透过文字表现的）心理反应
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/niming911-1.jpg)
+
+- 不同基因表现对灾难反应的不同影响：(Fletcher, 2014)
+
+这个其实不太算社会科学，觉得设计不错还是想放上来。纵轴大致可以看成是悲伤程度，竖线对应的0表示2001.9.11当天，横轴负数表示9/11发生前，正数表示发生后。拟合线实线和虚线的区别在于负责编码多巴胺受体D4的基因DRD4
+
+分析显示，基因DRD4多态性的主要效应体现在延长个体从悲伤恢复过来的过程，而不是体现在对于灾难的即时反应上，即：在相同时间段内，右边实线的悲伤程度变化不大，而虚线在下降。这有助于进一步理解环境和基因的交互作用
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/niming911-2.jpg)
+
+还有一个是9/11对英国市民心理健康影响的研究 (Metcalfe, Powdthavee, & Dolan, 2011)，比较复杂，有兴趣可以自己找来看看
+
+参考：
+
+1. Cohn, M. A., Mehl, M. R., & Pennebaker, J. W. (2004). Linguistic markers of psychological change surrounding September 11, 2001. Psychological Science, 15(10), 687-693.Fletcher, J. M. (2014).
+2. Enhancing the Gene-Environment Interaction Framework Through a Quasi-Experimental Research Design: Evidence from Differential Responses to September 11. Biodemography and social biology, 60(1), 1-20.
+3. Metcalfe, R., Powdthavee, N., & Dolan, P. (2011). Destruction and Distress: Using a Quasi‐Experiment to Show the Effects of the September 11 Attacks on Mental Well‐Being in the United Kingdom*. The Economic Journal, 121(550), F81-F103.
+
+# 匿名用户 (911, 女性沮丧与危险性行为) {#nmyh_______nxjsywxxhw_}
+
+我读到过做准自然实验最神的当属AER的这篇： Averett, Susan L., and Yang Wang. 2012. "Identification of the Effect of Depression on Risky Sexual Behavior: Exploiting a Natural Experiment." American Economic Review, 102(3): 570-74.
+
+以911为treatment，探讨女性沮丧与危险性行为之间的关系，发现沮丧的女性更喜欢危险性行为，比如口交，无套性交等。评论：美国佬的数据真是全啊，而且稀奇古怪，但是我比较怀疑survey的真实性。链接：<https://www.aeaweb.org/articles.php?doi=10.1257/aer.102.3.570>
+
+<blockquote class="gray">
+**胡玄韬**：我想问一下受试者的基因数据是怎么采集的啊？如果是随机的1000多人不是很难么？
+
+<blockquote class="white">
+**匿名用户**：那个样本是原来因为别的研究项目就存在的，然后突然发生了9/11。
+
+</blockquote>
+</blockquote>
+
+# 吴玥 (两篇政治传播学，一篇市场营销) {#ty__lpzccbx_ypfcyx_}
+
+我想到了两篇政治传播学，一篇市场营销（Marketing），与一篇不知道该如何归类的论文，它们都应该属于 natural experiment 。若有错误，请不吝指教。
+
+- 第一篇，政治传播学：King, G., Pan, J., & Roberts, M. E. (2013). How censorship in China allows government criticism but silences collective expression. American Political Science Review, 107(02), 326-343.
+
+“哈佛大学政治学者 Gary King 和同事想出了一个方法：建立了一个封闭的中文社交网站，联系中国公司咨询如何使用中国网站相同的审查技术，选择100家流行的中国社交网站，创建帐号，向对方网站上递交含有敏感关键词的帖子，了解正反观点和审查策略，逆向工程中国社交网站的审查机制。”以上摘自：[Solidot | 哈佛研究人员逆向工程中国社交网站的审查机制](http://www.solidot.org/story?threshold=0&mode=flat&sid=36253)
+
+- 第二篇，政治传播学：Al-saqaf, W. (2014). Breaking digital firewalls: analyzing internet censorship and circumvention in the arab world.
+
+这一篇是博士论文。作者免费分发科学上网软件，之后去观察用户如何使用这款软件，都去访问哪些网站等等。我的疑虑是，作者是否已经明确告诉用户，这款软件会实时记录他们的上网踪迹。
+
+- 第三篇，市场营销：Goldstein, N. J., Cialdini, R. B., & Griskevicius, V. (2008). A room with a viewpoint: Using social norms to motivate environmental conservation in hotels. Journal of consumer Research, 35(3), 472-482.
+
+客人若将酒店里的毛巾扔在地上，就意味着需要工作人员清洗。为了检测社会规范（social norms）的作用，作者联系一家酒店，印制一些提示比如：“住在这间客房的大部分客人都选择重复使用毛巾。”然后观察客人是否也会遵从，减少清洗次数，有助于环保。
+
+- 第四篇，不知道如何归类：Wang, X., Xu, S., Peng, L., Wang, Z., Wang, C., Zhang, C., & Wang, X. (2012). Exploring scientists’ working timetable: Do scientists often work overtime?. Journal of Informetrics, 6(4), 655-660.
+
+“大连理工大学王贤文等人通过监测Springer上科技论文的下载情况，分析了各国科学家的工作时间。主要结论：
+1. 论文的下载次数基本上正比于该国发表的SCI文章数。一分耕耘，一分收获。
+2. 科学家基本上没有周末。美国、德国、中国科学家的周末工作强度分别是平时的68%，64%，77%。
+3. 科学家基本上不分上下班。
+4. 美国人是夜猫子（会不会是作者没把IP与时区的对应算对？）；中国人与美、德的生活习惯差别非常明显，工作时间呈现三峰结构，即中午要休息，吃饭的时间比较规律（也比较认真 ^_^）。而西方人一般中午不休息，吃饭大概也没准点。”
+
+[以上摘自：科学网—科学家的工作时间](http://blog.sciencenet.cn/blog-296183-602706.html)
+
+# Chinhogo {#chinhogo}
+
+懂英文的童鞋可移驾：<http://www.stata-journal.com/sjpdf.html?articlenum=st0136>，Nichols, Austin. 2007.  Causal Inference with Observational Data. Stata Journal 7(4): 507-541. 附带STATA的使用哦
+
+# 苏白 (书) {#sb__s_}
+
+![](/images/Eco/MicroEconometrica/quasi-experiment-zhihu/subai.jpg)
+
+# 知乎用户 (89) {#zhyh_____}
+
+最经典的是89年的美国绿卡问题…
+
+# 李三火 (纳粹德国解雇科学家) {#lsh__ncdgjgkxg_}
+
+用纳粹德国解雇科学家（数学物理化学领域）这个事件来看high-quality peer会不会促进增长（在科学界就是发表和引用），也就是peer effect的一个衡量。
+
+Waldinger F. Peer effects in science: Evidence from the dismissal of scientists in Nazi Germany[J]. The Review of Economic Studies, 2011: rdr029. <http://media.wix.com/ugd/0d0a02_234ad2d219734d05a9438a68dcbb9c03.pdf>
+
+利用苏联解体这个事件。
+前提是苏联的数学家和美国的数学家在数学研究上侧重的领域不完全相同，苏联的数学家研究微分方程，概率论、几何等比较多，而美国数学家更专注于与生物和计算机领域相关的统计和逻辑学的研究。而在苏联解体之前，由于各种原因，两个国家的数学家合作极少，苏联的数学家也基本只在苏联的刊物上发表文章。解体后，苏联的数学家有部分前往美国并增加了学术合作。
+作者认为这些苏联移民数学家对美国数学家在顶尖刊物发表的影响是两方面的：
+
+1. 知识溢出的正效应。
+2. 竞争带来的负效应。（在学术刊物的数量和发行容量不变的前提下，“Maybe the effect was negative for the average mathematician but more top papers could have been produced by people in Soviet fields”）
+
+作者用这个背景研究了High-Skilled Migrants的影响。
+
+Borjas G J, Doran K B. The collapse of the Soviet Union and the productivity of American mathematicians[R]. National Bureau of Economic Research, 2012. <https://dash.harvard.edu/bitstream/handle/1/8160722/RWP12-004-Borjas.pdf>
+
+# 蒲Pu (中文维基) {#bpu__zwwj_}
+
+有一篇蛮符合，Zhang and Zhu (2010) Group size and Incentives to Contribute: a natural experiment at Chinese Wikipedia。研究中文维基在大陆block后用户group size减小（自然形成被block和不被block两个对照）对用户contribution的影响。
+
+# 思凡 (参考《基本无害的计量经济学》) {#sf__ck_jbmhdjljjx__}
+
+柏林墙、轰炸越南、非洲国家的国界、班级规模、突然出台的政策、重大自然灾害等等，可参考《基本无害的计量经济学》，里面有系统的介绍，当然主要是针对经济学
+
+# 匿名用户 (波黑战争前的ethnic diverse和战争后ethnic homogenous) {#nmyh__bhzzjdethnic_diversehzzhethnic_homogenous_}
+
+来一篇新的吧， Swee(2015)研究了关于ethnic diversity和public goods provision的关系，用波黑战争前的ethnic diverse和战争后ethnic homogenous 作为natural experiments得出结论，挺有趣的有兴趣的人可以去看看。
+
+# liu jun (兰德实验、抓阄实验) {#liu_jun__ldsy_zjsy_}
+
+卫生经济学里最经典的是兰德实验。按下不表。今天要说的是俄勒冈的抓阄实验。
+
+美国的Medicaid是针对低收入者的医疗保险项目。俄勒冈州决定扩大Medicaid，但是政府的财政吃紧，所以采取了这样的办法：符合条件的都可以报名；政府抓阄来决定让谁入选。
+
+结果这就成就了著名的Oregon Health Study，http://www.nber.org/oregon/。
+
+有无医保成了一个完全随机分配的事件，因此有医保的和没医保的成了完美的实验组和控制组。
+
+哈佛大学公共卫生学院的Katherine Baicker和MIT的Amy Finkelstein是主持人。她们的论文发在了The New England Journal of Medicine，世界上影响因子最高的刊物上。你不要问我是多高，我只能告诉你两倍于Nature或者 Science。其他的刊物例如Science, Health Affairs, QJE, AER就不用说了。BTW，上过的Katherine Baicker课，伊气场非常了得。

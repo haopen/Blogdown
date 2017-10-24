@@ -7,7 +7,11 @@ slug: wrap-figure
 show_toc: true
 ---
 
-**原文地址**：<https://www.zhihu.com/question/26837705>
+**参考资料**：
+
+- <https://www.zhihu.com/question/26837705>
+- <https://tex.stackexchange.com/questions/56176/handling-of-wrapfig-pictures-in-latex>
+
 
 买了我书的读者，请看 5.3.5 节「文字绕排」。
 

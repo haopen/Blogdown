@@ -2,7 +2,7 @@
 title: 共轭梯度法计算回归 z
 date: 2016-11-23
 author: "邱怡轩"
-categories: ["5-数据科学"]
+categories: ["5-算法"]
 tags: ["5-共轭梯度", "5-回归", "5-多重共线性", "5-稀疏矩阵", "5-线性方程组", "5-迭代法"]
 slug: conjugate-gradient-for-regression
 ---

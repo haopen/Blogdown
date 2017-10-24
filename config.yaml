@@ -15,6 +15,7 @@ permalinks:
   en: "/en/:year/:month/:day/:slug/"
   prof: "/prof/:year/:month/:day/:slug/"
   arts: "/arts/:year/:month/:day/:slug/"
+  data: "/data/:year/:month/:day/:slug/"
   tech: "/tech/:year/:month/:day/:slug/"
 
 menu:
@@ -225,5 +226,5 @@ blackfriday:
   # 紧挨着的两行不会被合并成一行，而是变成了 <br />，换行不再需要用 \\
   # 这个选项不开启时，两行虽然可以合并为一行，但有一个空格出现，需要 cjk 修复
   # 但目前 blackfriday 没有这个功能
-  extensions: ["hardLineBreak"]
+  extensions: ["joinLines"]
   extensionsmask: ["noIntraEmphasis"]

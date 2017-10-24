@@ -20,19 +20,19 @@ slug: weizhou-island
 
 裂縫已經在的時候，即使靜下來了，時間也會如引力般慢慢將它拉大，大到如黑洞般不見底
 
-	For him, there was no upside. If he won, he upset Gutfreund. No good came of this. But if he lost, he was out of pocket a million bucks. This was worse than upsetting the boss.
+> For him, there was no upside. If he won, he upset Gutfreund. No good came of this. But if he lost, he was out of pocket a million bucks. This was worse than upsetting the boss.
 
 也許我也曾經如 Meriwether 一樣左右為難
 
 所以當 Meriwether 面對 Gutfreund 的為難，以他專業經化險為夷
 
-	"No, John," he said, "if we're going to play for those kind of numbers, I'd rather play for real money. Ten million dollars. No tears."
+> "No, John," he said, "if we're going to play for those kind of numbers, I'd rather play for real money. Ten million dollars. No tears."
 
 於是 Meriwether 就不用再上下不安，左右為難
 
 我也學到了他的方式，所以雖然原則曾經帶給我上下不安，可是它現在又確實讓我成功逃脫
 
-	"No, thought Meriwether, just very, very good."
+> "No, thought Meriwether, just very, very good."
 
 看到 Meriwether 這麽想的時候，其實我也已經學會了
 

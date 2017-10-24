@@ -22,7 +22,7 @@
 	{{ else }}
 	{{ if eq $taxonomy "tags"}}{{ "标签" }}{{ else }} {{ "分类" }}{{ end}}
 	{{ end }}
-	：{{if eq (substr .Title 2) "Sas"}}{{ "SAS" }}{{ else }}{{ substr .Title 2 }}{{ end }}<!-- 不清楚为什么这里的 .Title 是首字母大写的 -->
+	：{{if eq (substr .Title 2) "Sas"}}{{ "SAS" }}{{ else }}{{ if findRE "[\u4e00-\u9fa5]+" .Title }}{{ replace (substr .Title 2) "   " " - " }}{{ else }}{{ substr .Title 2 }}{{ end }}{{ end }}<!-- 不清楚为什么这里的 .Title 是首字母大写的 -->
 	</h1>
 	{{ end }}
     {{ range .Pages.GroupByDate "2006" }}

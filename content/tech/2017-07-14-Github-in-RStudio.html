@@ -22,7 +22,10 @@ slug: github-in-rstudio
 <li><a href="#set-keys"><span class="toc-section-number">2.2</span> 配置密钥</a></li>
 <li><a href="#test-connection"><span class="toc-section-number">2.3</span> 测试连接</a></li>
 </ul></li>
-<li><a href="#-rstudio--github"><span class="toc-section-number">3</span> 在 RStudio 中使用 GitHub</a></li>
+<li><a href="#-rstudio--github"><span class="toc-section-number">3</span> 在 RStudio 中使用 GitHub</a><ul>
+<li><a href="#-github-pages"><span class="toc-section-number">3.1</span> 发布到 GitHub Pages</a></li>
+<li><a href="#-github-"><span class="toc-section-number">3.2</span> 连接 GitHub 可能遇到的问题</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -33,8 +36,7 @@ slug: github-in-rstudio
 <h2><span class="header-section-number">1.1</span> 查看配置</h2>
 <p>参考资料：<a href="http://www.jianshu.com/p/0ad3d88c51f4" class="uri">http://www.jianshu.com/p/0ad3d88c51f4</a></p>
 <p>由于之前已经成功安装 Git 并登陆到过 GitHub，因此查看当前配置时，最后两行会显示用户名及用户密码。</p>
-<pre class="bash"><code>$ git config --list
-......
+<pre class="bash"><code>$ git config --list | grep user
 user.name=xxxxxx
 user.email=xxxxxx@xxxx.com</code></pre>
 <p>这里的 <code>user.name</code> 和 <code>user.email</code> 就是 Author 信息。此时，上面提到的三个级别都配置了 user 信息。当 <code>git commit</code> 时，Author 信息依次读取 local、global 和 system 的配置，如果找到则不再继续读取。其他配置的读取顺序也是如此。</p>
@@ -108,16 +110,24 @@ Hi haopen! You&#39;ve successfully authenticated, but GitHub does not provide sh
 </div>
 <div id="-rstudio--github" class="section level1">
 <h1><span class="header-section-number">3</span> 在 RStudio 中使用 GitHub</h1>
-<p>到 GitHub 的网站上新添加了一个代码仓库（包含 <code>readme.md</code>），然后打开 RStudio，<code>File - New Project - Version Control - Git</code>，输入 <code>Repository URL</code>（要输入的内容可以在 GitHub 代码仓库右方点 <code>Clone or download</code> 找到），其中 <code>Project directory name</code> 用于设定项目所在文件夹的名称，<code>Create project as subdirectory of</code> 用于指定该文件夹所属的父目录，此外勾选 <code>Open in new session</code>，接下来 RStudio 会将该仓库中的内容 Pull 到本地。</p>
+<p>到 GitHub 的网站上新添加一个代码仓库（包含 <code>readme.md</code>），然后打开 RStudio，<code>File - New Project - Version Control - Git</code>，输入 <code>Repository URL</code>（要输入的内容可以在 GitHub 代码仓库右方点 <code>Clone or download</code> 找到），其中 <code>Project directory name</code> 用于设定项目所在文件夹的名称，<code>Create project as subdirectory of</code> 用于指定该文件夹所属的父目录，此外勾选 <code>Open in new session</code>，接下来 RStudio 会将该仓库中的内容 Pull 到本地。</p>
 <div class="figure">
-<img src="/images/Tech/GitHub/Create-Git-Repository.png" alt="创建一个 Git Repository" />
-<p class="caption">创建一个 Git Repository</p>
+<img src="/images/Tech/GitHub/RStudio/NewProject-Git-RStudio.png" alt="创建一个 Git Repository：Step 1" />
+<p class="caption">创建一个 Git Repository：Step 1</p>
+</div>
+<div class="figure">
+<img src="/images/Tech/GitHub/RStudio/NewProject-Git-RStudio1.png" alt="创建一个 Git Repository：Step 2" />
+<p class="caption">创建一个 Git Repository：Step 2</p>
+</div>
+<div class="figure">
+<img src="/images/Tech/GitHub/RStudio/Create-Git-Repository.png" alt="创建一个 Git Repository：Step 3" />
+<p class="caption">创建一个 Git Repository：Step 3</p>
 </div>
 <p>成功之后显示如下内容：</p>
 <pre class="txt"><code>C:/Program Files/.../git.exe clone --progress git@github.com:haopen/Blogdown.git Blogdown</code></pre>
 <p>尝试添加文件并保存到，点击右边 Git 面板中的 <code>Commit</code>（直接在 Git 面板中某个文件上点右键，选择 <code>ignore</code> 可以指定应忽略跳过的文件），可以在打开的窗口中勾选需要 Commit 的文件，之后在右半边窗口中填写简单的描述文字，之后可以点击下方的 <code>Commit</code>。</p>
 <div class="figure">
-<img src="/images/Tech/GitHub/RStudio-Commit.png" alt="提交一个 Commit" />
+<img src="/images/Tech/GitHub/RStudio/RStudio-Commit.png" alt="提交一个 Commit" />
 <p class="caption">提交一个 Commit</p>
 </div>
 <p><strong>问题</strong>：Commit 完成之后，刚开始右上角并没有 <code>Pull</code> 向上箭头，并且尝试提交时会出现 <code>unable to access... The requested URL returned error: 403</code> 类的错误，根据<a href="https://stackoverflow.com/questions/7438313/pushing-to-git-returning-error-code-403-fatal-http-request-failed">这个讨论</a>，在本地目录中找到隐藏的 <code>.git/config</code>，将其中的</p>
@@ -125,4 +135,63 @@ Hi haopen! You&#39;ve successfully authenticated, but GitHub does not provide sh
 <p>修改成</p>
 <pre><code>url = ssh://git@github.com/haopen/testGit.git</code></pre>
 <p>之后再次提交成功，并且上图右上角出现 <code>Pull</code> 向上箭头。当然，<strong>更好的做法</strong>是在点 <code>Clone or download</code> 时，直接点击 <code>Use SSH</code>，然后复制 <code>git@github.com:haopen/testGit.git</code> 即可。</p>
+<div id="-github-pages" class="section level2">
+<h2><span class="header-section-number">3.1</span> 发布到 GitHub Pages</h2>
+<ol style="list-style-type: decimal">
+<li>先到 GitHub 创建一个名称为 <code>haopen.github.io</code> 的代码仓库；</li>
+<li>之后 Clone 到本地<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>：参考前面在 RStudio 中 Clone Repository 的步骤，也可以先进入到 <code>D:\GitHub</code>，再点击右键，选择 <code>Git GUI Here</code>，在打开的窗口中选择 <code>Clone Existing Repository</code>，参考下图填写内容即可：</li>
+</ol>
+<div class="figure">
+<img src="/images/Tech/GitHub/RStudio/CloneExistingRepository.png" alt="Git 客户端" />
+<p class="caption">Git 客户端</p>
+</div>
+<div class="figure">
+<img src="/images/Tech/GitHub/RStudio/CloneExistingRepositoryRStudio.png" alt="RStudio 中的 Git 客户端" />
+<p class="caption">RStudio 中的 Git 客户端</p>
+</div>
+<p>其中 <code>haopen-public</code> 是在 Hugo 中的 <code>.Rprofile</code> 中指定的内容发布目录，对应的绝对地址是 <code>D:\GitHub\haopen-public</code>。</p>
+<ol start="3" style="list-style-type: decimal">
+<li>做一个 Commit，之后再 Push，等 Push 完成就可以在 <a href="https://haopen.github.io/" class="uri">https://haopen.github.io/</a> 观察到发布后的页面效果。</li>
+</ol>
+</div>
+<div id="-github-" class="section level2">
+<h2><span class="header-section-number">3.2</span> 连接 GitHub 可能遇到的问题</h2>
+<p><strong>问题</strong>：Push 的时候可能会遇到如下的错误：</p>
+<pre class="txt"><code>Git push origin 
+ssh: Could not resolve hostname ssh.github.com: Name or service not known 
+fatal: Could not read from remote repository.</code></pre>
+<p>参考 <a href="http://blog.csdn.net/qq_17335153/article/details/51701700" class="uri">http://blog.csdn.net/qq_17335153/article/details/51701700</a> 的说明，打开 <code>~/.ssh</code>，在里面新建一个名称为 <code>config</code> 的文件，注意没有扩展名，在其中添加内容：</p>
+<pre class="txt"><code>Host github.com
+User haopeng.yn@gmail.com
+Hostname ssh.github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa
+Port 443</code></pre>
+<p>但是通过 <code>ssh -T git@github.com</code> 测试仍然报错：</p>
+<pre class="txt"><code>ssh: Could not resolve hostname github.com: Name or service not known
+fatal: The remote end hung up unexpectedly</code></pre>
+<p>参考 <a href="http://blog.sina.com.cn/s/blog_a3fb1fe30102wieq.html" class="uri">http://blog.sina.com.cn/s/blog_a3fb1fe30102wieq.html</a> 先通过 <code>ping github.com</code> 获得 ip 地址 <code>192.30.255.113</code>，之后在 <code>/etc/hosts</code> 中添加如下内容<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>：</p>
+<pre><code>192.30.255.113 github.com</code></pre>
+<p>再测试时就没有问题<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>：</p>
+<pre class="txt"><code>$ ssh -T git@github.com
+The authenticity of host &#39;[ssh.github.com]:443 ([192.30.253.123]:443)&#39; can&#39;t be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added &#39;[ssh.github.com]:443,[192.30.253.123]:443&#39; (RSA) to the list of known hosts.
+Hi haopen! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</code></pre>
+<p><strong>技巧</strong>：在 RStudio 第一次准备将本地大量文件 Commit 时，右侧 Git 面板中的 <code>Staged</code> 对应的 Checkbox 经常点不动，参考 <a href="https://pages.github.com/" class="uri">https://pages.github.com/</a> 后此时可以考虑从齿轮那里打开 RStudio 带的 Git shell，然后在里面输入<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>：</p>
+<pre class="bash"><code>git add --all
+~$git commit -m &quot;Initial commit&quot;
+~$git push -u origin master</code></pre>
+<p>这种命令行的方式此时可能会更加方便一些。</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>可以考虑使用直接使用 Git GUI Here 客户端，也可以考虑使用 RStudio 提供的界面，通常后者可能会更人性化一些。<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>修改 <code>C:\Windows\System32\drivers\etc\hosts</code> 这个文件时，经常提示有其它程序占用，因此转而修改 <code>C:\Program Files\Git\etc\hosts</code>，效果也是一样的。<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>但连接速度真的很慢。<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>要在这个自带的 Shell 窗口中粘贴内容，只能在窗口的标题栏点击右击，再选择“编辑”，之后选择“粘贴”。<a href="#fnref4">↩</a></p></li>
+</ol>
 </div>

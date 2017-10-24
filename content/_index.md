@@ -3,6 +3,8 @@ title: 语千·刻一
 date: '2005-01-01'
 disable_mathjax: true
 disable_highlight: true
+blackfriday:
+  extensions: ["hardLineBreak"]
 ---
 
 这是彭浩的个人主页，和[谢益辉](http://yihui.name/cn)相似的是我也支持开源软件，喜欢折腾博客平台、花哨但不实用的代码以及各种乱七八糟的软件，是一个高度自我驱动的人；不同的是，我虽然在学校呆了很久，并且有点害怕 Deadline，但暂时还不怎么厌倦上学。

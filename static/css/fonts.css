@@ -69,10 +69,12 @@ blockquote.white {
 }
 code {
   font-family: 'PT Mono', 'STKaiti', 'KaiTi', 'SimKai', monospace;
-  font-size: 85%;
+}
+pre code {
+  font-size: 85% !important;
 }
 p code, li code {
-  font-size: 90%;
+  font-size: 95%;
 }
 
 h1 {

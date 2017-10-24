@@ -6,6 +6,22 @@ MathJax.Hub.Config({
 	"HTML-CSS": {linebreaks: {automatic: true}},
 	SVG: {linebreaks: {automatic: true}}
 });
+
+MathJax.Hub.Config({
+  TeX: {
+    extensions: ["boldsymbol.js"],
+    Augment: {
+      Definitions: {macros: {
+        bm: 'myBoldSwitch'
+      }},
+      Parse: {prototype: {
+        myBoldSwitch: function (name) {
+          this.stack.env.boldsymbol = true;
+        }
+      }}
+    }
+  }
+});
 </script>
 <script async src="{{ .Site.Params.MathJaxCDN | default "//cdn.bootcss.com" }}/mathjax/{{ .Site.Params.MathJaxVersion | default "2.7.1" }}/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 {{ end }}
