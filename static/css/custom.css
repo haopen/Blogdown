@@ -246,11 +246,13 @@ h1 .article-subtitle {
 }
 #TableOfContents {
   background-color: #f8f8f8;
+  margin-top: 1em;
 }
 #TableOfContents ul {
-  padding-top: .5em;
-  padding-bottom: .5em;
+  margin-top: 0em;
+  margin-bottom: 0em;
 }
+
 table {
   min-width: 50%;
   max-width: 100%;
